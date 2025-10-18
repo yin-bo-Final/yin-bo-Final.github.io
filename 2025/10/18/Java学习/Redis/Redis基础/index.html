@@ -145,7 +145,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-18T03:36:57.572Z">
-<meta property="article:modified_time" content="2025-10-18T04:09:35.185Z">
+<meta property="article:modified_time" content="2025-10-18T04:21:19.406Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="后端">
@@ -637,8 +637,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-18 12:09:35</span>
-            <span class="mobile">2025-10-18 12:09:35</span>
+            <span class="desktop">2025-10-18 12:21:19</span>
+            <span class="mobile">2025-10-18 12:21:19</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -688,7 +688,8 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="认识NoSQL"><a href="#认识NoSQL" class="headerlink" title="认识NoSQL"></a>认识NoSQL</h1><ul>
+			<p>因为之前已经学完ssm springboot等框架了 所以这里直接从Redis开始😘</p>
+<h1 id="认识NoSQL"><a href="#认识NoSQL" class="headerlink" title="认识NoSQL"></a>认识NoSQL</h1><ul>
 <li><p>Redis是一种键值型的NoSQL数据库</p>
 <ul>
 <li>键值型</li>
@@ -959,7 +960,8 @@
 </ul>
 <p>不管是哪种格式，底层都是字节数组形式存储，只不过是编码方式不同，字符串类型的最大空间不能超过512M</p>
 <ul>
-<li><p>String的常用命令</p>
+<li>String的常用命令</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1004,9 +1006,8 @@
 <td>添加一个String类型的键值对，并指定有效期</td>
 </tr>
 </tbody></table>
-</li>
-<li><p>KEY结构</p>
 <ul>
+<li>KEY结构<ul>
 <li><p>Redis没有类似MySQL中Table的概念，那么我们该如何区分不同类型的Key呢？</p>
 </li>
 <li><p>例如：需要存储用户、商品信息到Redis，有一个用户的id是1，有一个商品的id恰好也是1，如果此时使用id作为key，那么就会冲突，该怎么办？</p>
@@ -1027,7 +1028,8 @@
 </li>
 </ul>
 </li>
-<li><p>如果value是一个Java对象，例如一个User对象，则可以将对象序列化为JSON字符串后存储</p>
+<li>如果value是一个Java对象，例如一个User对象，则可以将对象序列化为JSON字符串后存储</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1044,14 +1046,13 @@
 <td>{“id”:1, “name”: “鲟鱼火锅”, “price”: 4999}</td>
 </tr>
 </tbody></table>
-</li>
-<li><p>并且在Redis的桌面客户端中，也会以相同前缀作为层次结构，让数据看起来层次分明，关系清晰</p>
-</li>
+<ul>
+<li>并且在Redis的桌面客户端中，也会以相同前缀作为层次结构，让数据看起来层次分明，关系清晰</li>
 </ul>
 <h2 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h2><ul>
-<li><p>Hash类型，也叫散列，其中value是一个无序字典，类似于Java中的HashMap结构</p>
-</li>
-<li><p>String结构是将对象序列化为JSON字符串后存储，当我们要修改对象的某个属性值的时候很不方便</p>
+<li>Hash类型，也叫散列，其中value是一个无序字典，类似于Java中的HashMap结构</li>
+<li>String结构是将对象序列化为JSON字符串后存储，当我们要修改对象的某个属性值的时候很不方便</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1068,8 +1069,9 @@
 <td>{“id”:1, “name”: “鲟鱼火锅”, “price”: 4999}</td>
 </tr>
 </tbody></table>
-</li>
-<li><p>Hash结构可以将对象中的每个字段独立存储，可以针对单个字段做CRUD</p>
+<ul>
+<li>Hash结构可以将对象中的每个字段独立存储，可以针对单个字段做CRUD</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1104,8 +1106,9 @@
 <td>18</td>
 </tr>
 </tbody></table>
-</li>
-<li><p>Hash的常用命令</p>
+<ul>
+<li>Hash的常用命令</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1146,22 +1149,18 @@
 <td>添加一个hash类型的key的field值，前提是这个field不存在，否则不执行</td>
 </tr>
 </tbody></table>
-</li>
-</ul>
 <h2 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h2><ul>
-<li><p>Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向链表结构。既可以支持正向检索和也可以支持反向检索。</p>
-</li>
-<li><p>特征也与LinkedList类似：</p>
-<ul>
+<li>Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向链表结构。既可以支持正向检索和也可以支持反向检索。</li>
+<li>特征也与LinkedList类似：<ul>
 <li>有序</li>
 <li>元素可以重复</li>
 <li>插入和删除快</li>
 <li>查询速度一般</li>
 </ul>
 </li>
-<li><p>常用来存储一个有序数据，例如：朋友圈点赞列表，评论列表等。</p>
-</li>
-<li><p>List的常见命令有：</p>
+<li>常用来存储一个有序数据，例如：朋友圈点赞列表，评论列表等。</li>
+<li>List的常见命令有：</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1170,10 +1169,6 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>LPUSH key element …</td>
-<td>向列表左侧插入一个或多个元素</td>
-</tr>
-<tr>
 <td>LPOP key</td>
 <td>移除并返回列表左侧的第一个元素，没有则返回nil</td>
 </tr>
@@ -1194,8 +1189,6 @@
 <td>与LPOP和RPOP类似，只不过在没有元素时等待指定时间，而不是直接返回nil</td>
 </tr>
 </tbody></table>
-</li>
-</ul>
 <h2 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a><strong>Set类型</strong></h2><ul>
 <li><p>Redis的Set结构与Java中的HashSet类似</p>
 <p>  可以看做是一个value为null的HashMap。因为也是一个hash表，因此具备与HashSet类似的特征：</p>
@@ -1207,6 +1200,8 @@
 </ul>
 </li>
 <li><p>Set的常见命令有：</p>
+</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -1247,8 +1242,6 @@
 <td>求key1与key2的差集</td>
 </tr>
 </tbody></table>
-</li>
-</ul>
 <blockquote>
 <p>练习题：</p>
 <ol>
@@ -1411,22 +1404,9 @@
 </ul>
 <p>自己手写序列化 白雪</p>
 <blockquote>
-<p>我们可以自定义RedisTemplate的序列化 代码如下@Configuration<br>public class RedisConfig {</p>
-</blockquote>
-<pre><code>@Bean
-public RedisTemplate&lt;String, Object&gt; redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-
-    //创建RedisTemplate对象        RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();
-    //设置连接工厂        template.setConnectionFactory(redisConnectionFactory);
-    //设置JSON序列化工具        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-    //设置KEY序列化        template.setKeySerializer(RedisSerializer.string());  //返回值是StringRedisSerializer.UTF_8;        template.setHashKeySerializer(RedisSerializer.string());
-    //设置Value序列化        template.setValueSerializer(genericJackson2JsonRedisSerializer);
-    template.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-    //返回        return template;
-}
-</code></pre>
-<p>}@Configuration：标记这个类为配置类，Spring在启动时会读取这个类的配置@Bean：将该方法的返回值注册为Spring容器中的一个BeanRedisTemplate&lt;String, Object&gt;：返回的Bean类型，支持String类型的Key和任意Object类型的Value</p>
-<blockquote>
+<p>我们可以自定义RedisTemplate的序列化 代码如下@Configuration</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title function_">redisTemplate</span><span class="params">(RedisConnectionFactory redisConnectionFactory)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建RedisTemplate对象        RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();</span></span><br><span class="line">        <span class="comment">//设置连接工厂        template.setConnectionFactory(redisConnectionFactory);</span></span><br><span class="line">        <span class="comment">//设置JSON序列化工具        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();</span></span><br><span class="line">        <span class="comment">//设置KEY序列化        template.setKeySerializer(RedisSerializer.string());  //返回值是StringRedisSerializer.UTF_8;        template.setHashKeySerializer&gt; &gt; (RedisSerializer.string());</span></span><br><span class="line">        <span class="comment">//设置Value序列化        template.setValueSerializer(genericJackson2JsonRedisSerializer);</span></span><br><span class="line">        template.setHashValueSerializer(genericJackson2JsonRedisSerializer);</span><br><span class="line">        <span class="comment">//返回        return template;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<p>@Configuration：标记这个类为配置类，Spring在启动时会读取这个类的配置@Bean：将该方法的返回值注册为Spring容器中的一个BeanRedisTemplate&lt;String, Object&gt;：返回的Bean类型，支&gt; 持String类型的Key和任意Object类型的Value</p>
 <ul>
 <li><p>创建一个User类 将创建的对象存入Redis</p>
   <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
@@ -1476,7 +1456,7 @@ public RedisTemplate&lt;String, Object&gt; redisTemplate(RedisConnectionFactory 
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-18 12:09:35
+                    :</strong> 2025-10-18 12:21:19
             </li>
         
         <li>
