@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="yin_bo_">
+    
+    <!-- Completely eliminate flash of wrong theme -->
+    <script>
+        (function() {
+            const THEME_KEY = "REDEFINE-THEME-STATUS";
+            const DARK = "dark", LIGHT = "light";
+            
+            // Get preferred theme
+            function getTheme() {
+                try {
+                    const saved = localStorage.getItem(THEME_KEY);
+                    if (saved) {
+                        const { isDark } = JSON.parse(saved);
+                        return isDark ? DARK : LIGHT;
+                    }
+                } catch (e) {}
+                
+                return matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+            }
+            
+            // Apply theme to document
+            function applyTheme(theme) {
+                const isDark = theme === DARK;
+                const root = document.documentElement;
+                
+                // Set data attribute for CSS variables
+                root.setAttribute("data-theme", theme);
+                
+                // Set classes for compatibility
+                root.classList.add(theme);
+                root.classList.remove(isDark ? LIGHT : DARK);
+                root.style.colorScheme = theme;
+            }
+            
+            // Initial application
+            const theme = getTheme();
+            applyTheme(theme);
+            
+            // Listen for system preference changes
+            matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+                // Only update if using system preference (no localStorage entry)
+                if (!localStorage.getItem(THEME_KEY)) {
+                    applyTheme(matches ? DARK : LIGHT);
+                }
+            });
+            
+            // Set body classes once DOM is ready
+            if (document.readyState !== "loading") {
+                document.body.classList.add(theme + "-mode");
+            } else {
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.body.classList.add(theme + "-mode");
+                    document.body.classList.remove((theme === DARK ? LIGHT : DARK) + "-mode");
+                });
+            }
+        })();
+    </script>
+    
+    <!-- Critical CSS to prevent flash -->
+    <style>
+        :root[data-theme="dark"] {
+            --background-color: #202124;
+            --background-color-transparent: rgba(32, 33, 36, 0.6);
+            --second-background-color: #2d2e32;
+            --third-background-color: #34353a;
+            --third-background-color-transparent: rgba(32, 33, 36, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #ffffff;
+            --second-text-color: #eeeeee;
+            --third-text-color: #bebec6;
+            --fourth-text-color: #999999;
+            --default-text-color: #bebec6;
+            --invert-text-color: #373D3F;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(255, 255, 255, 0.08);
+            --shadow-color-2: rgba(255, 255, 255, 0.05);
+        }
+        
+        :root[data-theme="light"] {
+            --background-color: #fff;
+            --background-color-transparent: rgba(255, 255, 255, 0.6);
+            --second-background-color: #f8f8f8;
+            --third-background-color: #f2f2f2;
+            --third-background-color-transparent: rgba(241, 241, 241, 0.6);
+            --primary-color: #0066CC;
+            --first-text-color: #16171a;
+            --second-text-color: #2f3037;
+            --third-text-color: #5e5e5e;
+            --fourth-text-color: #eeeeee;
+            --default-text-color: #373D3F;
+            --invert-text-color: #bebec6;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --selection-color: #0066CC;
+            --shadow-color-1: rgba(0, 0, 0, 0.08);
+            --shadow-color-2: rgba(0, 0, 0, 0.05);
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+        
+        /* Apply body classes as soon as DOM is ready */
+        :root[data-theme="dark"] body {
+            background-color: var(--background-color);
+            color: var(--default-text-color);
+        }
+    </style>
+    
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+        
+        
+        
+            <link rel="preconnect" href="https://evan.beee.top" crossorigin>
+        
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/10/18/java学习/redis/redis基础/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+    
+    
+        
+        <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis">
+<meta property="og:url" content="http://example.com/2025/10/18/Java%E5%AD%A6%E4%B9%A0/Redis/Redis%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-18T03:36:57.572Z">
+<meta property="article:modified_time" content="2025-10-18T04:09:35.185Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="后端">
+<meta name="twitter:card" content="summary">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/avatar.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpg">
+    <meta name="theme-color" content="#FF66FF">
+    <link rel="shortcut icon" href="/images/avatar.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            Redis | yin_bo_&#39;s BLOG
+        
+    </title>
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Chillax/chillax.css">
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/css/build/tailwind.css">
+    
+
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/GeistMono/geist-mono.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fonts/Geist/geist.css">
+    <!--- Font Part-->
+    
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    
+    
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    
+        <link href="" rel="stylesheet">
+    
+    
+    
+        <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/anime.min.js" ></script>
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"zh-CN","path":"search.json"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"left","image_caption":false,"link_icon":true,"delete_mask":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"pangu_js":false,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#FF66FF","secondary":"#6666FF","default_mode":"light"},"global":{"fonts":{"chinese":{"enable":true,"family":"Noto Sans SC","url":"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap"},"english":{"enable":true,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":true},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":{"enable":true,"custom_message":null},"side_tools":{"gear_rotation":true,"auto_expand":true},"open_graph":{"enable":true,"image":"","description":"Hexo Theme Redefine, Redefine Your Hexo Journey."},"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/light.webp","dark":"/images/dark.webp"},"title":"yin_bo_'s BLOG","subtitle":{"text":["world.search(you)....."],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":150,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#000000","dark":"#FFFFFF"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":true,"family":"Noto Sans SC","url":"https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap"},"social_links":{"enable":false,"style":"default","links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}},"s social_links":{"enable":true,"style":"default","links":{"github":"https://github.com/yin-bo-Final","fa-solid fa-envelope":"https://mail.google.com/mail/yinbo1054@gmail.com","fa-brands fa-bilibili":"https://space.bilibili.com/205429568?spm_id_from=333.1007.0.0"}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"11.4.1"}},"version":"2.8.5","navbar":{"auto_hide":false,"color":{"left":"#CC66FF","right":"#00FFFF","transparency":50},"width":{"home":"1300px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Tags":{"icon":"fa-solid fa-tags","path":"/tags/"},"Friends":{"icon":"fa-solid fa-link","path":"/links/"},"GITHUB":{"path":"https://github.com/yin-bo-Final","icon":"fa-brands fa-github"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"world.execute(me)....","show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":100,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2025/10/16 11:45:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/fontawesome.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/brands.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/solid.min.css">
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/fontawesome/regular.min.css">
+    
+    
+    
+    
+<meta name="generator" content="Hexo 8.0.0"></head>
+
+
+
+<body>
+	<div class="progress-bar-container">
+	
+	<span class="scroll-progress-bar"></span>
+	
+
+	
+	<span class="pjax-progress-bar"></span>
+	<!--        <span class="swup-progress-icon">-->
+	<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+	<!--        </span>-->
+	
+</div>
+
+<style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        yin_bo_&#39;s BLOG
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({ loop: true })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [20, 0],
+                translateZ: 0,
+                opacity: [0, 1],
+                filter: ['blur(5px)', 'blur(0px)'],
+                easing: "easeOutExpo",
+                duration: 1200,
+                delay: (el, i) => 300 + 20 * i,
+            })
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [0, -20],
+                opacity: [1, 0],
+                filter: ['blur(0px)', 'blur(5px)'],
+                easing: "easeInExpo",
+                duration: 1000,
+                delay: (el, i) => 15 * i,
+                complete: function() {
+                    hidePreloader();
+                }
+            }, '-=700');
+
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+	
+
+	<div class="main-content-container flex flex-col justify-between min-h-dvh">
+		<div class="main-content-header">
+			<header class="navbar-container px-6 md:px-12">
+    <div class="navbar-content transition-navbar ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                yin_bo_&#39;s BLOG
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/tags/"
+                                        >
+                                    <i class="fa-solid fa-tags fa-fw"></i>
+                                    标签
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/links/"
+                                        >
+                                    <i class="fa-solid fa-link fa-fw"></i>
+                                    友情链接
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   target="_blank" rel="noopener" href="https://github.com/yin-bo-Final"
+                                        >
+                                    <i class="fa-brands fa-github fa-fw"></i>
+                                    GITHUB
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-dvh w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/tags/"
+                        >
+                            <span>
+                                标签
+                            </span>
+                            
+                                <i class="fa-solid fa-tags fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/links/"
+                        >
+                            <span>
+                                友情链接
+                            </span>
+                            
+                                <i class="fa-solid fa-link fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           target="_blank" rel="noopener" href="https://github.com/yin-bo-Final"
+                        >
+                            <span>
+                                GITHUB
+                            </span>
+                            
+                                <i class="fa-brands fa-github fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">2</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+		</div>
+
+		<div class="main-content-body transition-fade-up">
+			
+
+			<div class="main-content">
+				<div class="post-page-container flex relative justify-between box-border w-full h-full">
+	<div class="article-content-container">
+
+		<div class="article-title relative w-full">
+			
+			<div class="w-full flex items-center pt-6 justify-start">
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">Redis</h1>
+			</div>
+			
+		</div>
+
+		
+		<div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+			<div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+				<img src="/images/avatar.jpg">
+			</div>
+			<div class="info flex flex-col justify-between">
+				<div class="author flex items-center">
+					<span class="name text-default-text-color text-lg font-semibold">yin_bo_</span>
+					
+					<span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+					
+				</div>
+				<div class="meta-info">
+					<div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-18 11:36:57</span>
+        <span class="mobile">2025-10-18 11:36:57</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-18 12:09:35</span>
+            <span class="mobile">2025-10-18 12:09:35</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.4k 字</span>
+        </span>
+    
+    
+        <span class="article-min2read article-meta-item">
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>22 分钟</span>
+        </span>
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+				</div>
+			</div>
+		</div>
+		
+
+		
+
+
+		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+			<h1 id="认识NoSQL"><a href="#认识NoSQL" class="headerlink" title="认识NoSQL"></a>认识NoSQL</h1><ul>
+<li><p>Redis是一种键值型的NoSQL数据库</p>
+<ul>
+<li>键值型</li>
+</ul>
+<p>  指Redis中存储的数据都是以<code>Key-Value</code>键值对的形式存储</p>
+<p>  而Value的形式多种多样 可以是字符串 数组甚至Json文件和HashMap</p>
+<ul>
+<li><p>NoSQL</p>
+<p>  NoSQL可以翻译做Not Only SQL（不仅仅是SQL），或者是No SQL（非Sql的）数据库。是相对于传统关系型数据库而言，有很大差异的一种特殊的数据库，因此也称之为<code>非关系型数据库</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>结构化和非结构化</p>
+<ul>
+<li>传统关系型数据库是结构化数据 表在创建的时候需要有严格的约束 如字段名 字段数据类型 字段约束等，插入的数据必须遵信这些约束</li>
+<li>而NoSQL则对数据库的格式没有约束 可以是键值型 也可以是文档型 甚至可以是图格式</li>
+</ul>
+</li>
+<li><p>关联与非关联</p>
+<ul>
+<li><p>传统数据库的表与表之间往往存在关联 如外键约束</p>
+</li>
+<li><p>而非关系型数据库不存在关联关系 要维护关系要么靠代码中的业务逻辑 要么靠数据之间的耦合性</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  id: <span class="number">1</span>,</span><br><span class="line">  name: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">  orders: [</span><br><span class="line">    &#123;</span><br><span class="line">       id: <span class="number">1</span>,</span><br><span class="line">       item: &#123;</span><br><span class="line">         id: <span class="number">10</span>, title: <span class="string">&quot;荣耀6&quot;</span>, price: <span class="number">4999</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">       id: <span class="number">2</span>,</span><br><span class="line">       item: &#123;</span><br><span class="line">         id: <span class="number">20</span>, title: <span class="string">&quot;小米11&quot;</span>, price: <span class="number">3999</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line"></span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<p>  例如此处要维护张三与两个手机订单的关系 不得不冗余的将两个商品保存在张三的订单文档中 不够优雅 所以建议使用业务逻辑来维护关系
+  </p>
+</li>
+<li><p>查询方式</p>
+<ul>
+<li><p>传统关系型数据库会基于SQL语句做查询 语法有统一的标准</p>
+  <div class="code-container" data-rel="Sql"><figure class="iseeu highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id,age <span class="keyword">FROM</span> tb_user <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>而不同的非关系型数据库查询语法差异较大</p>
+<p>  以Redis和MongoDB两种不同的非关系型数据库举例</p>
+  <div class="code-container" data-rel="Sql"><figure class="iseeu highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Redis:       <span class="keyword">get</span> <span class="keyword">user</span>:<span class="number">1</span></span><br><span class="line">MongoDB:     de.user.find(&#123;_id:<span class="number">1</span>&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+<li><p>事务</p>
+<ul>
+<li>传统关系型数据库能满足事务的ACID原则(原子性 一致性 独立性 持久性)</li>
+<li>非关系型数据库往往不支持事务 不能保证ACID 只能实现基本的一致性(BASE理论)</li>
+</ul>
+</li>
+<li><p>存储方式</p>
+<ul>
+<li>关系型数据库基于磁盘进行存储 会有大量的磁盘IO 对性能有一定影响</li>
+<li>非关系型数据库 操作更多依赖于内存进行操作 内存的读写速度会非常快 性能更好</li>
+</ul>
+</li>
+<li><p>拓展性</p>
+<ul>
+<li>垂直拓展</li>
+</ul>
+<p>  关系型数据库集群模式一般是主从  主从数据一致  起到数据备份的作用</p>
+<ul>
+<li>水平拓展</li>
+</ul>
+<p>  非关系型数据库可以将数据拆分 存储到不同机器上 可以保存海量数据 解决内存大小有限的问题</p>
+<ul>
+<li>关系型数据库因为表之间存在关联关系 如果做水平拓展会给数据查询带来麻烦</li>
+</ul>
+</li>
+<li><p>总结</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>SQL</strong></th>
+<th><strong>NoSQL</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据结构</td>
+<td>结构化(Structured)</td>
+<td>非结构化</td>
+</tr>
+<tr>
+<td>数据关联</td>
+<td>关联的(Relational)</td>
+<td>无关联的</td>
+</tr>
+<tr>
+<td>查询方式</td>
+<td>SQL查询</td>
+<td>非SQL</td>
+</tr>
+<tr>
+<td>事务特性</td>
+<td>ACID</td>
+<td>BASE</td>
+</tr>
+<tr>
+<td>存储方式</td>
+<td>磁盘</td>
+<td>内存</td>
+</tr>
+<tr>
+<td>扩展性</td>
+<td>垂直</td>
+<td>水平</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>1. 数据结构固定2. 对一致性、安全性要求不高</td>
+<td>1. 数据结构不固定2. 相关业务对数据安全性、一致性要求较高3. 对性能要求</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h1 id="认识Redis"><a href="#认识Redis" class="headerlink" title="认识Redis"></a>认识Redis</h1><ul>
+<li>Redis特征<ul>
+<li>键值(Key-Value)型，Value支持多种不同的数据结构，功能丰富</li>
+<li>单线程，每个命令具有原子性</li>
+<li>低延迟，速度快(基于内存、IO多路复用、良好的编码)</li>
+<li>支持数据持久化</li>
+<li>支持主从集群、分片集群</li>
+<li>支持多语言客户端</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis桌面客户端"><a href="#Redis桌面客户端" class="headerlink" title="Redis桌面客户端"></a>Redis桌面客户端</h1><ul>
+<li>在linux上安装Redis之后 可以对数据进行CRUD了 这需要用到Redis客户端 包括<ul>
+<li>命令行客户端(CLI)</li>
+<li>图形化桌面客户端</li>
+<li>编程客户端</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p>Redis命令行客户端CLI</p>
+<p> Redis安装完成之后就自带了命令行客户端：</p>
+<p> <code>redis-cli [options] [commonds]</code></p>
+</li>
+</ol>
+<p>其中常见的options有：</p>
+<ul>
+<li><code>h 127.0.0.1</code>：指定要连接的redis节点的IP地址，默认是127.0.0.1</li>
+<li><code>p 6379</code>：指定要连接的redis节点的端口，默认是6379</li>
+<li><code>a 123321</code>：指定redis的访问密码</li>
+</ul>
+<p>其中的commonds就是Redis的操作命令，例如：</p>
+<ul>
+<li><p><code>ping</code>：与redis服务端做心跳测试，服务端正常会返回&#96;pong</p>
+</li>
+<li><p>一般不要求commonds</p>
+</li>
+<li><p><strong>Redis基础命令</strong></p>
+<ul>
+<li><code>redis-server</code></li>
+</ul>
+<p>  启动redis服务器 默认端口号为6379
+  </p>
+</li>
+<li><p><code>sudo nano /etc/redis/redis.conf</code></p>
+</li>
+</ul>
+<p>打开redis配置文件</p>
+<ul>
+<li><p><code>ps -ef | grep redis</code></p>
+<p>  查看redis进程</p>
+</li>
+<li><p><code>systemctl status redis-server</code></p>
+<p>  查看redis状态</p>
+</li>
+<li><p><code>systemctl stop redis</code></p>
+</li>
+</ul>
+<p>停止redis服务</p>
+<ul>
+<li><code>sudo systemctl enable redis-server</code></li>
+</ul>
+<p>让redis开机自启</p>
+<ul>
+<li><p><code>ping</code></p>
+<p>  与redis服务端做心跳测试 服务端正常会返回<code>pong</code></p>
+</li>
+<li><p><code>SELECT 库序号</code></p>
+</li>
+</ul>
+<p>使用CLI来连接Redis<code>不同的库</code></p>
+<ul>
+<li><p><code>GET 键名</code></p>
+<p>  查看该库里该键名里的键值</p>
+</li>
+</ul>
+<h2 id="图形化桌面客户端"><a href="#图形化桌面客户端" class="headerlink" title="图形化桌面客户端"></a>图形化桌面客户端</h2><p>安装包：<a class="link"   target="_blank" rel="noopener" href="https://github.com/lework/RedisDesktopManager-Windows/releases" >https://github.com/lework/RedisDesktopManager-Windows/releases<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p>连接数据库之后是这样的界面</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=NDAwOTViZWQxOGJjOWQ0OWY2MmFjNjc1ZTliYjg2OWNfd2FaN2UyYmZiMkRmTDNtcDdyQ0I3TjdXVWp2OTk2ZW1fVG9rZW46RlJTYWI4dWx6b2pvYnV4RnRxeGN3eFlYbmpjXzE3NjA3NjAxNzA6MTc2MDc2Mzc3MF9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<ul>
+<li>Redis默认有16个仓库，编号从0至15</li>
+</ul>
+<p>通过配置文件可以设置仓库数量，但是不超过16 并且不能自定义仓库名称。</p>
+<hr>
+<h1 id="Redis常用命令"><a href="#Redis常用命令" class="headerlink" title="Redis常用命令"></a>Redis常用命令</h1><ul>
+<li><p>Redis是典型的key-value数据库 key一般是字符串 而value包含很多不同的数据类型</p>
+<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=ZGM1NDY1YWM3YTA2MmMwODU4ZDI4MDQyMTE3NGUwMDdfbWg1Q010TFlRMDRNVVFiYVV5aEZWOGZXTDBJTHRVcVFfVG9rZW46V2JzZ2JlbTJTb0k1R3F4TE53b2NYR2hUbmZkXzE3NjA3NjAxNzA6MTc2MDc2Mzc3MF9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</li>
+<li><p>Redis通用命令</p>
+</li>
+</ul>
+<p>常用的通用命令有以下几个</p>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KEYs pattern</td>
+<td>查找所有符合给定模式(pattern)的key</td>
+</tr>
+<tr>
+<td>EXISTs key</td>
+<td>检查给定key是否存在</td>
+</tr>
+<tr>
+<td>TYPE key</td>
+<td>返回key所储存的值的类型</td>
+</tr>
+<tr>
+<td>TTL key</td>
+<td>返回给定key的剩余生存时间(TTL, time to live)，以秒为单位</td>
+</tr>
+<tr>
+<td>DEL key</td>
+<td>该命令用于在key存在是删除key</td>
+</tr>
+</tbody></table>
+<ul>
+<li><code>SET key value</code><ul>
+<li>新增键与键值</li>
+<li><code>MSET key value key value .....</code> 同时增加多个键与键值</li>
+</ul>
+</li>
+<li><code>KEYS pattern</code>：查看符合模板的所有key<ul>
+<li><code>KEYS *</code>就是查询该仓库里所有的key</li>
+<li><code>KEYS a*</code>查看以a开头的key</li>
+<li>不建议在生产环境设备上使用，因为Redis是单线程的，执行查询的时候会阻塞其他命令，当数据量很大的时候，使用KEYS进行模糊查询，效率很差</li>
+</ul>
+</li>
+<li><code>DEL key</code>：删除一个指定的key<ul>
+<li>也可以删除多个key，<code>DEL name age</code>，会将name和age都删掉</li>
+</ul>
+</li>
+<li><code>EXISTS</code>：判断key是否存在<ul>
+<li><code>EXISTS name</code>，如果存在返回1，不存在返回0</li>
+</ul>
+</li>
+<li><code>EXPIRE</code>：给一个key设置有效期，有效期到期时该key会被自动删除<ul>
+<li><code>EXPIRE name 20</code>，给name设置20秒有效期，到期自动删除</li>
+</ul>
+</li>
+<li><code>TTL</code>：查看一个key的剩余有效期(Time-To-Live)<ul>
+<li><code>TTL name</code>，查看name的剩余有效期，如果未设置有效期，则返回-1</li>
+</ul>
+</li>
+</ul>
+<h2 id="String类型"><a href="#String类型" class="headerlink" title="String类型"></a>String类型</h2><ul>
+<li>String类型 也就是字符串类型 是Redis中最简单的存储类型</li>
+</ul>
+<p>其value是字符串 不过根据字符串格式不同 又分三种</p>
+<ul>
+<li><code>string</code>：普通字符串、</li>
+<li><code>int</code>：整数类型 可以自增自减</li>
+<li><code>float</code>：浮点类型 可以自增自减</li>
+</ul>
+<p>不管是哪种格式，底层都是字节数组形式存储，只不过是编码方式不同，字符串类型的最大空间不能超过512M</p>
+<ul>
+<li><p>String的常用命令</p>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SET</td>
+<td>添加或者修改一个已经存在的String类型的键值对</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>根据key获取String类型的value</td>
+</tr>
+<tr>
+<td>MEST</td>
+<td>批量添加多个String类型的键值对</td>
+</tr>
+<tr>
+<td>MGET</td>
+<td>根据多个key获取多个String类型的value</td>
+</tr>
+<tr>
+<td>INCR</td>
+<td>让一个整形的key自增1</td>
+</tr>
+<tr>
+<td>INCRBY</td>
+<td>让一个整形的key自增并指定步长值，例如：incrby num 2，让num值自增2</td>
+</tr>
+<tr>
+<td>INCRBYFLOAT</td>
+<td>让一个浮点类型的数字自增并指定步长值</td>
+</tr>
+<tr>
+<td>SETNX</td>
+<td>添加一个String类型的键值对，前提是这个key不存在，否则不执行，可以理解为真正的新增</td>
+</tr>
+<tr>
+<td>SETEX</td>
+<td>添加一个String类型的键值对，并指定有效期</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>KEY结构</p>
+<ul>
+<li><p>Redis没有类似MySQL中Table的概念，那么我们该如何区分不同类型的Key呢？</p>
+</li>
+<li><p>例如：需要存储用户、商品信息到Redis，有一个用户的id是1，有一个商品的id恰好也是1，如果此时使用id作为key，那么就会冲突，该怎么办？</p>
+</li>
+<li><p>我们可以通过给key添加前缀加以区分，不过这个前缀不是随便加的，有一定的规范</p>
+<ul>
+<li>Redis的key允许有多个单词形成层级结构，多个单词之间用<code>:</code>隔开，格式如下</li>
+</ul>
+<hr>
+<ul>
+<li>这个格式也并非是固定的，可以根据自己的需求来删除&#x2F;添加词条，这样我们就可以把不同数据类型的数据区分开了，从而避免了key的冲突问题</li>
+<li>例如我们的项目名叫reggie，有user和dish两种不同类型的数据，我们可以这样定义key<ul>
+<li>user相关的key：<code>reggie:user:1</code></li>
+<li>dish相关的key：<code>reggie:dish:1</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果value是一个Java对象，例如一个User对象，则可以将对象序列化为JSON字符串后存储</p>
+<table>
+<thead>
+<tr>
+<th><strong>KEY</strong></th>
+<th><strong>VALUE</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>reggie:user:1</td>
+<td>{“id”:1, “name”: “Jack”, “age”: 21}</td>
+</tr>
+<tr>
+<td>reggie:dish:1</td>
+<td>{“id”:1, “name”: “鲟鱼火锅”, “price”: 4999}</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>并且在Redis的桌面客户端中，也会以相同前缀作为层次结构，让数据看起来层次分明，关系清晰</p>
+</li>
+</ul>
+<h2 id="Hash类型"><a href="#Hash类型" class="headerlink" title="Hash类型"></a>Hash类型</h2><ul>
+<li><p>Hash类型，也叫散列，其中value是一个无序字典，类似于Java中的HashMap结构</p>
+</li>
+<li><p>String结构是将对象序列化为JSON字符串后存储，当我们要修改对象的某个属性值的时候很不方便</p>
+<table>
+<thead>
+<tr>
+<th><strong>KEY</strong></th>
+<th><strong>VALUE</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>reggie:user:1</td>
+<td>{“id”:1, “name”: “Jack”, “age”: 21}</td>
+</tr>
+<tr>
+<td>reggie:dish:1</td>
+<td>{“id”:1, “name”: “鲟鱼火锅”, “price”: 4999}</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>Hash结构可以将对象中的每个字段独立存储，可以针对单个字段做CRUD</p>
+<table>
+<thead>
+<tr>
+<th>KEY</th>
+<th>VALUE</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td>field</td>
+<td>value</td>
+</tr>
+<tr>
+<td>reggie:user:1</td>
+<td>name</td>
+<td>Jack</td>
+</tr>
+<tr>
+<td></td>
+<td>age</td>
+<td>21</td>
+</tr>
+<tr>
+<td>reggie:user:2</td>
+<td>name</td>
+<td>Rose</td>
+</tr>
+<tr>
+<td></td>
+<td>age</td>
+<td>18</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>Hash的常用命令</p>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HSET key field value</td>
+<td>添加或者修改hash类型key的field的值</td>
+</tr>
+<tr>
+<td>HGET key field</td>
+<td>获取一个hash类型key的field的值</td>
+</tr>
+<tr>
+<td>HMSET</td>
+<td>批量添加多个hash类型key的field的值</td>
+</tr>
+<tr>
+<td>HMGET</td>
+<td>批量获取多个hash类型key的field的值</td>
+</tr>
+<tr>
+<td>HGETALL</td>
+<td>获取一个hash类型的key中的所有的field和value</td>
+</tr>
+<tr>
+<td>HKEYS</td>
+<td>获取一个hash类型的key中的所有的field</td>
+</tr>
+<tr>
+<td>HINCRBY</td>
+<td>让一个hash类型key的字段值自增并指定步长</td>
+</tr>
+<tr>
+<td>HSETNX</td>
+<td>添加一个hash类型的key的field值，前提是这个field不存在，否则不执行</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="List类型"><a href="#List类型" class="headerlink" title="List类型"></a>List类型</h2><ul>
+<li><p>Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向链表结构。既可以支持正向检索和也可以支持反向检索。</p>
+</li>
+<li><p>特征也与LinkedList类似：</p>
+<ul>
+<li>有序</li>
+<li>元素可以重复</li>
+<li>插入和删除快</li>
+<li>查询速度一般</li>
+</ul>
+</li>
+<li><p>常用来存储一个有序数据，例如：朋友圈点赞列表，评论列表等。</p>
+</li>
+<li><p>List的常见命令有：</p>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LPUSH key element …</td>
+<td>向列表左侧插入一个或多个元素</td>
+</tr>
+<tr>
+<td>LPOP key</td>
+<td>移除并返回列表左侧的第一个元素，没有则返回nil</td>
+</tr>
+<tr>
+<td>RPUSH key element …</td>
+<td>向列表右侧插入一个或多个元素</td>
+</tr>
+<tr>
+<td>RPOP key</td>
+<td>移除并返回列表右侧的第一个元素</td>
+</tr>
+<tr>
+<td>LRANGE key star end</td>
+<td>返回一段角标范围内的所有元素</td>
+</tr>
+<tr>
+<td>BLPOP和BRPOP</td>
+<td>与LPOP和RPOP类似，只不过在没有元素时等待指定时间，而不是直接返回nil</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="Set类型"><a href="#Set类型" class="headerlink" title="Set类型"></a><strong>Set类型</strong></h2><ul>
+<li><p>Redis的Set结构与Java中的HashSet类似</p>
+<p>  可以看做是一个value为null的HashMap。因为也是一个hash表，因此具备与HashSet类似的特征：</p>
+<ul>
+<li>无序</li>
+<li>元素不可重复</li>
+<li>查找快</li>
+<li>支持交集、并集、差集等功能</li>
+</ul>
+</li>
+<li><p>Set的常见命令有：</p>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SADD key member …</td>
+<td>向set中添加一个或多个元素</td>
+</tr>
+<tr>
+<td>SREM key member …</td>
+<td>移除set中的指定元素</td>
+</tr>
+<tr>
+<td>SCARD key</td>
+<td>返回set中元素的个数</td>
+</tr>
+<tr>
+<td>SISMEMBER key member</td>
+<td>判断一个元素是否存在于set中</td>
+</tr>
+<tr>
+<td>SMEMBERS</td>
+<td>获取set中的所有元素</td>
+</tr>
+<tr>
+<td>SINTER key1 key2 …</td>
+<td>求key1与key2的交集</td>
+</tr>
+<tr>
+<td>SUNION key1 key2 …</td>
+<td>求key1与key2的并集</td>
+</tr>
+<tr>
+<td>SDIFF key1 key2 …</td>
+<td>求key1与key2的差集</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<blockquote>
+<p>练习题：</p>
+<ol>
+<li><p>将下列数据用Redis的Set集合来存储：</p>
+<ol>
+<li><p>张三的好友有：李四、王五、赵六</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd zhangsan lisi wangwu zhaoliu</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>李四的好友有：王五、麻子、二狗</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd lisi wangwu mazi ergou</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+</li>
+<li><p>利用Set的命令实现下列功能：</p>
+<ol>
+<li><p>计算张三的好友有几人</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; scard zhangsan</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>计算张三和李四有哪些共同好友</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sinter zhangsan lisi</span><br><span class="line">1) <span class="string">&quot;wangwu&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>查询哪些人是张三的好友却不是李四的好友</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sdiff zhangsan lisi</span><br><span class="line">1) <span class="string">&quot;zhaoliu&quot;</span></span><br><span class="line">2) <span class="string">&quot;lisi&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>查询张三和李四的好友总共有哪些人</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sunion zhangsan lisi</span><br><span class="line">1) <span class="string">&quot;wangwu&quot;</span></span><br><span class="line">2) <span class="string">&quot;zhaoliu&quot;</span></span><br><span class="line">3) <span class="string">&quot;ergou&quot;</span></span><br><span class="line">4) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">5) <span class="string">&quot;mazi&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>判断李四是否是张三的好友</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sismember zhangsan lisi</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>判断张三是否是李四的好友</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sismember lisi zhangsan</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>将李四从张三的好友列表中移除</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; srem zhangsan lisi</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+</li>
+</ol>
+</blockquote>
+<h2 id="SortedSet类型"><a href="#SortedSet类型" class="headerlink" title="SortedSet类型"></a>SortedSet类型</h2><ul>
+<li>Redis的SortedSet是一个可排序的set集合，与Java中的TreeSet有些类似，但底层数据结构却差别很大。SortedSet中的每一个元素都带有一个score属性，可以基于score属性对元素排序，底层的实现是一个跳表（SkipList）加 hash表。</li>
+<li>SortedSet具备下列特性：<ul>
+<li>可排序</li>
+<li>元素不重复</li>
+<li>查询速度快</li>
+</ul>
+</li>
+<li>因为SortedSet的可排序特性，经常被用来实现排行榜这样的功能。</li>
+<li>SortedSet的常见命令有：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>描述</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ZADD key score member</td>
+<td>添加一个或多个元素到sorted set ，如果已经存在则更新其score值</td>
+</tr>
+<tr>
+<td>ZREM key member</td>
+<td>删除sorted set中的一个指定元素</td>
+</tr>
+<tr>
+<td>ZSCORE key member</td>
+<td>获取sorted set中的指定元素的score值</td>
+</tr>
+<tr>
+<td>ZRANK key member</td>
+<td>获取sorted set 中的指定元素的排名</td>
+</tr>
+<tr>
+<td>ZCARD key</td>
+<td>获取sorted set中的元素个数</td>
+</tr>
+<tr>
+<td>ZCOUNT key min max</td>
+<td>统计score值在给定范围内的所有元素的个数</td>
+</tr>
+<tr>
+<td>ZINCRBY key increment member</td>
+<td>让sorted set中的指定元素自增，步长为指定的increment值</td>
+</tr>
+<tr>
+<td>ZRANGE key min max</td>
+<td>按照score排序后，获取指定排名范围内的元素</td>
+</tr>
+<tr>
+<td>ZRANGEBYSCORE key min max</td>
+<td>按照score排序后，获取指定score范围内的元素</td>
+</tr>
+<tr>
+<td>ZDIFF、ZINTER、ZUNION</td>
+<td>求差集、交集、并集</td>
+</tr>
+</tbody></table>
+<p>注意：所有的排名默认都是升序，如果要降序则在命令的Z后面添加REV即可，例如：</p>
+<ul>
+<li><code>升序</code>获取sorted set 中的指定元素的排名：ZRANK key member</li>
+<li><code>降序</code>获取sorted set 中的指定元素的排名：ZREVRANK key memeber</li>
+</ul>
+<hr>
+<h1 id="Redis的Java客户端"><a href="#Redis的Java客户端" class="headerlink" title="Redis的Java客户端"></a>Redis的Java客户端</h1><ul>
+<li>目前主流的Redis的Java客户端有三种<ul>
+<li>Jedis和Lettuce：这两个主要是提供了Redis命令对应的API，方便我们操作Redis，而SpringDataRedis又对这两种做了抽象和封装，因此我们后期会直接以SpringDataRedis来学习。</li>
+<li>Redisson：是在Redis基础上实现了分布式的可伸缩的java数据结构，例如Map、Queue等，而且支持跨进程的同步机制：Lock、Semaphore等待，比较适合用来实现特殊的功能需求。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Jedis客户端"><a href="#Jedis客户端" class="headerlink" title="Jedis客户端"></a>Jedis客户端</h2><ul>
+<li>使用Jedis步骤</li>
+</ul>
+<ol>
+<li><p>导入Jedis的maven坐标</p>
+ <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--jedis--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>redis.clients<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jedis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--单元测试--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.junit.jupiter<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit-jupiter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>建立连接</p>
+<p> 测试插入数据</p>
+<p> 释放资源</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">publicclassTest01 &#123;</span><br><span class="line">privateJedis jedis;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@BeforeEach</span></span><br><span class="line">voidsetUp() &#123;</span><br><span class="line"><span class="comment">//1. 建立连接jedis =newJedis(&quot;127.0.0.1&quot;, 6379);</span></span><br><span class="line"><span class="comment">//2. 设置密码jedis.auth(&quot;zhou123quan&quot;);</span></span><br><span class="line"><span class="comment">//3. 选择库jedis.select(0);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">voidtestString()&#123;</span><br><span class="line">        jedis.set(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Kyle&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> jedis.get(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;name = &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">voidtestHash()&#123;</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:1&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:2&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Rose&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:1&quot;</span>,<span class="string">&quot;age&quot;</span>,<span class="string">&quot;21&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:2&quot;</span>,<span class="string">&quot;age&quot;</span>,<span class="string">&quot;18&quot;</span>);</span><br><span class="line">Map&lt;String, String&gt; map = jedis.hgetAll(<span class="string">&quot;reggie:user:1&quot;</span>);</span><br><span class="line">        System.out.println(map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterEach</span></span><br><span class="line">voidtearDown()&#123;</span><br><span class="line"><span class="keyword">if</span>(jedis !=<span class="literal">null</span>)&#123;</span><br><span class="line">            jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<ul>
+<li><p>连接池</p>
+<ul>
+<li><code>Jedis</code>本身是线程不安全的，并且频繁的创建和销毁连接会有性能损耗，因此我们推荐大家使用Jedis连接池代替Jedis的直连方式。</li>
+<li>新建一个<code>com.jedisLink.util</code>，用于存放我们编写的工具类</li>
+<li>但后面我们使用<code>SpringDataRedis</code>的时候，可以直接在<code>yml</code>配置文件里配置这些内容</li>
+</ul>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">packagecom.yin_bo_.redis_develop.bean;</span><br><span class="line"></span><br><span class="line">importredis.clients.jedis.Jedis;</span><br><span class="line">importredis.clients.jedis.JedisPool;</span><br><span class="line">importredis.clients.jedis.JedisPoolConfig;</span><br><span class="line"></span><br><span class="line">publicclassjedisConnectionBean &#123;</span><br><span class="line">publicstaticJedisPooljedisPool;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span>&#123;</span><br><span class="line"><span class="comment">//配置连接池JedisPoolConfig poolConfig =newJedisPoolConfig();</span></span><br><span class="line">        poolConfig.setMaxTotal(<span class="number">8</span>);</span><br><span class="line">        poolConfig.setMaxIdle(<span class="number">8</span>);</span><br><span class="line">        poolConfig.setMinIdle(<span class="number">0</span>);</span><br><span class="line">        poolConfig.setMaxWaitMillis(<span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建连接对象 参数：连接池配置 服务端IP 服务端端口 超时时间 密码        jedisPool=newJedisPool(poolConfig, &quot;127.0.0.1&quot;, 6379, 1000, &quot;zhou123quan&quot;);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">publicstaticJedis <span class="title function_">getJedis</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="keyword">return</span> jedisPool.getResource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">packagecom.yin_bo_.redis_develop.Day001;</span><br><span class="line"></span><br><span class="line">importcom.yin_bo_.redis_develop.bean.jedisConnectionBean;</span><br><span class="line">importorg.junit.jupiter.api.AfterEach;</span><br><span class="line">importorg.junit.jupiter.api.BeforeEach;</span><br><span class="line">importorg.junit.jupiter.api.Test;</span><br><span class="line">importredis.clients.jedis.Jedis;</span><br><span class="line"></span><br><span class="line">importjava.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> classTest01 &#123;</span><br><span class="line"></span><br><span class="line">privateJedis jedis;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@BeforeEach</span></span><br><span class="line">voidsetUp() &#123;</span><br><span class="line"><span class="comment">//1. 建立连接jedis = jedisConnectionBean.getJedis();</span></span><br><span class="line">        jedis.select(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">voidtestString()&#123;</span><br><span class="line">        jedis.set(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Kyle&quot;</span>);</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> jedis.get(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;name = &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">voidtestHash()&#123;</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:1&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Jack&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:2&quot;</span>,<span class="string">&quot;name&quot;</span>,<span class="string">&quot;Rose&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:1&quot;</span>,<span class="string">&quot;age&quot;</span>,<span class="string">&quot;21&quot;</span>);</span><br><span class="line">        jedis.hset(<span class="string">&quot;reggie:user:2&quot;</span>,<span class="string">&quot;age&quot;</span>,<span class="string">&quot;18&quot;</span>);</span><br><span class="line">Map&lt;String, String&gt; map = jedis.hgetAll(<span class="string">&quot;reggie:user:1&quot;</span>);</span><br><span class="line">        System.out.println(map);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterEach</span></span><br><span class="line">voidtearDown()&#123;</span><br><span class="line"><span class="keyword">if</span>(jedis !=<span class="literal">null</span>)&#123;</span><br><span class="line">            jedis.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="SpringDataRedis客户端"><a href="#SpringDataRedis客户端" class="headerlink" title="SpringDataRedis客户端"></a><strong>SpringDataRedis客户端</strong></h2><p>SpringBoot已经提供了对SpringDataRedis的支持 使用非常简单</p>
+<ol>
+<li><p>引入依赖</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--redis依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-data-redis&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!--common-pool--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!--Jackson依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!--lombok--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;lombok&lt;/artifactId&gt;</span><br><span class="line">    &lt;optional&gt;<span class="literal">true</span>&lt;/optional&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">    &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>配置Redis</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">spring:</span><br><span class="line">  data:</span><br><span class="line">    redis:</span><br><span class="line">      host: localhost</span><br><span class="line">      port: <span class="number">6379</span></span><br><span class="line">      password: zhou123quan</span><br><span class="line">      database: <span class="number">0</span></span><br><span class="line">      lettuce:</span><br><span class="line">        pool:</span><br><span class="line">          max-active: <span class="number">8</span></span><br><span class="line">          max-idle: <span class="number">8</span></span><br><span class="line">          min-idle: <span class="number">0</span></span><br><span class="line">          max-wait: 100ms</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>在测试类中 注入<code>RedisTemplate</code> 编写测试方法</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">packagecom.yin_bo_.redis_develop_02;</span><br><span class="line"></span><br><span class="line">importorg.junit.jupiter.api.Test;</span><br><span class="line">importorg.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">importorg.springframework.boot.test.context.SpringBootTest;</span><br><span class="line">importorg.springframework.data.redis.core.RedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SpringBootTest</span></span><br><span class="line">classRedisDevelop02ApplicationTests &#123;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Autowired</span></span><br><span class="line">privateRedisTemplate redisTemplate;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">voidtestString() &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">//        //写入一条String数据//        redisTemplate.opsForValue().set(&quot;name&quot;,&quot;wave111&quot;);//获取String数据Object name = redisTemplate.opsForValue().get(&quot;name&quot;);</span></span><br><span class="line">        System.out.println(<span class="string">&quot;name = &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<ul>
+<li><p>自定义序列</p>
+<ul>
+<li><code>RedisTemplate</code>可以接受任意Object作为值写入Redis</li>
+</ul>
+<p>  只不过写入前会把Object序列化为字节形式，默认是采用JDK序列化，得到的结果是这样的</p>
+<blockquote>
+<p>\xAC\xED\x00\x05t\x00\x06\xE5\xBC\xA0\xE4\xB8\x89</p>
+</blockquote>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>可读性差</li>
+<li>内存占用较大</li>
+</ul>
+</li>
+</ul>
+<p>自己手写序列化 白雪</p>
+<blockquote>
+<p>我们可以自定义RedisTemplate的序列化 代码如下@Configuration<br>public class RedisConfig {</p>
+</blockquote>
+<pre><code>@Bean
+public RedisTemplate&lt;String, Object&gt; redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+
+    //创建RedisTemplate对象        RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();
+    //设置连接工厂        template.setConnectionFactory(redisConnectionFactory);
+    //设置JSON序列化工具        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
+    //设置KEY序列化        template.setKeySerializer(RedisSerializer.string());  //返回值是StringRedisSerializer.UTF_8;        template.setHashKeySerializer(RedisSerializer.string());
+    //设置Value序列化        template.setValueSerializer(genericJackson2JsonRedisSerializer);
+    template.setHashValueSerializer(genericJackson2JsonRedisSerializer);
+    //返回        return template;
+}
+</code></pre>
+<p>}@Configuration：标记这个类为配置类，Spring在启动时会读取这个类的配置@Bean：将该方法的返回值注册为Spring容器中的一个BeanRedisTemplate&lt;String, Object&gt;：返回的Bean类型，支持String类型的Key和任意Object类型的Value</p>
+<blockquote>
+<ul>
+<li><p>创建一个User类 将创建的对象存入Redis</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@AllArgsConstructor</span></span><br><span class="line"><span class="meta">@NoArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">User</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>测试方法里创建对象</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">voiduserTest()&#123;</span><br><span class="line">    redisTemplate.opsForValue().set(<span class="string">&quot;userdata&quot;</span>,newUser(<span class="string">&quot;张三&quot;</span>,<span class="string">&quot;18&quot;</span>));</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) redisTemplate.opsForValue().get(<span class="string">&quot;userdata&quot;</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>采用了JSON序列化来代替默认的JDK序列化方式 最终结果为JSON</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;@class&quot;</span>: <span class="string">&quot;com.yin_bo_.redis_develop_02.bean.User&quot;</span>,</span><br><span class="line">  <span class="string">&quot;name&quot;</span>: <span class="string">&quot;张三&quot;</span>,</span><br><span class="line">  <span class="string">&quot;age&quot;</span>: <span class="string">&quot;18&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</blockquote>
+<ul>
+<li><p>StringRedisTemplate</p>
+<ul>
+<li><p>为了节省内存空间 我们并不会使用JSON序列化器来处理value 而是统一使用String序列化器 要求只能存储String类型的key和value 当需要存储Java对象时 手动完成对象的序列化和反序列化</p>
+<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=OTU4NWUzNGViMzQxM2JkZDBiZTBmY2I4N2ZlZGZiZDdfWk12TXZVZ0FVd1l6M0hSSEUyZzhodnhnNVFSazFBVzhfVG9rZW46WXhmRmIxdU9Xb0tybjh4VklNd2NMVVRsbmoxXzE3NjA3NjAxNzA6MTc2MDc2Mzc3MF9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</li>
+</ul>
+</li>
+<li><p>Spring默认提供了一个StringRedisTemplate类 他的key和value的序列化方式默认就是String方式 省去了我们自定义RedisTemplate的过程</p>
+<ul>
+<li><p>如果key和value都是String 则不需要序列化 直接使用<code>StringRedisTemplate</code></p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">privateStringRedisTemplate stringRedisTemplate;</span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line">voiduserTest()&#123;</span><br><span class="line">    redisTemplate.opsForValue().set(<span class="string">&quot;userdata&quot;</span>,newUser(<span class="string">&quot;张三&quot;</span>,<span class="string">&quot;18&quot;</span>));</span><br><span class="line">    <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> (User) redisTemplate.opsForValue().get(<span class="string">&quot;userdata&quot;</span>);</span><br><span class="line">    System.out.println(user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+<li><p>如果value是JSON 则需要手动序列化</p>
+<ul>
+<li>ObjectMapper是一个JSON处理工具 作用是把一个对象转成JSON</li>
+</ul>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">privateStringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="comment">//JSON工具privatestaticfinalObjectMappermapper=newObjectMapper();</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Value是JSON</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line">voidtestStringTemplateForJSON()throwsJsonProcessingException &#123;</span><br><span class="line"><span class="comment">//准备对象User user =newUser(&quot;音波&quot;,&quot;20&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//手动序列化String json  =mapper.writeValueAsString(user);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//写入一条数据到RedisstringRedisTemplate.opsForValue().set(&quot;userdata&quot;,json);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//读取数据String userdata = stringRedisTemplate.opsForValue().get(&quot;userdata&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//反序列化User user1 =mapper.readValue(userdata, User.class);</span></span><br><span class="line">    System.out.println(user1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>使用<code>StringRedisTemplate</code>操作Hash类型</p>
+<p>  注意 这里存取Hash数据用的是put entries    与Java相似</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">voidtestHash()&#123;</span><br><span class="line">    stringRedisTemplate.opsForHash().put(<span class="string">&quot;friends&quot;</span>,<span class="string">&quot;friend01&quot;</span>,<span class="string">&quot;xinxin_suried&quot;</span>);</span><br><span class="line">    stringRedisTemplate.opsForHash().put(<span class="string">&quot;friends&quot;</span>,<span class="string">&quot;friend02&quot;</span>,<span class="string">&quot;canon_0724&quot;</span>);</span><br><span class="line">Map&lt;Object, Object&gt; friends = stringRedisTemplate.opsForHash().entries(<span class="string">&quot;friends&quot;</span>);</span><br><span class="line">    System.out.println(friends);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+
+		</div>
+
+		
+		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+			<div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> Redis</li>
+        <li><strong>作者:</strong> yin_bo_</li>
+        <li><strong>创建于
+                :</strong> 2025-10-18 11:36:57</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-10-18 12:09:35
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.blog.yinbo.xyz/2025/10/18/Java学习/Redis/Redis基础/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+		</div>
+		
+
+		
+		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
+			</li>
+			
+			<li class="tag-item mx-0.5">
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
+			</li>
+			
+		</ul>
+		
+
+		
+
+		
+		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+			
+			
+			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="next" rel="next" href="/2025/10/17/%E6%9D%82%E8%B0%88/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">第一篇博客</span>
+						<span class="post-nav-item">下一篇</span>
+					</span>
+					<span class="right arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-right"></i>
+					</span>
+				</a>
+			</div>
+			
+		</div>
+		
+
+
+		
+	</div>
+
+	
+	<div class="toc-content-container">
+		<div class="post-toc-wrap">
+	<div class="post-toc">
+		<div class="toc-title">目录</div>
+		<div class="page-title">Redis</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86NoSQL"><span class="nav-text">认识NoSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86Redis"><span class="nav-text">认识Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis桌面客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">图形化桌面客户端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">Redis常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%B1%BB%E5%9E%8B"><span class="nav-text">Hash类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%E7%B1%BB%E5%9E%8B"><span class="nav-text">List类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set%E7%B1%BB%E5%9E%8B"><span class="nav-text">Set类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortedSet%E7%B1%BB%E5%9E%8B"><span class="nav-text">SortedSet类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%9A%84Java%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis的Java客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Jedis客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringDataRedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">SpringDataRedis客户端</span></a></li></ol></li></ol>
+
+	</div>
+</div>
+	</div>
+	
+</div>
+			</div>
+
+			
+		</div>
+
+		<div class="main-content-footer">
+			<footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+            <div class="customize-info my-1">你说的对，但是《原神》是由米哈游自主研发的一款全新开放世界冒险游戏。</div>
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2025</span>
+              -
+            
+            2025&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">yin_bo_</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共撰写了 2 篇文章
+                    </span>
+                    
+                        <span>
+                            共 6k 字
+                        </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.8.5</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+		</div>
+	</div>
+
+	
+	<div class="post-tools">
+		<div class="post-tools-container">
+	<ul class="article-tools-list">
+		<!-- TOC aside toggle -->
+		
+		<li class="right-bottom-tools page-aside-toggle">
+			<i class="fa-regular fa-outdent"></i>
+		</li>
+		
+
+		<!-- go comment -->
+		
+	</ul>
+</div>
+	</div>
+	
+
+	<div class="right-side-tools-container">
+		<div class="side-tools-container">
+	<ul class="hidden-tools-list">
+		<li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-plus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+			<i class="fa-regular fa-magnifying-glass-minus"></i>
+		</li>
+
+		<li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+			<i class="fa-regular fa-moon"></i>
+		</li>
+
+		<!-- rss -->
+		
+
+		
+
+		<li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+			<i class="fa-regular fa-arrow-down"></i>
+		</li>
+	</ul>
+
+	<ul class="visible-tools-list">
+		<li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+			<i class="fa-regular fa-cog fa-spin"></i>
+		</li>
+		
+		<li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+			<i class="arrow-up fas fa-arrow-up"></i>
+			<span class="percent"></span>
+		</li>
+		
+		
+	</ul>
+</div>
+	</div>
+
+	<div class="image-viewer-container">
+	<img src="">
+</div>
+
+	
+	<div class="search-pop-overlay">
+	<div class="popup search-popup">
+		<div class="search-header">
+			<span class="search-input-field-pre">
+				<i class="fa-solid fa-keyboard"></i>
+			</span>
+			<div class="search-input-container">
+				<input autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="站内搜索您需要的内容..." spellcheck="false" type="search" class="search-input">
+			</div>
+			<span class="popup-btn-close">
+				<i class="fa-solid fa-times"></i>
+			</span>
+		</div>
+		<div id="search-result">
+			<div id="no-result">
+				<i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+</main>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Swup.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupSlideTheme.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScriptsPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupProgressPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupScrollPlugin.min.js" ></script><script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/SwupPreloadPlugin.min.js" ></script>
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+	<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/imageViewer.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/utils.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/main.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/navbarShrink.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/scrollTopBottom.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/lightDarkSwitch.js" ></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/categoryList.js" ></script>
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/localSearch.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/codeBlock.js" ></script>
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/lazyload.js" ></script>
+
+
+
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/runtime.js" ></script>
+    <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/odometer.min.js" ></script>
+    <link rel="stylesheet" href="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/assets/odometer-theme-minimal.css">
+
+
+
+  <script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/Typed.min.js" ></script>
+  <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/typed.js" ></script>
+
+
+
+
+
+
+
+
+
+
+    <script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/tools/tocToggle.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/toc.js" data-swup-reload-script></script><script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/plugins/tabs.js" data-swup-reload-script></script>
+
+
+<script  src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/libs/moment-with-locales.min.js" data-swup-reload-script></script>
+<script type="module" src="https://evan.beee.top/projects/hexo-theme-redefine@2.8.5/source/js/build/layouts/essays.js" data-swup-reload-script></script>
+
+
+
+
+	
+</body>
+
+</html>
