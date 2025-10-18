@@ -145,7 +145,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-18T03:36:57.572Z">
-<meta property="article:modified_time" content="2025-10-18T04:22:50.517Z">
+<meta property="article:modified_time" content="2025-10-18T05:03:56.514Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="后端">
@@ -637,8 +637,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-18 12:22:50</span>
-            <span class="mobile">2025-10-18 12:22:50</span>
+            <span class="desktop">2025-10-18 13:03:56</span>
+            <span class="mobile">2025-10-18 13:03:56</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -1402,9 +1402,8 @@
 </ul>
 </li>
 </ul>
-<p>自己手写序列化 白雪</p>
 <blockquote>
-<p>我们可以自定义RedisTemplate的序列化 代码如下@Configuration</p>
+<p>自己手写序列化 白雪<br>我们可以自定义RedisTemplate的序列化 代码如下@Configuration</p>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisConfig</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RedisTemplate&lt;String, Object&gt; <span class="title function_">redisTemplate</span><span class="params">(RedisConnectionFactory redisConnectionFactory)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//创建RedisTemplate对象        RedisTemplate&lt;String, Object&gt; template = new RedisTemplate&lt;&gt;();</span></span><br><span class="line">        <span class="comment">//设置连接工厂        template.setConnectionFactory(redisConnectionFactory);</span></span><br><span class="line">        <span class="comment">//设置JSON序列化工具        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();</span></span><br><span class="line">        <span class="comment">//设置KEY序列化        template.setKeySerializer(RedisSerializer.string());  //返回值是StringRedisSerializer.UTF_8;        template.setHashKeySerializer&gt; &gt; (RedisSerializer.string());</span></span><br><span class="line">        <span class="comment">//设置Value序列化        template.setValueSerializer(genericJackson2JsonRedisSerializer);</span></span><br><span class="line">        template.setHashValueSerializer(genericJackson2JsonRedisSerializer);</span><br><span class="line">        <span class="comment">//返回        return template;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <p>@Configuration：标记这个类为配置类，Spring在启动时会读取这个类的配置@Bean：将该方法的返回值注册为Spring容器中的一个BeanRedisTemplate&lt;String, Object&gt;：返回的Bean类型，支&gt; 持String类型的Key和任意Object类型的Value</p>
 <ul>
@@ -1442,7 +1441,14 @@
 <p>  注意 这里存取Hash数据用的是put entries    与Java相似</p>
   <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">voidtestHash()&#123;</span><br><span class="line">    stringRedisTemplate.opsForHash().put(<span class="string">&quot;friends&quot;</span>,<span class="string">&quot;friend01&quot;</span>,<span class="string">&quot;xinxin_suried&quot;</span>);</span><br><span class="line">    stringRedisTemplate.opsForHash().put(<span class="string">&quot;friends&quot;</span>,<span class="string">&quot;friend02&quot;</span>,<span class="string">&quot;canon_0724&quot;</span>);</span><br><span class="line">Map&lt;Object, Object&gt; friends = stringRedisTemplate.opsForHash().entries(<span class="string">&quot;friends&quot;</span>);</span><br><span class="line">    System.out.println(friends);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
 </ul>
-
+<h2 id="黑马没讲知识的补充"><a href="#黑马没讲知识的补充" class="headerlink" title="黑马没讲知识的补充"></a>黑马没讲知识的补充</h2><ul>
+<li><p>登出功能<br>  很容易实现<br>  只需要在Controller层调用<code>UserHolder</code>方法来将用户信息从<code>ThreadLocal</code>去除就行</p>
+<ul>
+<li>UserController的代码</li>
+</ul>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/logout&quot;)</span>  </span><br><span class="line">   <span class="keyword">public</span> Result <span class="title function_">logout</span><span class="params">()</span>&#123;  </span><br><span class="line">   UserHolder.removeUser();  </span><br><span class="line">   <span class="keyword">return</span> Result.ok();  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h1 id="4-商品查询缓存"><a href="#4-商品查询缓存" class="headerlink" title="4. 商品查询缓存"></a>4. 商品查询缓存</h1>
 		</div>
 
 		
@@ -1456,7 +1462,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-18 12:22:50
+                    :</strong> 2025-10-18 13:03:56
             </li>
         
         <li>
@@ -1535,7 +1541,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Redis基础篇</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86NoSQL"><span class="nav-text">认识NoSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86Redis"><span class="nav-text">认识Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis桌面客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">图形化桌面客户端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">Redis常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%B1%BB%E5%9E%8B"><span class="nav-text">Hash类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%E7%B1%BB%E5%9E%8B"><span class="nav-text">List类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set%E7%B1%BB%E5%9E%8B"><span class="nav-text">Set类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortedSet%E7%B1%BB%E5%9E%8B"><span class="nav-text">SortedSet类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%9A%84Java%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis的Java客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Jedis客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringDataRedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">SpringDataRedis客户端</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86NoSQL"><span class="nav-text">认识NoSQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86Redis"><span class="nav-text">认识Redis</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis桌面客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E5%8C%96%E6%A1%8C%E9%9D%A2%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">图形化桌面客户端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-text">Redis常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E7%B1%BB%E5%9E%8B"><span class="nav-text">String类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hash%E7%B1%BB%E5%9E%8B"><span class="nav-text">Hash类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#List%E7%B1%BB%E5%9E%8B"><span class="nav-text">List类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set%E7%B1%BB%E5%9E%8B"><span class="nav-text">Set类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortedSet%E7%B1%BB%E5%9E%8B"><span class="nav-text">SortedSet类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E7%9A%84Java%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Redis的Java客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">Jedis客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringDataRedis%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">SpringDataRedis客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a></li></ol>
 
 	</div>
 </div>
@@ -1568,7 +1574,7 @@
                     </span>
                     
                         <span>
-                            共 14.2k 字
+                            共 14.3k 字
                         </span>
                     
                 </p>
