@@ -144,13 +144,15 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/%E6%8B%A6%E6%88%AA%E5%99%A8.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-18T04:42:21.324Z">
+<meta property="article:modified_time" content="2025-10-18T04:49:02.075Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="项目">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/%E6%8B%A6%E6%88%AA%E5%99%A8.jpg">
     
     
     <!--- Icon Part-->
@@ -638,8 +640,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-18 12:42:21</span>
-            <span class="mobile">2025-10-18 12:42:21</span>
+            <span class="desktop">2025-10-18 12:49:02</span>
+            <span class="mobile">2025-10-18 12:49:02</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -730,9 +732,10 @@
 </ul>
 <hr>
 <h1 id="2-导入项目"><a href="#2-导入项目" class="headerlink" title="2. 导入项目"></a>2. 导入项目</h1><ul>
-<li><p>在实现功能之前，我们先来导入项目，让项目跑起来</p>
-<ul>
+<li>在实现功能之前，我们先来导入项目，让项目跑起来<ul>
 <li>导入SQL表</li>
+</ul>
+</li>
 </ul>
 <table>
 <thead>
@@ -759,7 +762,7 @@
 </tr>
 <tr>
 <td>tb_blog</td>
-<td>用户日记表（达人探店日记)</td>
+<td>用户日记表（达人探店日记）</td>
 </tr>
 <tr>
 <td>tb_follow</td>
@@ -774,18 +777,18 @@
 <td>优惠券的订单表</td>
 </tr>
 </tbody></table>
+<blockquote>
 <ul>
-<li><p>有关当前模型</p>
-<ul>
+<li>有关当前模型<ul>
 <li>该项目采用的是前后端分离开发模式</li>
 <li>手机或者app端发起请求 请求我们的Nginx服务器 Nginx基于七层模型走的是HTTP协议 可以实现基于Lua直接绕开Tomcat访问Redis 也可以作为静态资源服务器 轻松抗下上万并发 负载均衡到下游Tomcat服务器 打散流量</li>
 <li>我们都知道一台4核8G的Tomcat在优化和处理简单业务的加持下 大不了就处理1000左右的并发 经过Nginx的负载均衡分馏后 利用集群支撑起整个项目 同时Nginx在部署了前端项目后 更是可以做到动静分离 进一步降低Tomcat服务器的压力 这些功能都靠Nginx起作用 所以Ngix是项目重要的一环</li>
 <li>在Tomcat支撑起并发流量后 我们如果让Tomcat直接去访问Mysql 根据经验Mysql企业级服务器只要上点并发 一般是16或32核心cpu 32或64G内存 向企业级mysql加上固态硬盘能够支撑的并发 大概就是4000~7000左右 上万并发 瞬间就会让Mysql服务器的cpu 硬盘全部打满 容易崩溃 所以我们在高并发场景下 会选择使用mysql集群 同时为了进一步降低Mysql的压力 同时增加访问的性能 我们也会加入Redis 同时使用Redis集群使得Redis对外提供更好的服务</li>
 </ul>
-<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=ZDQ5YThjZjliYzBjMTMzYjhkNDRjZTFhYzgxNzBjZDZfMWhZVHYyOWZyejFkMUZROWdnbFgyQWhvWVIwR2RZWTNfVG9rZW46Tjlka2JYWkpmb2YzMXJ4NUxmdWNnejc3bmllXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
 </li>
 </ul>
-</li>
+</blockquote>
+<ul>
 <li><p>导入后端项目</p>
 <ul>
 <li>黑马已经提供好了后端项目源码压缩包，我们将其解压之后，放到自己的workspace里</li>
@@ -797,15 +800,11 @@
 </li>
 <li><p>黑马已经提供好了前端项目源码压缩包，我们将其解压之后，放到自己的workSpace里</p>
 </li>
-<li><p>然后在nginx所在目录打开一个cmd窗口，输入命令，即可启动项目</p>
+<li><p>然后在nginx所在目录打开一个cmd窗口，输入命令，即可启动项目<br><code>start nginx.exe</code></p>
+</li>
+<li><p>访问<a class="link"   target="_blank" rel="noopener" href="http://localhost:8080/" >http://localhost:8080/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> ，打开开发者模式，可以看到页面</p>
 </li>
 </ul>
-<p>start nginx.exe</p>
-<hr>
-<ul>
-<li>访问<a class="link"   target="_blank" rel="noopener" href="http://localhost:8080/" >http://localhost:8080/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> ，打开开发者模式，可以看到页面</li>
-</ul>
-<p><a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=MjNlZTFmOTg4NjIyYzU0Zjg5Y2FjMjEyYWJiNWIwNzBfNmp1OVFVelFyQ2p6N3hOeFhhdmdjb29vUmRlbWVWZkFfVG9rZW46QU0wVmIxSFNmbzByQ1J4SVZZVWN2SERCbk9mXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
 <h1 id="3-短信登录"><a href="#3-短信登录" class="headerlink" title="3. 短信登录"></a>3. 短信登录</h1><ul>
 <li><p>Session的工作流程</p>
   <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一次：存储数据</span></span><br><span class="line">session.setAttribute(<span class="string">&quot;code&quot;</span>, <span class="string">&quot;123456&quot;</span>);</span><br><span class="line"><span class="comment">// 实际上：服务器内部 Map&lt;SessionID, Map&lt;String, Object&gt;&gt;</span></span><br><span class="line"><span class="comment">// 类似于：Map&lt;&quot;ABC123&quot;, &#123;&quot;code&quot;: &quot;123456&quot;&#125;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二次：获取数据</span></span><br><span class="line"><span class="type">String</span> <span class="variable">code</span> <span class="operator">=</span> (String) session.getAttribute(<span class="string">&quot;code&quot;</span>);</span><br><span class="line"><span class="comment">// 实际上：通过Session ID &quot;ABC123&quot; 找到对应的Map，然后取&quot;code&quot;的值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证成功，清除Session中的验证码</span></span><br><span class="line">session.removeAttribute(<span class="string">&quot;code&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
@@ -856,15 +855,11 @@
 <p>可以看到请求的URL是user&#x2F;login 并且请求参数是JSON形式</p>
 <p>由此推断出调用了<code>userController</code>的<code>login</code>方法</p>
 <ul>
-<li><p>由图 前端提交的是json形式 所以需要使用<code>@RequestBody</code></p>
-<ul>
+<li>由图 前端提交的是json形式 所以需要使用<code>@RequestBody</code><ul>
 <li><code>@RequestBody</code>是Sping MVC中的注解 作用是将HTTP请求的 JSON&#x2F;XML正文转换为Java对象</li>
 </ul>
-<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=MWMxNDIzMmJlYjVmNDlhNzFiMmU4YzRhN2NmN2JiOTlfcmNCd1FWWXhOdVNqWG9wVEZWcTN4aEFtbTBhZUo5WWhfVG9rZW46UllQUGJMdGtxb3oxSnV4YkhEQ2NUUGQ1bkNnXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>
-  </p>
 </li>
-<li><p>如下是<code>LoginFromDTO</code>的代码 由此可知将JSON文件转换成立<code>phone code password</code></p>
-</li>
+<li>如下是<code>LoginFromDTO</code>的代码 由此可知将JSON文件转换成立<code>phone code password</code></li>
 </ul>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line">publicclassLoginFormDTO &#123;</span><br><span class="line">privateString phone;</span><br><span class="line">privateString code;</span><br><span class="line">privateString password;  <span class="comment">//可以密码登录</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 
@@ -894,8 +889,12 @@
 <ul>
 <li><strong>拦截器概念</strong></li>
 </ul>
-<p>  在学习拦截器的概念之前，我们先看一张图</p>
-<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=NWMyYWM3N2ZmYjgwNDEzNGNjYWUwN2NlYjk2YTdiODZfZTBGRGN5YzhUSW1YcHJyc3J5NUM5WDhGRU95RDUybmNfVG9rZW46UWxETmJBV2xjb0szQjB4R3RrTGNIdDVhbm9mXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+<p>  在学习拦截器的概念之前，我们先看一张图<br>  <img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E6%8B%A6%E6%88%AA%E5%99%A8.jpg"
+                      alt="alt 拦截器"
+                ></p>
 <ul>
 <li>浏览器发送一个请求，会先到Tomcat服务器的web服务器</li>
 <li>Tomcat服务器接收到请求后，会先去判断请求的是<code>静态资源</code>还是<code>动态资源</code></li>
@@ -933,8 +932,6 @@
 </ul>
 </li>
 </ul>
-<p>  <a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=OWM4ZWQyYTI3NGQzZDI3Yzk3NzkwZGU0MWFhMDYzNTlfWjQ0b29qRXI4dXIyRzVSdjU4U2VUYVh0azQyTThlaHhfVG9rZW46VTIwTWI2ZjFkb09HMUF4UUw5NWNVcUFqblJkXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>
-  </p>
 </li>
 <li><p>先写出拦截器功能</p>
 <p>  创建一个<code>LoginInterceptor</code>类  完成<code>HandlerInterceptor</code>接口  重写其中的两个方法  前置拦截器和完成处理方法  前置拦截器主要用于我们登录之前的权限校验  完成处理方法是用于处理登录后的信息  避免内存泄漏</p>
@@ -1100,12 +1097,11 @@
 
   <div class="note-large red">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>自定义标题</p>
+      <p>拦截器NPE的心得</p>
 
     </div>
     <div class="notel-content markdown-body">
-      <p>拦截器NPE的心得</p>
-<p>这里我运行服务端之后可以登录  但是返回主页面的时候报错了  报错的是空指针异常NPE</p>
+      <p>这里我运行服务端之后可以登录  但是返回主页面的时候报错了  报错的是空指针异常NPE</p>
 <p>为什么？ 返回主页面报错说明拦截出错了  命令台也显示是我的拦截器出现了NPE</p>
 <p>我打开LoginInterceptor  出错的是第46行  如下</p>
 <p><code>*Map*&lt;Object, Object&gt; userMap = stringRedisTemplate.opsForHash().entries(***LOGIN_USER_KEY*** + token);</code></p>
@@ -1125,11 +1121,10 @@
 <li>拦截的问题： 拦截器只会拦截指定的路径 不是拦截一切</li>
 </ul>
 <p>如果一直访问的是没有被拦截的页面  token就不会被刷新  也就没有刷新有效期</p>
-<p><a class="link"   target="_blank" rel="noopener" href="https://scnyg4hu9bt3.feishu.cn/space/api/box/stream/download/asynccode/?code=MDIxZWJjZDhkMzMzMzdlOGFlYjM1MDA2YWJkZGU2OTRfR0wxQnpQYUcxejE2ZG52VmJubHJkb2EzN1V1b3V2ZzFfVG9rZW46S0lCOGJjbUw3b3UwYnp4VVJQeWNQSjdibm1lXzE3NjA3NjE4OTE6MTc2MDc2NTQ5MV9WNA" ><i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
 
   <div class="note-large red">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>自定义标题</p>
+      <p>解决方法</p>
 
     </div>
     <div class="notel-content markdown-body">
@@ -1163,7 +1158,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-18 12:42:21
+                    :</strong> 2025-10-18 12:49:02
             </li>
         
         <li>
