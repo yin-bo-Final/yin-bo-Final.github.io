@@ -150,7 +150,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E4%BD%9C%E7%94%A8%E6%A8%A1%E5%9E%8B2.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E6%A0%B9%E6%8D%AEid%E6%9F%A5%E8%AF%A2%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98.png">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-18T10:49:33.778Z">
+<meta property="article:modified_time" content="2025-10-18T13:15:38.101Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -644,8 +644,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-18 18:49:33</span>
-            <span class="mobile">2025-10-18 18:49:33</span>
+            <span class="desktop">2025-10-18 21:15:38</span>
+            <span class="mobile">2025-10-18 21:15:38</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -675,12 +675,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>8.8k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>9.3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>35 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>37 分钟</span>
         </span>
     
     
@@ -1187,7 +1187,7 @@
 </ul>
 </li>
 <li>添加了Redis缓存<ul>
-<li>客户端优先向Redis发送请求  如果Redis中恰好有需要的数据 则字何解返回给客户端</li>
+<li>客户端优先向Redis发送请求  如果Redis中恰好有需要的数据 则直接返回给客户端</li>
 <li>如果没有   则向数据库发送请求  数据向Redis发送数据使其缓存  同时返回给客户端  这样下次相同请求可以直接由Redis完成</li>
 </ul>
 </li>
@@ -1216,19 +1216,49 @@
 
   <div class="note-large blue">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>提示</p>
+      <p>实现据id查询商铺缓存</p>
 
     </div>
     <div class="notel-content markdown-body">
       <ul>
 <li>那么接下来 让我们尝试写一下根据id查询商铺缓存吧❤<ul>
 <li>如果在Redis中查询到数据了 那一定是JSON结构的  所以获取和存储商铺数据类型用的是String</li>
-<li>依旧使用hutool库中的JSONUtil来转换shop的类型🤭</li>
+<li>依旧使用<code>hutool</code>库中的<code>JSONUtil</code>来转换shop的类型🤭</li>
 </ul>
 </li>
 </ul>
-<div class="tabs" id="tab-根据id查询商铺缓存的代码"><ul class="nav-tabs"><li class="tab active"><a class="#根据id查询商铺缓存的代码-1">ShopSerciceImpl.java</a></li><li class="tab"><a class="#根据id查询商铺缓存的代码-2">ShopController.java</a></li></ul><div class="tab-content"><div class="tab-pane active" id="根据id查询商铺缓存的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShopServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;ShopMapper, Shop&gt; <span class="keyword">implements</span> <span class="title class_">IShopService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    StringRedisTemplate  stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="comment">//1. 从Redis查询商铺缓存</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">shopJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);</span><br><span class="line">        <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">                <span class="comment">//3 如果没命中 也就是数据在Redis中存在</span></span><br><span class="line">        <span class="keyword">if</span> (StrUtil.isNotBlank(shopJson)) &#123;</span><br><span class="line">            <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> JSONUtil.toBean(shopJson, Shop.class);</span><br><span class="line">            <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果Redis中不存在数据  则在MySQL中查询</span></span><br><span class="line">        <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> getById(id);</span><br><span class="line">        <span class="comment">//如果在MySQL中也没查到  返回404</span></span><br><span class="line">        <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;店铺不存在!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果在MySQL中查到了 存入Redis 使用String存的是JSON类型</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(shop));</span><br><span class="line">        <span class="comment">//7. 返回商铺信息</span></span><br><span class="line">        <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="根据id查询商铺缓存的代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryShopById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="comment">//getById是IService接口里的方法  是MyBatisPlus提供的接口</span></span><br><span class="line">    <span class="comment">//所以这里直接向前端返回数据库里的数据</span></span><br><span class="line">    <span class="keyword">return</span> shopService.queryById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+<div class="tabs" id="tab-根据id查询商铺缓存的代码"><ul class="nav-tabs"><li class="tab active"><a class="#根据id查询商铺缓存的代码-1">Controller层</a></li><li class="tab"><a class="#根据id查询商铺缓存的代码-2">Service层</a></li><li class="tab"><a class="#根据id查询商铺缓存的代码-3">SerciceImpl层</a></li></ul><div class="tab-content"><div class="tab-pane active" id="根据id查询商铺缓存的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryShopById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="comment">//getById是IService接口里的方法  是MyBatisPlus提供的接口</span></span><br><span class="line">    <span class="comment">//所以这里直接向前端返回数据库里的数据</span></span><br><span class="line">    <span class="keyword">return</span> shopService.queryById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="根据id查询商铺缓存的代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IShopService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;Shop&gt; &#123;</span><br><span class="line"></span><br><span class="line">    Result <span class="title function_">queryById</span><span class="params">(Long id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="根据id查询商铺缓存的代码-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShopServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;ShopMapper, Shop&gt; <span class="keyword">implements</span> <span class="title class_">IShopService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    StringRedisTemplate  stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="comment">//1. 从Redis查询商铺缓存</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">shopJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);</span><br><span class="line">        <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">                <span class="comment">//3. 如果命中 也就是数据在Redis中存在</span></span><br><span class="line">        <span class="keyword">if</span> (StrUtil.isNotBlank(shopJson)) &#123;</span><br><span class="line">            <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> JSONUtil.toBean(shopJson, Shop.class);</span><br><span class="line">            <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4. 如果Redis中不存在数据  则在MySQL中查询</span></span><br><span class="line">        <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> getById(id);</span><br><span class="line">        <span class="comment">//5. 如果在MySQL中也没查到  返回404</span></span><br><span class="line">        <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;店铺不存在!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//6. 如果在MySQL中查到了 存入Redis 使用String存的是JSON类型</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(shop));</span><br><span class="line">        <span class="comment">//7. 返回商铺信息</span></span><br><span class="line">        <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
 
+<ul>
+<li>做好根据id查询商铺缓存之后就会发现再次访问店铺加载时间缩短到了几ms  这就是缓存的力量</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>实现查询商铺列表缓存</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li>接下来趁热打铁😄<ul>
+<li>咱们自己独立完成以下商铺列表的缓存</li>
+<li>整个功能都是我自己写的哦  没有看黑马🤭</li>
+<li>为什么我存到Redis中的列表类型用JSON而不用List🤔<ul>
+<li>JSON：1次序列化 + 1次网络IO</li>
+<li>List：N次序列化 + N次网络IO（N为元素个数）</li>
+</ul>
+</li>
+<li>使用的SONUtil.toList方法将JSON改为List的哦</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="tab-查询商铺列表代码"><ul class="nav-tabs"><li class="tab active"><a class="#查询商铺列表代码-1">Controller层</a></li><li class="tab"><a class="#查询商铺列表代码-2">Service层</a></li><li class="tab"><a class="#查询商铺列表代码-3">SerciceImpl层</a></li></ul><div class="tab-content"><div class="tab-pane active" id="查询商铺列表代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;/shop-type&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShopTypeController</span> &#123;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> IShopTypeService typeService;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;list&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryTypeList</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> typeService.queryShopTypeByList();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询商铺列表代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IShopTypeService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;ShopType&gt; &#123;</span><br><span class="line"></span><br><span class="line">    Result <span class="title function_">queryShopTypeByList</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询商铺列表代码-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShopTypeServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;ShopTypeMapper, ShopType&gt; <span class="keyword">implements</span> <span class="title class_">IShopTypeService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryShopTypeByList</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//1. 从Redis中查询商铺类型</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">shopTypeListJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_TYPE_KEY);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">        <span class="comment">//3 如果命中 也就是数据在Redis中存在</span></span><br><span class="line">        <span class="keyword">if</span>(StrUtil.isNotBlank(shopTypeListJson))&#123;</span><br><span class="line">            <span class="comment">//将JSON数据转化为List&lt;ShopType&gt;集合</span></span><br><span class="line">            List&lt;ShopType&gt; shopTypeList = JSONUtil.toList(shopTypeListJson, ShopType.class);</span><br><span class="line">            <span class="keyword">return</span> Result.ok(shopTypeList);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//4. 如果Redis中不存在数据  则在MySQL中查询</span></span><br><span class="line">            <span class="comment">//这里的sort是tb_shop_type中的排序列</span></span><br><span class="line">            <span class="comment">//所以这段代码使用MyBatisPlus中的query方法按照sort列的顺序赋值给shopTypeList</span></span><br><span class="line">        List&lt;ShopType&gt; shopTypeList = query().orderByAsc(<span class="string">&quot;sort&quot;</span>).list();</span><br><span class="line">        <span class="comment">//5. 如果在MySQL中也没查到  返回404</span></span><br><span class="line">        <span class="keyword">if</span>(shopTypeList == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;商铺列表不存在！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//6. 如果在MySQL中查到了  将其存入Redis  使用String类型存入Redis</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(CACHE_SHOP_TYPE_KEY,JSONUtil.toJsonStr(shopTypeList));</span><br><span class="line">        <span class="comment">//7. 返回商铺列表信息</span></span><br><span class="line">        <span class="keyword">return</span> Result.ok(shopTypeList);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
 
     </div>
   </div>
@@ -1245,7 +1275,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-18 18:49:33
+                    :</strong> 2025-10-18 21:15:38
             </li>
         
         <li>
@@ -1349,7 +1379,7 @@
                     </span>
                     
                         <span>
-                            共 14.8k 字
+                            共 15.3k 字
                         </span>
                     
                 </p>
