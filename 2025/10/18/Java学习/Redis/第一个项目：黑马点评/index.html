@@ -155,8 +155,11 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/CLI%E4%B8%ADupdate.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/MySQL%E4%B8%ADupdate.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E8%A7%A3%E5%86%B3%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%BA%97%E9%93%BA.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/Redis%E4%B8%AD%E7%9C%8B%E7%A9%BA%E5%80%BC.png">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-19T07:33:26.024Z">
+<meta property="article:modified_time" content="2025-10-19T10:20:47.280Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -650,8 +653,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-19 15:33:26</span>
-            <span class="mobile">2025-10-19 15:33:26</span>
+            <span class="desktop">2025-10-19 18:20:47</span>
+            <span class="mobile">2025-10-19 18:20:47</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -663,11 +666,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Java/">Java</a>&nbsp;
+                        <a href="/tags/Redis/">Redis</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                        | <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
@@ -681,12 +684,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>11.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>12k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>45 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>47 分钟</span>
         </span>
     
     
@@ -1444,7 +1447,7 @@
 
 <h2 id="4-5-缓存穿透"><a href="#4-5-缓存穿透" class="headerlink" title="4.5 缓存穿透"></a>4.5 缓存穿透</h2><ul>
 <li><code>缓存穿透</code>：指客户端请求的数据在缓存中或在数据库中都不存在，这样缓存永远都不生效（只有数据库查到了，才会让redis缓存，现在的问题是查不到），会频繁的访问数据库。</li>
-<li><code>常见的结局方案：</code><ul>
+<li><code>常见的解决方案：</code><ul>
 <li>缓存空对象：<ul>
 <li><strong>将不存在的数据设置为null存到redis中，这样下次用户就不会直接访问数据库。给这种空对象设置TTL，防止占用太多内存。但是如果恰好在数据库中更新了相同key的对象，就会数据库缓存短期不一致。</strong><ul>
 <li>优点：实现简单，维护方便。</li>
@@ -1476,10 +1479,56 @@
 
     </div>
     <div class="notel-content markdown-body">
-      <p>布隆过滤器怎么知道我们数据库和Redis中是否有存在的数据呢？其实是采用的哈希思想来解决这个问题，通过一个庞大的二进制数据，根据哈希思想去判断当前数据是否存在。<br>误判的原因：布隆过滤器采用的是哈希思想，只要是哈希思想，就可能存在哈希冲突。</p>
+      <p>布隆过滤器怎么知道我们数据库和Redis中是否有存在的数据呢？<br>其实是采用的哈希思想来解决这个问题，通过一个庞大的二进制数据，根据哈希思想去判断当前数据是否存在。<br>误判的原因：布隆过滤器采用的是哈希思想，<strong>只要是哈希思想，就可能存在哈希冲突。</strong></p>
 
     </div>
   </div>
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>编码解决商品查询的缓存穿透问题</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li>核心思路如下<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E8%A7%A3%E5%86%B3%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F.png"
+                      alt="alt 解决缓存穿透"
+                ></li>
+<li>在ServiceImpl层增加判断逻辑  如果不存在将value设置为空字符串，设置较短的TTL，返回错误信息。</li>
+<li>再次发起查询，判断value是否为空字符串，如果是，就说明是不存在的数据，返回错误信息。</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="comment">//1. 从Redis查询商铺缓存</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">shopJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);</span><br><span class="line">        <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">                <span class="comment">//3 如果命中 也就是数据在Redis中存在</span></span><br><span class="line">        <span class="keyword">if</span> (StrUtil.isNotBlank(shopJson)) &#123;</span><br><span class="line">            <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> JSONUtil.toBean(shopJson, Shop.class);</span><br><span class="line">            <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        + <span class="comment">//判断商铺信息是否为空值</span></span><br><span class="line">        + <span class="comment">//这里shopJson只有空值和null两种情况</span></span><br><span class="line">        + <span class="comment">//排除null就是空对象</span></span><br><span class="line">        + <span class="keyword">if</span>(shopJson != <span class="literal">null</span>)&#123;</span><br><span class="line">        +     <span class="keyword">return</span> Result.fail(<span class="string">&quot;商铺不存在&quot;</span>);</span><br><span class="line">        + &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//3. 如果未命中  则在MySQL中查询</span></span><br><span class="line">        <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> getById(id);</span><br><span class="line">        - <span class="comment">//4. 如果在MySQL中也没查到  返回404</span></span><br><span class="line">        + <span class="comment">//4. 如果在MySQL中也没查到  将空值写入Redis</span></span><br><span class="line">        <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">        + stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id,<span class="string">&quot;&quot;</span>,CACHE_NULL_TTL,TimeUnit.MINUTES);</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;店铺不存在!&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//5. 如果在MySQL中查到了 存入Redis 使用String存的是JSON类型</span></span><br><span class="line">        <span class="comment">//写入缓存设置TTL</span></span><br><span class="line">        stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(shop),CACHE_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">        <span class="comment">//6. 返回商铺信息</span></span><br><span class="line">        <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+<p>运行之后进入一个不存在的店铺页面  会提示错误<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%BA%97%E9%93%BA.png"
+                      alt="alt 查询不存在店铺"
+                ></p>
+<p>在Redis中可以看到空对象，并且有很短的TTL<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/Redis%E4%B8%AD%E7%9C%8B%E7%A9%BA%E5%80%BC.png"
+                      alt="alt Redis中看空值"
+                ></p>
+
+    </div>
+  </div>
+
+
+<blockquote>
+<p>小结：</p>
+<p>缓存穿透产生的原因是什么？<br>用户请求的数据在缓存中和在数据库中都不存在，不断发起这样的请求，会给数据库带来巨大压力<br>缓存产投的解决方案有哪些？<br>缓存null值<br>布隆过滤<br>增强id复杂度，避免被猜测id规律（可以采用雪花算法）<br>做好数据的基础格式校验<br>加强用户权限校验<br>做好热点参数的限流</p>
+</blockquote>
+<h2 id="4-6-缓存雪崩"><a href="#4-6-缓存雪崩" class="headerlink" title="4.6 缓存雪崩"></a>4.6 缓存雪崩</h2><ul>
+<li>缓存雪崩是指在同一时间段，大量缓存的key同时失效，或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力。</li>
+</ul>
+
 		</div>
 
 		
@@ -1493,7 +1542,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-19 15:33:26
+                    :</strong> 2025-10-19 18:20:47
             </li>
         
         <li>
@@ -1519,11 +1568,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Redis/">#Redis</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -1564,7 +1613,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">第一个项目：黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1597,7 +1646,7 @@
                     </span>
                     
                         <span>
-                            共 17.5k 字
+                            共 18k 字
                         </span>
                     
                 </p>
