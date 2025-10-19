@@ -158,8 +158,12 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E8%A7%A3%E5%86%B3%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E6%9F%A5%E8%AF%A2%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%BA%97%E9%93%BA.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/Redis%E4%B8%AD%E7%9C%8B%E7%A9%BA%E5%80%BC.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF1.jpg">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E4%BA%92%E6%96%A5%E9%94%81.jpg">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F2.jpg">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-19T10:20:47.280Z">
+<meta property="article:modified_time" content="2025-10-19T11:36:44.006Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -653,8 +657,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-19 18:20:47</span>
-            <span class="mobile">2025-10-19 18:20:47</span>
+            <span class="desktop">2025-10-19 19:36:44</span>
+            <span class="mobile">2025-10-19 19:36:44</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -684,12 +688,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>12k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>13.2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>47 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>51 分钟</span>
         </span>
     
     
@@ -1526,8 +1530,114 @@
 <p>缓存穿透产生的原因是什么？<br>用户请求的数据在缓存中和在数据库中都不存在，不断发起这样的请求，会给数据库带来巨大压力<br>缓存产投的解决方案有哪些？<br>缓存null值<br>布隆过滤<br>增强id复杂度，避免被猜测id规律（可以采用雪花算法）<br>做好数据的基础格式校验<br>加强用户权限校验<br>做好热点参数的限流</p>
 </blockquote>
 <h2 id="4-6-缓存雪崩"><a href="#4-6-缓存雪崩" class="headerlink" title="4.6 缓存雪崩"></a>4.6 缓存雪崩</h2><ul>
-<li>缓存雪崩是指在同一时间段，大量缓存的key同时失效，或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力。</li>
+<li><p>缓存雪崩是指在同一时间段，<strong>大量缓存的key同时失效</strong>，或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力。</p>
+</li>
+<li><p>解决方案</p>
+<ul>
+<li>给不同的Key的TTL添加随机值，让其在不同时间段分批失效。</li>
+<li>利用Redis集群提高服务的可用性（使用一个或者多个哨兵(Sentinel)实例组成的系统，对redis节点进行监控，在主节点出现故障的情况下，能将从节点中的一个升级为主节点，进行故障转义，保证系统的可用性。 ）。</li>
+<li>给缓存业务添加降级限流策略 <strong>(在微服务中)</strong>。</li>
+<li>给业务添加<strong>多级缓存</strong>（浏览器访问静态资源时，优先读取浏览器本地缓存；访问非静态资源（ajax查询数据）时，访问服务端；请求到达Nginx后，优先读取Nginx本地缓存；如果Nginx本地缓存未命中，则去直接查询Redis（不经过Tomcat）；如果Redis查询未命中，则查询Tomcat；请求进入Tomcat后，优先查询JVM进程缓存；如果JVM进程缓存未命中，则查询数据库）。</li>
 </ul>
+</li>
+</ul>
+<h2 id="4-7-缓存击穿"><a href="#4-7-缓存击穿" class="headerlink" title="4.7 缓存击穿"></a>4.7 缓存击穿</h2><ul>
+<li>缓存击穿也叫热点Key问题，就是一个被<strong>高并发访问</strong>并且<strong>缓存重建业务较复杂</strong>的key突然失效了，那么无数请求访问就会在瞬间给数据库带来巨大的冲击。</li>
+</ul>
+
+  <div class="note-large red">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>缓存击穿解决方法</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li><strong>逻辑分析</strong>：<ul>
+<li>假设线程1在查询缓存之后未命中，去查询数据库重建缓存数据，完成之后其他线程就可以从缓存中加载数据了。</li>
+<li><strong>但在线程1没有重建缓存之前进来了很多线程同时访问，却没有缓存，就会一起访问数据库，导致数据库访问压力过大。</strong></li>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF1.jpg"
+                      alt="alt 缓存击穿1"
+                ></li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p><strong>互斥锁</strong></p>
+<ul>
+<li><p>利用锁的互斥性，假设线程过来，只能一个一个人访问数据库，从而避免对数据库频繁访问。</p>
+</li>
+<li><p>但是会影响查询的性能，使其从并行改成串行，我们可以用<strong>tryLock方法+double check</strong>来解决这个问题</p>
+</li>
+<li><p>线程1在操作的时候，拿锁把门锁上，那么线程2，3，4就不能操作数据库了，只有1操作完打开锁，缓存数据重建好了，那么其他线程直接从redis就能查到数据。</p>
+</li>
+<li><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E4%BA%92%E6%96%A5%E9%94%81.jpg"
+                      alt="alt 缓存击穿互斥锁"
+                ></p>
+</li>
+</ul>
+</li>
+<li><p><strong>逻辑过期</strong></p>
+<ul>
+<li><p>之所以会出现缓存击穿，主要是因为我们对key设置了TTL，如果不设置TTL，那么就不会有缓存击穿了，但是不设置TTL，又会一直占内存，所以我们可以采用<strong>逻辑过期方案</strong>。</p>
+</li>
+<li><p>我们直接在数据的value中设置过期时间，过期时间不会直接作用于Redis，而是我们后续用过逻辑去处理。</p>
+</li>
+<li><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F2.jpg"
+                      alt="alt 缓存击穿逻辑过期2"
+                ></p>
+</li>
+<li><p>假设线程1去查询缓存，然后从value中判断当前数据已经过期。此时线程1去获取互斥锁，那么其他线程会被阻塞，获得锁的进程他会开启一个新线程去进行之前的重建缓存数据的逻辑 <strong>(异步构建缓存数据)</strong>，直到新开的线程完成逻辑之后才会释放锁。<strong>而线程1直接返回过期的数据</strong>，假设线程3过来访问，由于线程2拿着锁，所以线程3无法获得锁，<strong>线程3也直接返回线程1的旧数据数据</strong>（牺牲了数据一致性换取性能的提升）。</p>
+</li>
+<li><p>只有等待线程2重建缓存数据之后，其他线程才能返回正确的数据。</p>
+</li>
+<li><p><strong>这种方案巧妙在于，异步构建缓存数据，缺点是在重建完缓存数据之前，返回的都是脏数据.</strong></p>
+</li>
+<li><p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F.jpg"
+                      alt="alt 缓存击穿逻辑过期"
+                ></p>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><strong>对比互斥锁与逻辑删除</strong></li>
+<li>互斥锁方案：由于保证了互斥性，所以数据一致，且实现简单，只是加了一把锁而已，也没有其他的事情需要操心，所以没有额外的内存消耗，缺点在于有锁的情况，就可能死锁，所以只能串行执行，性能会受到影响。</li>
+<li>逻辑过期方案：线程读取过程中不需要等待，性能好，有一个额外的线程持有锁去进行重构缓存数据，但是在重构数据完成之前，其他线程只能返回脏数据，且实现起来比较麻烦。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>解决方案</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>互斥锁</td>
+<td>没有额外的内存消耗  <br>保证一致性  <br>实现简单</td>
+<td>线程需要等待，性能受影响  <br>可能有死锁风险</td>
+</tr>
+<tr>
+<td>逻辑过期</td>
+<td>线程无需等待，性能较好</td>
+<td>不保证一致性  <br>有额外内存消耗  <br>实现复杂</td>
+</tr>
+</tbody></table>
+
+    </div>
+  </div>
 
 		</div>
 
@@ -1542,7 +1652,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-19 18:20:47
+                    :</strong> 2025-10-19 19:36:44
             </li>
         
         <li>
@@ -1613,7 +1723,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">第一个项目：黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1646,7 +1756,7 @@
                     </span>
                     
                         <span>
-                            共 18k 字
+                            共 19.2k 字
                         </span>
                     
                 </p>
