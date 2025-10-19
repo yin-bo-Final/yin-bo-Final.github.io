@@ -163,8 +163,9 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F2.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E4%BA%92%E6%96%A5%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/setnx%E6%8C%87%E4%BB%A4.png">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-19T12:01:47.151Z">
+<meta property="article:modified_time" content="2025-10-19T13:17:32.940Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -658,8 +659,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-19 20:01:47</span>
-            <span class="mobile">2025-10-19 20:01:47</span>
+            <span class="desktop">2025-10-19 21:17:32</span>
+            <span class="mobile">2025-10-19 21:17:32</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -689,12 +690,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>13.4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>14.4k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>52 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>56 分钟</span>
         </span>
     
     
@@ -1668,8 +1669,51 @@
 </li>
 </ul>
 <p><a class="button center large" target="_blank" rel="noopener" href='https://blog.yinbo.xyz/2025/10/18/Java%E5%AD%A6%E4%B9%A0/Redis/Redis%E5%9F%BA%E7%A1%80/#String%E7%B1%BB%E5%9E%8B' title='以免你不知道什么是setnx指令😓'><i class='fa-solid fa-play-circle'></i> 以免你不知道什么是setnx指令😓</a></p>
-<div class="tabs" id="tab-操作锁的代码"><ul class="nav-tabs"><li class="tab active"><a class="#操作锁的代码-1">tryLock</a></li><li class="tab"><a class="#操作锁的代码-2">Unlock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="操作锁的代码-1"></div><div class="tab-pane" id="操作锁的代码-2"></div></div></div>
+<ul>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/setnx%E6%8C%87%E4%BB%A4.png"
+                      alt="alt setnx指令"
+                ></li>
+</ul>
+<div class="tabs" id="tab-操作锁的代码"><ul class="nav-tabs"><li class="tab active"><a class="#操作锁的代码-1">tryLock</a></li><li class="tab"><a class="#操作锁的代码-2">Unlock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="操作锁的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置互斥锁</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">tryLock</span><span class="params">(String key)</span>&#123;</span><br><span class="line">    <span class="comment">//setOfAbsent就是redis中的setnx 如果value不为空则不能修改</span></span><br><span class="line">    <span class="type">Boolean</span> <span class="variable">Mutex</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().setIfAbsent(LOCK_SHOP_KEY + key, <span class="string">&quot;notnull&quot;</span>, LOCK_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">    <span class="comment">//避免返回值为null，我们这里使用了BooleanUtil工具类</span></span><br><span class="line">    <span class="keyword">return</span> BooleanUtil.isTrue(Mutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="操作锁的代码-2"><p>  &#x2F;&#x2F;释放互斥锁<br>    private void unLock(String key){<br>        stringRedisTemplate.delete(LOCK_SHOP_KEY + key);<br>    }</p></div></div></div>
 
+<ul>
+<li>先把之前的缓存穿透代码修改一下，提取成一个独立的方法 先存着不去调用</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//缓存穿透代码</span></span><br><span class="line"><span class="keyword">public</span> Shop <span class="title function_">queryWithPassThrough</span><span class="params">(Long id)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 从Redis查询商铺缓存</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">shopJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);</span><br><span class="line">    <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">    <span class="comment">//3 如果命中 也就是数据在Redis中存在</span></span><br><span class="line">    <span class="comment">//isNotBlank对于空字符串返回的也是false</span></span><br><span class="line">    <span class="keyword">if</span> (StrUtil.isNotBlank(shopJson)) &#123;</span><br><span class="line">        <span class="keyword">return</span> JSONUtil.toBean(shopJson, Shop.class);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//判断商铺信息是否为空值</span></span><br><span class="line">    <span class="comment">//这里shopJson只有空值和null两种情况</span></span><br><span class="line">    <span class="comment">//排除null就是空对象</span></span><br><span class="line">    <span class="keyword">if</span>(shopJson != <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 如果未命中  则在MySQL中查询</span></span><br><span class="line">    <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> getById(id);</span><br><span class="line">    <span class="comment">//4. 如果在MySQL中也没查到  将空值写入Redis</span></span><br><span class="line">    <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">        stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id,<span class="string">&quot;&quot;</span>,CACHE_NULL_TTL,TimeUnit.MINUTES);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//5. 如果在MySQL中查到了 存入Redis 使用String存的是JSON类型</span></span><br><span class="line">    <span class="comment">//写入缓存设置TTL</span></span><br><span class="line">    stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(shop),CACHE_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">    <span class="comment">//6. 返回商铺信息</span></span><br><span class="line">    <span class="keyword">return</span> shop;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>然后写一个互斥锁的缓存方法<code>queryWithMutex</code><ul>
+<li>这里使用try&#x2F;catch&#x2F;finally来捕获异常。</li>
+<li>如果没有获取互斥锁，那么休眠并通过递归重试</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//缓存穿透代码</span></span><br><span class="line">    <span class="keyword">public</span> Shop <span class="title function_">queryWithMutex</span><span class="params">(Long id)</span> &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//1. 从Redis查询商铺缓存</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">shopJson</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(CACHE_SHOP_KEY + id);</span><br><span class="line">        <span class="comment">//2. 判断缓存是否命中</span></span><br><span class="line">        <span class="comment">//3 如果命中 也就是数据在Redis中存在</span></span><br><span class="line">        <span class="comment">//isNotBlank对于空字符串返回的也是false</span></span><br><span class="line">        <span class="keyword">if</span> (StrUtil.isNotBlank(shopJson)) &#123;</span><br><span class="line">            <span class="keyword">return</span> JSONUtil.toBean(shopJson, Shop.class);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断商铺信息是否为空值</span></span><br><span class="line">        <span class="comment">//这里shopJson只有空值和null两种情况</span></span><br><span class="line">        <span class="comment">//排除null就是空对象</span></span><br><span class="line">        <span class="keyword">if</span>(shopJson != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//3. 如果未命中 实现缓存重建</span></span><br><span class="line">            <span class="comment">//3.1 获取互斥锁</span></span><br><span class="line">            <span class="type">boolean</span> <span class="variable">isGetLock</span> <span class="operator">=</span> tryLock(CACHE_SHOP_KEY + id);</span><br><span class="line">            <span class="comment">//3.2 判断是否获取成功</span></span><br><span class="line">            <span class="keyword">if</span>(!isGetLock)&#123;</span><br><span class="line">                <span class="comment">//3.3 如果获取失败 休眠并重试</span></span><br><span class="line">                Thread.sleep(<span class="number">50</span>);</span><br><span class="line">                <span class="comment">//递归</span></span><br><span class="line">                <span class="keyword">return</span> queryWithMutex(id);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//如果成功获取  根据id查询数据库</span></span><br><span class="line">            shop = getById(id);</span><br><span class="line">            <span class="comment">//为了更容易发生并发冲突  这里模拟重建的延迟  =  如果是企业级代码一定不行</span></span><br><span class="line">            Thread.sleep(<span class="number">200</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//4. 如果在MySQL中也没查到  将空值写入Redis</span></span><br><span class="line">            <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">                stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id,<span class="string">&quot;&quot;</span>,CACHE_NULL_TTL,TimeUnit.MINUTES);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//5. 如果在MySQL中查到了 存入Redis 使用String存的是JSON类型</span></span><br><span class="line">            <span class="comment">//写入缓存设置TTL</span></span><br><span class="line">            stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(shop),CACHE_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//6. 释放互斥锁</span></span><br><span class="line">            unLock(CACHE_SHOP_KEY + id);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//7. 返回商铺信息</span></span><br><span class="line">        <span class="keyword">return</span> shop;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>最后修改<code>queryById</code>方法</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">       <span class="comment">//缓存穿透</span></span><br><span class="line"><span class="comment">//        Shop shop = queryWithPassThrough(id);</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//互斥锁解决缓存击穿</span></span><br><span class="line">        <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> queryWithMutex(id);</span><br><span class="line">        <span class="keyword">if</span> (shop == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;店铺不存在！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//返回商铺信息</span></span><br><span class="line">        <span class="keyword">return</span> Result.ok(shop);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><p>使用JMeter进行测试吧😄</p>
+<ul>
+<li>模拟一下缓存击穿的场景：<ul>
+<li>某个时刻 一个热点数据的TTL到期了，用户不能从Redis中获取热点商品数据，然后就都去数据库里查询，造成数据库压力过大。</li>
+</ul>
+</li>
+<li>那么我们首先将Redis中的热点商品数据删除，模拟TTL到期，用JMeter压力测试，去访问这个没有缓存的热点数据。</li>
+</ul>
+</li>
+<li><p>这里JMeter设置1000个线程访问数据</p>
+<ul>
+<li>如果后台只输出了一条SQL语句 则说明互斥锁生效了，没有造成大量的用户查询数据库</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">: ==&gt;  Preparing: SELECT id,name,type_id,images,area,address,x,y,avg_price,sold,comments,score,open_hours,create_time,update_time FROM tb_shop WHERE id=?</span><br><span class="line">: ==&gt; Parameters: <span class="number">2</span>(Long)</span><br><span class="line">: &lt;==      Total: <span class="number">1</span></span><br></pre></td></tr></table></figure></div>
 
     </div>
   </div>
@@ -1686,7 +1730,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-19 20:01:47
+                    :</strong> 2025-10-19 21:17:32
             </li>
         
         <li>
@@ -1790,7 +1834,7 @@
                     </span>
                     
                         <span>
-                            共 19.4k 字
+                            共 20.4k 字
                         </span>
                     
                 </p>
