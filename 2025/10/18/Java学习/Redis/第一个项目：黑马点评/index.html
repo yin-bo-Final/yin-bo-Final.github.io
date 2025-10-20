@@ -164,8 +164,9 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E4%BA%92%E6%96%A5%E9%94%81%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/setnx%E6%8C%87%E4%BB%A4.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-19T13:19:49.648Z">
+<meta property="article:modified_time" content="2025-10-20T03:09:06.090Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -659,8 +660,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-19 21:19:49</span>
-            <span class="mobile">2025-10-19 21:19:49</span>
+            <span class="desktop">2025-10-20 11:09:06</span>
+            <span class="mobile">2025-10-20 11:09:06</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -690,12 +691,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>14.4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>14.9k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>56 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>58 分钟</span>
         </span>
     
     
@@ -1717,6 +1718,53 @@
 
     </div>
   </div>
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>基于逻辑过期方式方式解决缓存击穿问题</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li><strong>需求</strong>：修改根据id查询的店铺的逻辑，基于<strong>逻辑过期</strong>的方式来解决缓存击穿问题</li>
+<li><strong>思路分析</strong>： 当用户开始查询Redis时，判断是否命中<ul>
+<li><strong>没命中</strong>：返回空数据。</li>
+<li><strong>命中</strong>：将value取出，判断value中的过期时间。<ul>
+<li><strong>没过期</strong>：直接返回redis中的数据。</li>
+<li><strong>过期</strong>：尝试获取互斥锁，如果获取到了，则开启独立线程，然后直接返回之前的数据，独立线程去重构数据，重构完成之后释放互斥锁。</li>
+</ul>
+</li>
+<li><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg"
+                      alt="alt 缓存击穿逻辑过期流程图"
+                ></li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><strong>封装数据</strong>：因为现在redis中存储的数据的value需要带上过期时间，此时要么去修改原来的实体类，要么新建一个类包含原有的数据和过期时间</li>
+</ol>
+<ul>
+<li>如果修改了原来的实体类 就违反了OCP原则 所以这选择新建一个工具类<code>Redisdata</code><ul>
+<li><code>Redisdata</code>里设置一个逻辑过期时间 如果让<code>ShopServiceImpl</code>继承<code>Redisdata</code>就会有代码侵入性 ,所以直接object一个data.</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li>在ShopServiceImpl中新增方法，进行单元测试，看看是否写入数据。</li>
+</ol>
+<div class="tabs" id="tab-测试将有过期时间的商铺数据存入redis"><ul class="nav-tabs"><li class="tab active"><a class="#测试将有过期时间的商铺数据存入redis-1">RedisData</a></li><li class="tab"><a class="#测试将有过期时间的商铺数据存入redis-2">saveShopToRedis</a></li><li class="tab"><a class="#测试将有过期时间的商铺数据存入redis-3">test</a></li></ul><div class="tab-content"><div class="tab-pane active" id="测试将有过期时间的商铺数据存入redis-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisData</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> LocalDateTime expireTime;</span><br><span class="line">    <span class="keyword">private</span> Object data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="测试将有过期时间的商铺数据存入redis-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将封装有获取时间的店铺信息传到redis</span></span><br><span class="line">  <span class="comment">//设置成public以便于测试类调用</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveShopToRedis</span><span class="params">(Long id,Long expireSeconds)</span>&#123;</span><br><span class="line">      <span class="comment">//1. 查询店铺数据</span></span><br><span class="line">      <span class="type">Shop</span> <span class="variable">shop</span> <span class="operator">=</span> getById(id);</span><br><span class="line"></span><br><span class="line">      <span class="comment">//2. 写入逻辑过期</span></span><br><span class="line">      <span class="type">RedisData</span> <span class="variable">redisData</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RedisData</span>();</span><br><span class="line">      <span class="comment">//将shop的数据添加到redisData当中</span></span><br><span class="line">      redisData.setData(shop);</span><br><span class="line">      <span class="comment">//过期时间 = 本地时间 + 所预期的时间</span></span><br><span class="line">      redisData.setExpireTime(LocalDateTime.now().plusSeconds(expireSeconds));</span><br><span class="line"></span><br><span class="line">      <span class="comment">//3. 写入Redis</span></span><br><span class="line">      stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY + id, JSONUtil.toJsonStr(redisData),CACHE_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="测试将有过期时间的商铺数据存入redis-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">testSaveShopToRedis</span><span class="params">()</span> &#123;</span><br><span class="line">    shopService.saveShopToRedis(<span class="number">1L</span>,<span class="number">20L</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+* 运行测试类 在Redis中查看id为1的商铺数据
+* 发现有data和expireTime属性
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;area&quot;</span><span class="punctuation">:</span> <span class="string">&quot;大关&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;openHours&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10:00-22:00&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;sold&quot;</span><span class="punctuation">:</span> <span class="number">4215</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;address&quot;</span><span class="punctuation">:</span> <span class="string">&quot;金华路锦昌文华苑29号&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;comments&quot;</span><span class="punctuation">:</span> <span class="number">3035</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;avgPrice&quot;</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;updateTime&quot;</span><span class="punctuation">:</span> <span class="number">1760852369000</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;score&quot;</span><span class="punctuation">:</span> <span class="number">37</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;createTime&quot;</span><span class="punctuation">:</span> <span class="number">1640167839000</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;102茶餐厅&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;x&quot;</span><span class="punctuation">:</span> <span class="number">120.149192</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;y&quot;</span><span class="punctuation">:</span> <span class="number">30.316078</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;typeId&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;expireTime&quot;</span><span class="punctuation">:</span> <span class="number">1760929504900</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
+
+
+    </div>
+  </div>
 		</div>
 
 		
@@ -1730,7 +1778,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-19 21:19:49
+                    :</strong> 2025-10-20 11:09:06
             </li>
         
         <li>
@@ -1834,7 +1882,7 @@
                     </span>
                     
                         <span>
-                            共 20.4k 字
+                            共 21k 字
                         </span>
                     
                 </p>
