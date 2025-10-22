@@ -166,7 +166,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/setnx%E6%8C%87%E4%BB%A4.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E9%80%BB%E8%BE%91%E8%BF%87%E6%9C%9F%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-22T10:59:56.940Z">
+<meta property="article:modified_time" content="2025-10-22T11:20:27.990Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -660,8 +660,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-22 18:59:56</span>
-            <span class="mobile">2025-10-22 18:59:56</span>
+            <span class="desktop">2025-10-22 19:20:27</span>
+            <span class="mobile">2025-10-22 19:20:27</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -691,7 +691,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>19k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>18.9k 字</span>
         </span>
     
     
@@ -1924,212 +1924,15 @@
 <li><p>表关系如下：</p>
 <ul>
 <li><code>tb_voucher</code>：优惠券的基本信息，优惠金额，使用规则等。</li>
-<li><code>tb_seckill_voucher</code>：优惠券的库存，开始抢购时间，结束抢购时间，特价优惠券才需要填写这些信息<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Collation</th>
-<th>Null</th>
-<th>Key</th>
-<th>Default</th>
-<th>Extra</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td>PRI</td>
-<td>(NULL)</td>
-<td>auto_increment</td>
-<td>主键</td>
-</tr>
-<tr>
-<td>shop_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>商铺id</td>
-</tr>
-<tr>
-<td>title</td>
-<td>varchar(255)</td>
-<td>utf8mb4_general_ci</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>代金券标题</td>
-</tr>
-<tr>
-<td>sub_title</td>
-<td>varchar(255)</td>
-<td>utf8mb4_general_ci</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>副标题</td>
-</tr>
-<tr>
-<td>rules</td>
-<td>varchar(1024)</td>
-<td>utf8mb4_general_ci</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>使用规则</td>
-</tr>
-<tr>
-<td>pay_value</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>支付金额，单位是分。例如200代表2元</td>
-</tr>
-<tr>
-<td>actual_value</td>
-<td>bigint</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>抵扣金额，单位是分。例如200代表2元</td>
-</tr>
-<tr>
-<td>type</td>
-<td>tinyint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>0</td>
-<td></td>
-<td>0,普通券；1,秒杀券</td>
-</tr>
-<tr>
-<td>status</td>
-<td>tinyint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>1</td>
-<td></td>
-<td>1,上架; 2,下架; 3,过期</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>update_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-</tbody></table>
-</li>
+<li><code>tb_seckill_voucher</code>：优惠券的库存，开始抢购时间，结束抢购时间，特价优惠券才需要填写这些信息</li>
 </ul>
 </li>
+<li><p>平价券由于优惠力度并不是很大，所以是可以任意领取。而代金券由于优惠力度大，所以像第二种券，就得限制数量，从表结构上也能看出，特价券除了具有优惠券的基本信息以外，还具有库存，抢购时间，结束时间等等字段</p>
+</li>
+<li><p>黑马在VoucherController中提供了三个接口，可以实现下面的功能；</p>
+</li>
 </ul>
-<ul>
-<li>tb_seckill_voucher：优惠券的库存、开始抢购时间，结束抢购时间。特价优惠券才需要填写这些信息</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Collation</th>
-<th>Null</th>
-<th>Key</th>
-<th>Default</th>
-<th>Extra</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>voucher_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td>PRI</td>
-<td>(NULL)</td>
-<td></td>
-<td>关联的优惠券的id</td>
-</tr>
-<tr>
-<td>stock</td>
-<td>int</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>库存</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>begin_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>生效时间</td>
-</tr>
-<tr>
-<td>end_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>失效时间</td>
-</tr>
-<tr>
-<td>update_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-</tbody></table>
-
+<div class="tabs" id="tab-vouchercontroller里的三个功能"><ul class="nav-tabs"><li class="tab active"><a class="#vouchercontroller里的三个功能-1">添加普通优惠券</a></li><li class="tab"><a class="#vouchercontroller里的三个功能-2">添加秒杀优惠券</a></li><li class="tab"><a class="#vouchercontroller里的三个功能-3">查询商铺的优惠券</a></li></ul><div class="tab-content"><div class="tab-pane active" id="vouchercontroller里的三个功能-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">addVoucher</span><span class="params">(<span class="meta">@RequestBody</span> Voucher voucher)</span> &#123;</span><br><span class="line">    voucherService.save(voucher);</span><br><span class="line">    <span class="keyword">return</span> Result.ok(voucher.getId());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="vouchercontroller里的三个功能-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;seckill&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">addSeckillVoucher</span><span class="params">(<span class="meta">@RequestBody</span> Voucher voucher)</span> &#123;</span><br><span class="line">    voucherService.addSeckillVoucher(voucher);</span><br><span class="line">    <span class="keyword">return</span> Result.ok(voucher.getId());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="vouchercontroller里的三个功能-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/list/&#123;shopId&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryVoucherOfShop</span><span class="params">(<span class="meta">@PathVariable(&quot;shopId&quot;)</span> Long shopId)</span> &#123;</span><br><span class="line">   <span class="keyword">return</span> voucherService.queryVoucherOfShop(shopId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
 		</div>
 
 		
@@ -2143,7 +1946,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-22 18:59:56
+                    :</strong> 2025-10-22 19:20:27
             </li>
         
         <li>
@@ -2247,7 +2050,7 @@
                     </span>
                     
                         <span>
-                            共 25k 字
+                            共 24.9k 字
                         </span>
                     
                 </p>
