@@ -172,8 +172,9 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E4%B9%90%E8%A7%82%E9%94%81%E7%89%88%E6%9C%AC%E5%8F%B7%E6%B3%95.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E4%B9%90%E8%A7%82%E9%94%81CAS%E6%B3%95.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E6%B5%81%E7%A8%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%90%8C%E6%97%B6%E5%90%AF%E5%8A%A8%E4%B8%A4%E4%B8%AA%E6%9C%8D%E5%8A%A1.png">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-29T03:48:14.283Z">
+<meta property="article:modified_time" content="2025-10-29T08:57:25.665Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -667,8 +668,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-29 11:48:14</span>
-            <span class="mobile">2025-10-29 11:48:14</span>
+            <span class="desktop">2025-10-29 16:57:25</span>
+            <span class="mobile">2025-10-29 16:57:25</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -698,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>22.9k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>23.3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>92 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>94 分钟</span>
         </span>
     
     
@@ -2331,8 +2332,45 @@
 </ul>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@MapperScan(&quot;com.hmdp.mapper&quot;)</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="meta">@EnableAspectJAutoProxy(exposeProxy = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HmDianPingApplication</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SpringApplication.run(HmDianPingApplication.class, args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <ul>
-<li>重启服务器，再次使用Jmeter测试，200个线程并发，但是只能抢到一张优惠券，目的达成😙&#96;</li>
+<li>重启服务器，再次使用Jmeter测试，200个线程并发，但是只能抢到一张优惠券，目的达成😙</li>
 </ul>
+<h2 id="5-7-集群下的线程并发安全问题"><a href="#5-7-集群下的线程并发安全问题" class="headerlink" title="5.7 集群下的线程并发安全问题"></a>5.7 集群下的线程并发安全问题</h2><ul>
+<li>通过加锁可以解决单机情况下的一人一单安全问题，但是在集群模式下就不行</li>
+<li>模拟集群：<ol>
+<li><p>我们将服务启动两份，端口分别为8081和8082：</p>
+<ol>
+<li>对着服务按CTRL+D，拷贝当前启动项</li>
+<li>点击修改选项，然后点击添加虚拟机选项</li>
+<li>在里面输入-Dserver.port&#x3D;8082，然后同时启动两个服务，这样就有了服务集群<br>  <img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%90%8C%E6%97%B6%E5%90%AF%E5%8A%A8%E4%B8%A4%E4%B8%AA%E6%9C%8D%E5%8A%A1.png"
+                      alt="alt 同时启动两个服务"
+                ></li>
+</ol>
+</li>
+<li><p>然后修改nginx的conf目录下的nginx.conf文件，配置<strong>反向代理</strong>和<strong>负载均衡</strong>：</p>
+<ul>
+<li>将<code>proxy_pass http://127.0.0.1:8081;</code>注释掉，改用<code>proxy_pass http://backend;</code></li>
+<li>在backend里面加入<code>server 127.0.0.1:8082 max_fails=5 fail_timeout=10s weight=1;</code></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">   location /api &#123;  </span><br><span class="line">        default_type  application/json;</span><br><span class="line">        #internal;  </span><br><span class="line">        keepalive_timeout   30s;  </span><br><span class="line">        keepalive_requests  1000;  </span><br><span class="line">        #支持keep-alive  </span><br><span class="line">        proxy_http_version 1.1;  </span><br><span class="line">        rewrite /api(/.*) $1 break;  </span><br><span class="line">        proxy_pass_request_headers on;</span><br><span class="line">        #more_clear_input_headers Accept-Encoding;  </span><br><span class="line">        proxy_next_upstream error timeout;  </span><br><span class="line">        #proxy_pass http://127.0.0.1:8081;</span><br><span class="line">        proxy_pass http://backend;</span><br><span class="line">    &#125;</span><br><span class="line">upstream backend &#123;</span><br><span class="line">    server 127.0.0.1:8081 max_fails=5 fail_timeout=10s weight=1;</span><br><span class="line">    server 127.0.0.1:8082 max_fails=5 fail_timeout=10s weight=1;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li><p>在nginx文件中输入<code>.\nginx.exe -s reload</code>使其重载</p>
+</li>
+<li><p>现在，用户请求会在这两个节点上负载均衡，再次测试下是否存在线程安全问题😘</p>
+<ul>
+<li>访问<code>http://localhost:8080/api/voucher/list/1</code>，因为在nginx中配置了访问8080会调用8081和8082</li>
+<li>这时看后台命令框则发现只有一个服务被调用了 刷新一下页面，发现另外一个服务被调用了</li>
+<li>这就是nginx的轮询机制</li>
+</ul>
+</li>
+</ol>
 
 		</div>
 
@@ -2347,7 +2385,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-29 11:48:14
+                    :</strong> 2025-10-29 16:57:25
             </li>
         
         <li>
@@ -2418,7 +2456,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -2451,7 +2489,7 @@
                     </span>
                     
                         <span>
-                            共 28.9k 字
+                            共 29.3k 字
                         </span>
                     
                 </p>
