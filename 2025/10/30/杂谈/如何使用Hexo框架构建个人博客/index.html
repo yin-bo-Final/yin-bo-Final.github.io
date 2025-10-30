@@ -145,7 +145,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-10-30T06:25:54.286Z">
-<meta property="article:modified_time" content="2025-10-30T06:52:46.050Z">
+<meta property="article:modified_time" content="2025-10-30T06:54:38.119Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Blog">
 <meta property="article:tag" content="杂谈">
@@ -637,8 +637,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-30 14:52:46</span>
-            <span class="mobile">2025-10-30 14:52:46</span>
+            <span class="desktop">2025-10-30 14:54:38</span>
+            <span class="mobile">2025-10-30 14:54:38</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -664,7 +664,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>198 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>211 字</span>
         </span>
     
     
@@ -718,7 +718,27 @@
 <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查 Node.js 版本   如果输出git的版本号则证明下载成功</span></span><br><span class="line">git <span class="literal">--version</span></span><br></pre></td></tr></table></figure></div></div></div></div>
 
 
-<div class="tabs" id="tab-操作锁的代码"><ul class="nav-tabs"><li class="tab active"><a class="#操作锁的代码-1">tryLock</a></li><li class="tab"><a class="#操作锁的代码-2">Unlock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="操作锁的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置互斥锁</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">tryLock</span><span class="params">(String key)</span>&#123;</span><br><span class="line">    <span class="comment">//setOfAbsent就是redis中的setnx 如果value不为空则不能修改</span></span><br><span class="line">    <span class="type">Boolean</span> <span class="variable">Mutex</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().setIfAbsent(LOCK_SHOP_KEY + key, <span class="string">&quot;notnull&quot;</span>, LOCK_SHOP_TTL, TimeUnit.MINUTES);</span><br><span class="line">    <span class="comment">//避免返回值为null，我们这里使用了BooleanUtil工具类</span></span><br><span class="line">    <span class="keyword">return</span> BooleanUtil.isTrue(Mutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="操作锁的代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//释放互斥锁</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">unLock</span><span class="params">(String key)</span>&#123;</span><br><span class="line">      stringRedisTemplate.delete(LOCK_SHOP_KEY + key);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+<div class="tabs" id="tab-操作锁的代码"><ul class="nav-tabs"><li class="tab active"><a class="#操作锁的代码-1">tryLock</a></li><li class="tab"><a class="#操作锁的代码-2">Unlock</a></li></ul><div class="tab-content"><div class="tab-pane active" id="操作锁的代码-1"><ol>
+<li><strong>下载Node</strong></li>
+</ol>
+<p><a class="button center large" target="_blank" rel="noopener" href='https://nodejs.org/en' title='Node.js官网'><i class='fa-solid fa-download'></i> Node.js官网</a></p>
+<ol start="2">
+<li><strong>通过CMD验证安装</strong></li>
+</ol>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查 Node.js 版本   如果输出node的版本号则证明下载成功</span></span><br><span class="line">node <span class="literal">-v</span></span><br></pre></td></tr></table></figure></div>
+
+
+<ol start="3">
+<li><strong>进行npm换源，然后运行</strong></li>
+</ol>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config <span class="built_in">set</span> registry https://registry.npmmirror.com</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="操作锁的代码-2"><ol>
+<li><strong>下载Git</strong></li>
+</ol>
+<p><a class="button center large" target="_blank" rel="noopener" href='https://git-scm.com/install/' title='Node.js官网'><i class='fa-solid fa-download'></i> Node.js官网</a></p>
+<ol>
+<li><strong>通过CMD验证安装</strong></li>
+</ol>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查 Node.js 版本   如果输出git的版本号则证明下载成功</span></span><br><span class="line">git <span class="literal">--version</span></span><br></pre></td></tr></table></figure></div></div></div></div>
 
 
     </div>
@@ -737,7 +757,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-30 14:52:46
+                    :</strong> 2025-10-30 14:54:38
             </li>
         
         <li>
