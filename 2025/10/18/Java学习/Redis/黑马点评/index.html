@@ -176,7 +176,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-10-30T13:10:30.322Z">
+<meta property="article:modified_time" content="2025-10-30T13:34:01.027Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -670,8 +670,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-10-30 21:10:30</span>
-            <span class="mobile">2025-10-30 21:10:30</span>
+            <span class="desktop">2025-10-30 21:34:01</span>
+            <span class="mobile">2025-10-30 21:34:01</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -683,11 +683,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Java/">Java</a>&nbsp;
+                        <a href="/tags/Redis/">Redis</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                        | <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
@@ -835,7 +835,9 @@
 <li><p>访问<a class="link"   target="_blank" rel="noopener" href="http://localhost:8080/" >http://localhost:8080/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> ，打开开发者模式，可以看到页面</p>
 </li>
 </ul>
-<h1 id="3-短信登录"><a href="#3-短信登录" class="headerlink" title="3. 短信登录"></a>3. 短信登录</h1><ul>
+<hr>
+<h1 id="3-短信登录"><a href="#3-短信登录" class="headerlink" title="3. 短信登录"></a>3. 短信登录</h1><hr>
+<ul>
 <li><p>Session的工作流程</p>
   <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一次：存储数据</span></span><br><span class="line">session.setAttribute(<span class="string">&quot;code&quot;</span>, <span class="string">&quot;123456&quot;</span>);</span><br><span class="line"><span class="comment">// 实际上：服务器内部 Map&lt;SessionID, Map&lt;String, Object&gt;&gt;</span></span><br><span class="line"><span class="comment">// 类似于：Map&lt;&quot;ABC123&quot;, &#123;&quot;code&quot;: &quot;123456&quot;&#125;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二次：获取数据</span></span><br><span class="line"><span class="type">String</span> <span class="variable">code</span> <span class="operator">=</span> (String) session.getAttribute(<span class="string">&quot;code&quot;</span>);</span><br><span class="line"><span class="comment">// 实际上：通过Session ID &quot;ABC123&quot; 找到对应的Map，然后取&quot;code&quot;的值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证成功，清除Session中的验证码</span></span><br><span class="line">session.removeAttribute(<span class="string">&quot;code&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 </li>
@@ -846,6 +848,7 @@
 <li><p>校验登录状态<br>用户在请求的时候，会从cookie中携带<code>JsessionId</code>到后台，后台通过JsessionId从session中拿到用户信息，如果没有session信息，则进行拦截，如果有session信息，则将用户信息保存到<code>threadLocal</code>中，并放行</p>
 </li>
 </ul>
+<hr>
 <h2 id="3-1-Session实现发送验证码功能"><a href="#3-1-Session实现发送验证码功能" class="headerlink" title="3.1 Session实现发送验证码功能"></a>3.1 Session实现发送验证码功能</h2><ul>
 <li><p>发送验证码<br>用户在提交手机号后，会校验手机号是否合法，如果不合法，则要求用户重新输入手机号<br>如果手机号合法，后台此时生成对应的验证码，同时将验证码进行保存，然后再通过短信的方式将验证码发送给用户</p>
 </li>
@@ -878,6 +881,7 @@
 </blockquote>
 </li>
 </ul>
+<hr>
 <h2 id="3-2-Session实现验证码登录功能"><a href="#3-2-Session实现验证码登录功能" class="headerlink" title="3.2 Session实现验证码登录功能"></a>3.2 Session实现验证码登录功能</h2><ul>
 <li>短信验证码登录、注册<br>用户将验证码和手机号进行输入，后台从session中拿到当前验证码，然后和用户输入的验证码进行校验，如果不一致，则无法通过校验，如果一致，则后台根据手机号查询用户，如果用户不存在，则为用户创建账号信息，保存到数据库，无论是否存在，都会将用户信息保存到session中，方便后续获得当前登录信息</li>
 <li>输入手机号和验证码 点击登录的按钮 查看发送的请求</li>
@@ -914,6 +918,7 @@
 <p>解决方案：</p>
 <p>首先在发送验证码功能里使用<code>Session</code>里的<code>setAttribute</code>来获取申请验证码的手机号</p>
 <p>然后在登录功能里通过校验<code>Session</code>里的手机号和前端发送的手机号进行比对 来避免这个漏洞</p>
+<hr>
 <h2 id="3-3-Session实现登录校验拦截功能"><a href="#3-3-Session实现登录校验拦截功能" class="headerlink" title="3.3 Session实现登录校验拦截功能"></a>3.3 <strong>Session实现登录校验拦截功能</strong></h2><ul>
 <li><p>用拦截器对用户信息进行校验</p>
 <ul>
@@ -1034,6 +1039,7 @@
 <p>  暂时无法在飞书文档外展示此内容</p>
 </li>
 </ul>
+<hr>
 <h2 id="3-4-Session共享问题"><a href="#3-4-Session共享问题" class="headerlink" title="3.4 Session共享问题"></a>3.4 Session共享问题</h2><ul>
 <li><p>每个tomcat中都有一份属于自己的session 假设用户第一次访问第一台tomcat 并且把自己的信息存放到第一台服务器的session中</p>
 <p>  但是第二次这个用户访问了第二台tomcat  那么在第二台机器上  肯定没有第一台服务器存放的session  所以此时整个登录拦截功能就会出现问题</p>
@@ -1051,6 +1057,7 @@
 </li>
 </ul>
 <p>所以后面都是基于Redis来完成  我们把session换成Redis  Redis数据本身就是共享的  就可以避免session共享的问题了</p>
+<hr>
 <h2 id="3-5-Redis代替session的业务流程"><a href="#3-5-Redis代替session的业务流程" class="headerlink" title="3.5 Redis代替session的业务流程"></a>3.5 Redis代替session的业务流程</h2><ul>
 <li>设计key结构<ul>
 <li>首先要知道用什么数据结构来存储数据</li>
@@ -1092,6 +1099,7 @@
 </ul>
 </li>
 </ul>
+<hr>
 <h2 id="3-6-基于Redis实现短信登录"><a href="#3-6-基于Redis实现短信登录" class="headerlink" title="3.6 基于Redis实现短信登录"></a>3.6 基于Redis实现短信登录</h2><ol>
 <li><p>在<code>UserServiceImpl</code>中注入<code>StringRedisTemplate</code></p>
  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">privateStringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
@@ -1175,7 +1183,7 @@
 <p>并使用order来将拦截器排序</p>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个类加了@Configuration  说明这个类由Spring构建  所以可以用@Resource注解</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line">publicclassMvcConfigimplementsWebMvcConfigurer&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">privateLoginInterceptor loginInterceptor;</span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">privateRefreshTokenInterceptor refreshTokenInterceptor;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">publicvoidaddInterceptors(InterceptorRegistry registry) &#123;</span><br><span class="line"><span class="comment">//第一个拦截器  拦截所有请求  有用户数据刷新token有效期  没有用户数据不刷新直接放行//使用order来规定拦截器顺序registry.addInterceptor(refreshTokenInterceptor).order(0);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//第二个拦截器  除了以下路径如果没登录直接拦截registry.addInterceptor(loginInterceptor).order(1)</span></span><br><span class="line">                .excludePathPatterns(</span><br><span class="line">                        <span class="string">&quot;/user/code&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/user/login&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/blog/hot&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/shop/**&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/shop-type/**&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/upload/**&quot;</span>,</span><br><span class="line">                        <span class="string">&quot;/voucher/**&quot;</span></span><br><span class="line">                );</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 
-
+<hr>
 <h2 id="3-7-黑马没讲知识的补充"><a href="#3-7-黑马没讲知识的补充" class="headerlink" title="3.7 黑马没讲知识的补充"></a>3.7 黑马没讲知识的补充</h2><ul>
 <li><p>登出功能<br>  很容易实现<br>  只需要在Controller层调用<code>UserHolder</code>类的<code>removeUser</code>方法来将用户信息从<code>ThreadLocal</code>去除就行</p>
 <ul>
@@ -1183,7 +1191,9 @@
 </ul>
   <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/logout&quot;)</span>  </span><br><span class="line">   <span class="keyword">public</span> Result <span class="title function_">logout</span><span class="params">()</span>&#123;  </span><br><span class="line">   UserHolder.removeUser();  </span><br><span class="line">   <span class="keyword">return</span> Result.ok();  </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
-<h1 id="4-商品查询缓存"><a href="#4-商品查询缓存" class="headerlink" title="4. 商品查询缓存"></a>4. 商品查询缓存</h1><h2 id="4-1-什么是缓存？"><a href="#4-1-什么是缓存？" class="headerlink" title="4.1 什么是缓存？"></a>4.1 什么是缓存？</h2><ul>
+<hr>
+<h1 id="4-商品查询缓存"><a href="#4-商品查询缓存" class="headerlink" title="4. 商品查询缓存"></a>4. 商品查询缓存</h1><hr>
+<h2 id="4-1-什么是缓存？"><a href="#4-1-什么是缓存？" class="headerlink" title="4.1 什么是缓存？"></a>4.1 什么是缓存？</h2><ul>
 <li><p>缓存(Cache)就是数据交换的缓冲区，是存储数据的临时地方，一般读写性能较高。</p>
 </li>
 <li><p>在各个层面都有缓存 如图:<br><img  
@@ -1207,6 +1217,7 @@
 </ul>
 </li>
 </ul>
+<hr>
 <h2 id="4-2-添加Redis缓存"><a href="#4-2-添加Redis缓存" class="headerlink" title="4.2 添加Redis缓存"></a>4.2 添加Redis缓存</h2><ul>
 <li>没有添加Redis缓存的时候  <ul>
 <li>客户端直接向数据库发送请求  数据库直接将数据返回给客户端</li>
@@ -1288,8 +1299,7 @@
 
     </div>
   </div>
-
-
+<hr>
 <h2 id="4-3-缓存更新策略"><a href="#4-3-缓存更新策略" class="headerlink" title="4.3 缓存更新策略"></a>4.3 缓存更新策略</h2><ul>
 <li>缓存更新是Redis为了节约内存而设计出来的一个东西，主要是因为内存数据宝贵，当我们向Redis插入太多数据，此时就可能会导致缓存中数据过多，所以Redis会对部分数据进行更新，或者把淘汰更合适。🤔</li>
 </ul>
@@ -1383,6 +1393,7 @@
 
 
 <p><font color="red">红色文字</font></p>
+<hr>
 <h2 id="4-4-实现商铺缓存双写一致"><a href="#4-4-实现商铺缓存双写一致" class="headerlink" title="4.4 实现商铺缓存双写一致"></a>4.4 实现商铺缓存双写一致</h2>
   <div class="note-large red">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -1461,7 +1472,7 @@
 
     </div>
   </div>
-
+<hr>
 <h2 id="4-5-缓存穿透"><a href="#4-5-缓存穿透" class="headerlink" title="4.5 缓存穿透"></a>4.5 缓存穿透</h2><ul>
 <li><code>缓存穿透</code>：指客户端请求的数据在缓存中或在数据库中都不存在，这样缓存永远都不生效（只有数据库查到了，才会让redis缓存，现在的问题是查不到），会频繁的访问数据库。</li>
 <li><code>常见的解决方案：</code><ul>
@@ -1542,6 +1553,7 @@
 <p>小结：</p>
 <p>缓存穿透产生的原因是什么？<br>用户请求的数据在缓存中和在数据库中都不存在，不断发起这样的请求，会给数据库带来巨大压力<br>缓存产投的解决方案有哪些？<br>缓存null值<br>布隆过滤<br>增强id复杂度，避免被猜测id规律（可以采用雪花算法）<br>做好数据的基础格式校验<br>加强用户权限校验<br>做好热点参数的限流</p>
 </blockquote>
+<hr>
 <h2 id="4-6-缓存雪崩"><a href="#4-6-缓存雪崩" class="headerlink" title="4.6 缓存雪崩"></a>4.6 缓存雪崩</h2><ul>
 <li><p>缓存雪崩是指在同一时间段，<strong>大量缓存的key同时失效</strong>，或者Redis服务宕机，导致大量请求到达数据库，带来巨大压力。</p>
 </li>
@@ -1554,6 +1566,7 @@
 </ul>
 </li>
 </ul>
+<hr>
 <h2 id="4-7-缓存击穿"><a href="#4-7-缓存击穿" class="headerlink" title="4.7 缓存击穿"></a>4.7 缓存击穿</h2><ul>
 <li>缓存击穿也叫热点Key问题，就是一个被<strong>高并发访问</strong>并且<strong>缓存重建业务较复杂</strong>的key突然失效了，那么无数请求访问就会在瞬间给数据库带来巨大的冲击。</li>
 </ul>
@@ -1795,7 +1808,7 @@
     </div>
   </div>
 
-
+<hr>
 <h2 id="4-8-封装缓存工具"><a href="#4-8-封装缓存工具" class="headerlink" title="4.8 封装缓存工具"></a>4.8 <strong>封装缓存工具</strong></h2>
   <div class="note-large blue">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -1832,8 +1845,9 @@
     </div>
   </div>
 
-
-<h1 id="5-优惠券秒杀"><a href="#5-优惠券秒杀" class="headerlink" title="5. 优惠券秒杀"></a>5. 优惠券秒杀</h1><h2 id="5-1-Redis实现全局唯一ID"><a href="#5-1-Redis实现全局唯一ID" class="headerlink" title="5.1 Redis实现全局唯一ID"></a>5.1 Redis实现全局唯一ID</h2><ul>
+<hr>
+<h1 id="5-优惠券秒杀"><a href="#5-优惠券秒杀" class="headerlink" title="5. 优惠券秒杀"></a>5. 优惠券秒杀</h1><hr>
+<h2 id="5-1-Redis实现全局唯一ID"><a href="#5-1-Redis实现全局唯一ID" class="headerlink" title="5.1 Redis实现全局唯一ID"></a>5.1 Redis实现全局唯一ID</h2><ul>
 <li><p>用户抢购时，会自动生成订单并保存到<code>tb_voucher_order</code>这张表中，而订单表如果使用数据库自增ID就会存在一些问题：</p>
 <ul>
 <li>id的规律性太明显</li>
@@ -1927,7 +1941,7 @@
     </div>
   </div>
 
-
+<hr>
 <h2 id="5-2-实现优惠券秒杀下单"><a href="#5-2-实现优惠券秒杀下单" class="headerlink" title="5.2 实现优惠券秒杀下单"></a>5.2 实现优惠券秒杀下单</h2><ul>
 <li><p>每个店铺都可以发送优惠券，分为平价券和特价券。平价券可以任意购买，而特价券需要秒杀抢购。</p>
 </li>
@@ -1973,6 +1987,7 @@
                       alt="alt 秒杀券显示"
                 ></li>
 </ul>
+<hr>
 <h2 id="5-3-实现秒杀下单"><a href="#5-3-实现秒杀下单" class="headerlink" title="5.3 实现秒杀下单"></a>5.3 实现秒杀下单</h2><ul>
 <li>点击<code>限时抢购</code>，然后查看发送的请求</li>
 </ul>
@@ -2123,7 +2138,7 @@
     </div>
   </div>
 
-
+<hr>
 <h2 id="5-4-超卖问题"><a href="#5-4-超卖问题" class="headerlink" title="5.4 超卖问题"></a>5.4 超卖问题</h2>
   <div class="note-large red">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -2210,6 +2225,7 @@
                       alt="alt 乐观锁CAS法"
                 ></li>
 </ol>
+<hr>
 <h2 id="5-5-使用乐观锁解决库存超卖问题"><a href="#5-5-使用乐观锁解决库存超卖问题" class="headerlink" title="5.5 使用乐观锁解决库存超卖问题"></a>5.5 使用乐观锁解决库存超卖问题</h2>
   <div class="note-large red">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -2254,7 +2270,7 @@
   </div>
 
 
-
+<hr>
 <h2 id="5-6-实现一人一单功能"><a href="#5-6-实现一人一单功能" class="headerlink" title="5.6 实现一人一单功能"></a>5.6 实现一人一单功能</h2><ul>
 <li><p>需求：修改秒杀业务，要求同一个优惠券，一个用户只能下一单<br><img  
                      lazyload
@@ -2336,6 +2352,7 @@
 <ul>
 <li>重启服务器，再次使用Jmeter测试，200个线程并发，但是只能抢到一张优惠券，目的达成😙</li>
 </ul>
+<hr>
 <h2 id="5-7-集群下的线程并发安全问题"><a href="#5-7-集群下的线程并发安全问题" class="headerlink" title="5.7 集群下的线程并发安全问题"></a>5.7 集群下的线程并发安全问题</h2><ul>
 <li><p>通过加锁可以解决单机情况下的一人一单安全问题，但是在集群模式下就不行</p>
 </li>
@@ -2393,7 +2410,9 @@
 </ul>
 </li>
 </ul>
-<h1 id="6-分布式锁"><a href="#6-分布式锁" class="headerlink" title="6. 分布式锁"></a>6. 分布式锁</h1><h2 id="6-1-基本原理和实现方式比对"><a href="#6-1-基本原理和实现方式比对" class="headerlink" title="6.1 基本原理和实现方式比对"></a>6.1 基本原理和实现方式比对</h2><ul>
+<hr>
+<h1 id="6-分布式锁"><a href="#6-分布式锁" class="headerlink" title="6. 分布式锁"></a>6. 分布式锁</h1><hr>
+<h2 id="6-1-基本原理和实现方式比对"><a href="#6-1-基本原理和实现方式比对" class="headerlink" title="6.1 基本原理和实现方式比对"></a>6.1 基本原理和实现方式比对</h2><ul>
 <li><p>分布式锁：满足分布式系统或集群模式下<strong>多线程可见</strong>并且可以互斥的锁</p>
 <ul>
 <li><strong>核心思想</strong>：大家共同用一把锁，那么我们就能锁住线程，不让线程进行，让程序串行执行。<br><img  
@@ -2457,14 +2476,15 @@
 <td>临时节点，断开连接自动释放</td>
 </tr>
 </tbody></table>
+<hr>
 <h2 id="6-2-Redis分布式锁的实现核心思路"><a href="#6-2-Redis分布式锁的实现核心思路" class="headerlink" title="6.2 Redis分布式锁的实现核心思路"></a>6.2 Redis分布式锁的实现核心思路</h2><ul>
 <li>实现分布式锁时需要实现两个基本方法</li>
 </ul>
 <ol>
 <li><p><strong>获取锁</strong></p>
 <ul>
-<li>互斥：确保只能由一个线程获取锁。</li>
-<li>非阻塞：尝试一次，成功返回<code>true</code>，失败返回<code>false</code>。</li>
+<li><strong>互斥</strong>：确保只能由一个线程获取锁。</li>
+<li><strong>非阻塞</strong>：尝试一次，成功返回<code>true</code>，失败返回<code>false</code>。</li>
 </ul>
  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加锁，利用setnx的互斥特性</span></span><br><span class="line">SETNX lock thread1</span><br><span class="line"><span class="comment"># 添加锁过期时间，避免服务器宕机引起的死锁</span></span><br><span class="line">EXPIRE lock 10</span><br></pre></td></tr></table></figure></div>
 <ul>
@@ -2487,7 +2507,7 @@
 <li>手动释放</li>
 <li>超时释放：获取锁的时候添加一个超时时间</li>
 </ul>
- <div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEL lock</span><br></pre></td></tr></table></figure></div></li>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DEL lock</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <ul>
 <li>核心思路<ul>
@@ -2497,7 +2517,8 @@
 </ul>
 </li>
 </ul>
-
+<hr>
+<h2 id="6-3-实现分布式锁"><a href="#6-3-实现分布式锁" class="headerlink" title="6.3 实现分布式锁"></a>6.3 实现分布式锁</h2>
 		</div>
 
 		
@@ -2511,7 +2532,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-10-30 21:10:30
+                    :</strong> 2025-10-30 21:34:01
             </li>
         
         <li>
@@ -2537,11 +2558,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Redis/">#Redis</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -2594,7 +2615,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现分布式锁</span></a></li></ol></li></ol>
 
 	</div>
 </div>
