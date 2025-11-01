@@ -176,7 +176,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-01T10:18:58.426Z">
+<meta property="article:modified_time" content="2025-11-01T12:43:22.349Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -670,8 +670,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-01 18:18:58</span>
-            <span class="mobile">2025-11-01 18:18:58</span>
+            <span class="desktop">2025-11-01 20:43:22</span>
+            <span class="mobile">2025-11-01 20:43:22</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -701,12 +701,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>25.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>26.5k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>103 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>106 分钟</span>
         </span>
     
     
@@ -2578,6 +2578,116 @@
 </li>
 </ul>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleRedisLock</span> <span class="keyword">implements</span> <span class="title class_">ILock</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//具体业务名称，将前缀和业务名拼接之后当做Key</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//这里不是@Autowired注入，采用的是构造器注入，在创建SimpleRedisLock时，将RedisTemplate作为参数传入</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> StringRedisTemplate stringRedisTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SimpleRedisLock</span><span class="params">(String name, StringRedisTemplate stringRedisTemplate)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.stringRedisTemplate = stringRedisTemplate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//锁的前缀</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">KEY_PREFIX</span> <span class="operator">=</span> <span class="string">&quot;lock:&quot;</span>;</span><br><span class="line">    <span class="comment">//锁的线程标识的前缀</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">ID_PREFIX</span> <span class="operator">=</span> UUID.randomUUID().toString(<span class="literal">true</span>) + <span class="string">&quot;-&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">tryLock</span><span class="params">(<span class="type">long</span> timeoutSec)</span> &#123;</span><br><span class="line">        <span class="comment">//获取当前线程标示</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">threadId</span> <span class="operator">=</span> ID_PREFIX + Thread.currentThread().getId();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//获取锁</span></span><br><span class="line">        <span class="type">Boolean</span> <span class="variable">isGetLock</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);</span><br><span class="line">        <span class="comment">//因为Boolean是包装类，直接返回会有自动拆箱，可能会有安全风险</span></span><br><span class="line">        <span class="comment">//所以这里使用包装类的equals方法来判断</span></span><br><span class="line">        <span class="keyword">return</span> Boolean.TRUE.equals(isGetLock);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//获取线程标识</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">threadId</span> <span class="operator">=</span> ID_PREFIX + Thread.currentThread().getId();</span><br><span class="line">        <span class="comment">//获取锁中的线程标识</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">id</span> <span class="operator">=</span> stringRedisTemplate.opsForValue().get(KEY_PREFIX + name);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断是否一致</span></span><br><span class="line">        <span class="keyword">if</span> (threadId.equals(id)) &#123;</span><br><span class="line">            <span class="comment">//一致，释放锁</span></span><br><span class="line">            stringRedisTemplate.delete(KEY_PREFIX + name);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<h2 id="6-5-Lua脚本解决分布式锁的原子性问题"><a href="#6-5-Lua脚本解决分布式锁的原子性问题" class="headerlink" title="6.5 Lua脚本解决分布式锁的原子性问题"></a>6.5 Lua脚本解决分布式锁的原子性问题</h2>
+  <div class="note-large red">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p><strong>更为极端的误删逻辑😅</strong></p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ol>
+<li>假设线程1已经获取锁，在判断一致后，准备释放锁(也就是调用unlock)的时候，又出现了阻塞(例如JVM垃圾回收机制)</li>
+<li>于是TTL过期，自动释放了</li>
+<li>这时线程2拿到了锁</li>
+<li>但是线程1还没执行完，那么线程1就会把线程2的锁给删了</li>
+<li>这就是删锁的原子性问题</li>
+</ol>
+
+    </div>
+  </div>
+
+<ul>
+<li>Redis提供了Lua脚本功能，在一个脚本中编写多条Redis命令，确保多条命令执行时的原子性</li>
+<li>Lua是一种编程语言，它的基本语法可以上菜鸟教程看看，链接：<a class="link"   target="_blank" rel="noopener" href="https://www.runoob.com/lua/lua-tutorial.html" >https://www.runoob.com/lua/lua-tutorial.html<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li>这里重点介绍Redis提供的调用函数，我们可以使用Lua去操作Redis，而且还能保证他的原子性，这样就可以实现<code>拿锁</code>,<code>判断标示</code>,<code>删锁</code>是一个原子性动作了</li>
+</ul>
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p><strong>Lua脚本操作Redis用法</strong></p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li>Redis提供的调用函数语法：</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis.call(<span class="string">&#x27;命令名称&#x27;</span>,<span class="string">&#x27;key&#x27;</span>,<span class="string">&#x27;其他参数&#x27;</span>....)</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>例如我们要执行<code>set name yi_bo_</code>,则脚本是这样</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis.call(<span class="string">&#x27;set&#x27;</span>,<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;yin_bo_&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>例如我们要执行<code>set name yin_bo_</code>，再执行<code>get name</code>,则脚本如下</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 先执行set name yin_bo_)</span></span><br><span class="line">redis.call(<span class="string">&#x27;set&#x27;</span>,<span class="string">&#x27;name&#x27;</span>,<span class="string">&#x27;yin_bo_&#x27;</span>)</span><br><span class="line"><span class="comment">## 再执行get name</span></span><br><span class="line"><span class="built_in">local</span> name = redis.call(<span class="string">&#x27;get&#x27;</span>,<span class="string">&#x27;name&#x27;</span>)</span><br><span class="line"><span class="comment">## 返回</span></span><br><span class="line"><span class="built_in">return</span> name</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>写好脚本之后，需要用Redis命令来调用脚本，调用脚本的常见命令如下</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## numkeys为参数数量  为0则不需要传参</span></span><br><span class="line">EVAL script numkeys key[key...]  arg[arg...]</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>例如,我们要调用<code>redis.call(&#39;set&#39;,&#39;name&#39;,&#39;yin_bo_&#39;)</code>这个脚本，语法如下</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EVAL <span class="string">&quot;return redis.call(&#x27;set&#x27;,&#x27;name&#x27;,&#x27;yin_bo_&#x27;)&quot;</span> 0</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>如果脚本中的key和value不想写死，可以作为参数传递，key类型参数会放入KEYS数组,其他参数会放入ARGV数组，在脚本中可以以KEYS和ARGV数组中获取这些参数<blockquote>
+<p>注意：在Lua中，数组下标从1开始</p>
+</blockquote>
+</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EVAL <span class="string">&quot;return redis.call(&#x27;set&#x27;,KEYS[1],ARGV[1])&quot;</span> 1 name yin_bo_</span><br></pre></td></tr></table></figure></div>
+
+    </div>
+  </div>
+
+
+<ul>
+<li>现在我们来实现Lua脚本吧😊</li>
+</ul>
+<div class="code-container" data-rel="Lua"><figure class="iseeu highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--其中KEYS[1]为锁的key</span></span><br><span class="line"><span class="comment">--ARGB[1]为当前线程标示</span></span><br><span class="line"><span class="comment">--把这个标示和当前线程标示做比较</span></span><br><span class="line"><span class="keyword">if</span> (redis.call(<span class="string">&#x27;get&#x27;</span>, KEYS[<span class="number">1</span>]) == ARGV[<span class="number">1</span>]) <span class="keyword">then</span></span><br><span class="line">    <span class="comment">--释放锁 del key</span></span><br><span class="line">    <span class="keyword">return</span> redis.call(<span class="string">&#x27;del&#x27;</span>,key)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="6-7-利用Java代码调用Lua脚本改造分布式锁"><a href="#6-7-利用Java代码调用Lua脚本改造分布式锁" class="headerlink" title="6.7 利用Java代码调用Lua脚本改造分布式锁"></a>6.7 利用Java代码调用Lua脚本改造分布式锁</h2><ul>
+<li>在RedisTemplate中 可以利用execute方法去执行Lua脚本<ul>
+<li>以下为RedisTemplate调用Lua脚本的API</li>
+<li>接受参数为脚本，keys和args</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">execute</span><span class="params">(RedisScript&lt;T&gt; script, List&lt;K&gt; keys, Object... args)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">this</span>.scriptExecutor.execute(script, keys, args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>如何在java文件中获取Lua文件呢？<ul>
+<li>这里就需要获取多线程锁的脚本了</li>
+<li>这里Lua文件放到了resources里的LuaScript文件夹里  所以通过<code>ClassPathResource</code>来调用</li>
+<li>static 块加载 → 脚本只读一次</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DefaultRedisScript&lt;Long&gt; UNLOCK_SCRIPT;</span><br><span class="line"> <span class="keyword">static</span>&#123;</span><br><span class="line">     UNLOCK_SCRIPT = <span class="keyword">new</span> <span class="title class_">DefaultRedisScript</span>&lt;&gt;();</span><br><span class="line">     UNLOCK_SCRIPT.setLocation(<span class="keyword">new</span> <span class="title class_">ClassPathResource</span>(<span class="string">&quot;LuaScript/Unlock.lua&quot;</span>));</span><br><span class="line">     UNLOCK_SCRIPT.setResultType(Long.class);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<ul>
+<li>现在来修改删除锁的逻辑吧</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//调用Lua脚本</span></span><br><span class="line">    <span class="comment">//因为KEYS必须要是一个LIST  而我们锁的key是一个字符串 所以这里用Collections.singletonList方法来将key变成单一元素的数组</span></span><br><span class="line">    stringRedisTemplate.execute(</span><br><span class="line">            UNLOCK_SCRIPT,</span><br><span class="line">            Collections.singletonList(KEY_PREFIX + name),</span><br><span class="line">            ID_PREFIX + Thread.currentThread().getId());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+<p>现在完成了，我们的分布式锁维持了原子性😊</p>
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p><strong>分布式锁原子性之我见</strong></p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>所谓原子性，就是要保持功能执行的时间短到不会发生意外嘛<br>之前的删除锁功能写的太繁琐了，可能会还没删除锁就TTL失效了<br>所以我们要使用Lua脚本，直接调用脚本，让功能在TTL失效之前运行完</p>
+
+    </div>
+  </div>
 		</div>
 
 		
@@ -2591,7 +2701,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-01 18:18:58
+                    :</strong> 2025-11-01 20:43:22
             </li>
         
         <li>
@@ -2674,7 +2784,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Lua%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">6.5 Lua脚本解决分布式锁的原子性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-%E5%88%A9%E7%94%A8Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Lua%E8%84%9A%E6%9C%AC%E6%94%B9%E9%80%A0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.7 利用Java代码调用Lua脚本改造分布式锁</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -2707,7 +2817,7 @@
                     </span>
                     
                         <span>
-                            共 32.5k 字
+                            共 33.4k 字
                         </span>
                     
                 </p>
