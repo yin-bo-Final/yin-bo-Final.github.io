@@ -180,7 +180,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-05T13:32:14.880Z">
+<meta property="article:modified_time" content="2025-11-05T13:34:05.838Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -674,8 +674,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-05 21:32:14</span>
-            <span class="mobile">2025-11-05 21:32:14</span>
+            <span class="desktop">2025-11-05 21:34:05</span>
+            <span class="mobile">2025-11-05 21:34:05</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -687,11 +687,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Java/">Java</a>&nbsp;
+                        <a href="/tags/Redis/">Redis</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                        | <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
@@ -705,7 +705,7 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>30.4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>30.5k 字</span>
         </span>
     
     
@@ -3019,6 +3019,8 @@
 </ol>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//消息队列的脚本的脚本</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> DefaultRedisScript&lt;Long&gt; SECKILL_SCRIPT;</span><br><span class="line"><span class="keyword">static</span>&#123;</span><br><span class="line">    SECKILL_SCRIPT = <span class="keyword">new</span> <span class="title class_">DefaultRedisScript</span>&lt;&gt;();</span><br><span class="line">    SECKILL_SCRIPT.setLocation(<span class="keyword">new</span> <span class="title class_">ClassPathResource</span>(<span class="string">&quot;LuaScript/seckill.lua&quot;</span>));</span><br><span class="line">    SECKILL_SCRIPT.setResultType(Long.class);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">seckillVoucher</span><span class="params">(Long voucherId)</span> &#123;</span><br><span class="line">    <span class="comment">//1. 执行lua脚本</span></span><br><span class="line">    <span class="type">Long</span> <span class="variable">result</span> <span class="operator">=</span> stringRedisTemplate.execute(SECKILL_SCRIPT,</span><br><span class="line">            Collections.emptyList(), voucherId.toString(),</span><br><span class="line">            UserHolder.getUser().getId().toString());</span><br><span class="line">    <span class="comment">//2. 判断返回值，并返回错误信息</span></span><br><span class="line">    <span class="keyword">if</span> (result.intValue() != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Result.fail(result.intValue() == <span class="number">1</span> ? <span class="string">&quot;库存不足&quot;</span> : <span class="string">&quot;不能重复下单&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">orderId</span> <span class="operator">=</span> redisIdWorker.nextId(<span class="string">&quot;order&quot;</span>);</span><br><span class="line">    <span class="comment">//TODO 保存阻塞队列</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//3. 返回订单id</span></span><br><span class="line">    <span class="keyword">return</span> Result.ok(orderId);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 
+<p>最后使用JMeter进行测验  发现吞吐量接近两千😊</p>
+
 		</div>
 
 		
@@ -3032,7 +3034,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-05 21:32:14
+                    :</strong> 2025-11-05 21:34:05
             </li>
         
         <li>
@@ -3058,11 +3060,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Redis/">#Redis</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
