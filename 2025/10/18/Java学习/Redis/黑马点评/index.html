@@ -180,7 +180,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-08T13:16:21.691Z">
+<meta property="article:modified_time" content="2025-11-08T13:26:25.538Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -674,8 +674,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-08 21:16:21</span>
-            <span class="mobile">2025-11-08 21:16:21</span>
+            <span class="desktop">2025-11-08 21:26:25</span>
+            <span class="mobile">2025-11-08 21:26:25</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -687,11 +687,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Java/">Java</a>&nbsp;
+                        <a href="/tags/Redis/">Redis</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                        | <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
@@ -3090,12 +3090,12 @@
 </ol>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> BlockingQueue&lt;VoucherOrder&gt; orderTasks = <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">1024</span> * <span class="number">1024</span>);</span><br></pre></td></tr></table></figure></div>
 
-<ol>
+<ol start="2">
 <li>将订单信息封装到voucherOrder中，然后将其加入到阻塞队列</li>
 </ol>
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">long</span> <span class="variable">orderId</span> <span class="operator">=</span> redisIdWorker.nextId(<span class="string">&quot;order&quot;</span>);</span><br><span class="line"><span class="comment">//封装到voucherOrder中</span></span><br><span class="line"><span class="type">VoucherOrder</span> <span class="variable">voucherOrder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VoucherOrder</span>();</span><br><span class="line">voucherOrder.setVoucherId(voucherId);</span><br><span class="line">voucherOrder.setUserId(UserHolder.getUser().getId());</span><br><span class="line">voucherOrder.setId(orderId);</span><br><span class="line"><span class="comment">//加入到阻塞队列</span></span><br><span class="line">orderTasks.add(voucherOrder);</span><br></pre></td></tr></table></figure></div>
 
-<ol>
+<ol start="3">
 <li><p>创建一个线程池来实现异步下单</p>
 <ul>
 <li>因为只需要另外开一个线程去处理下单  所以这里用<code>newSingleThreadExecutor</code></li>
@@ -3126,7 +3126,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-08 21:16:21
+                    :</strong> 2025-11-08 21:26:25
             </li>
         
         <li>
@@ -3152,11 +3152,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Redis/">#Redis</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
