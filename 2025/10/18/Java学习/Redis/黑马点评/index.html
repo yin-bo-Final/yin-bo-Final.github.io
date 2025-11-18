@@ -180,8 +180,9 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97.png">
+<meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0%E6%95%88%E6%9E%9C%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-18T09:58:20.389Z">
+<meta property="article:modified_time" content="2025-11-18T11:48:13.281Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -712,8 +713,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-18 17:58:20</span>
-            <span class="mobile">2025-11-18 17:58:20</span>
+            <span class="desktop">2025-11-18 19:48:13</span>
+            <span class="mobile">2025-11-18 19:48:13</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -743,12 +744,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>36.7k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>38.2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>148 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>155 分钟</span>
         </span>
     
     
@@ -3518,236 +3519,109 @@
 </ol>
 <h1 id="10-达人探店"><a href="#10-达人探店" class="headerlink" title="10. 达人探店"></a>10. 达人探店</h1><h2 id="10-1-发布探店笔记"><a href="#10-1-发布探店笔记" class="headerlink" title="10.1 发布探店笔记"></a>10.1 发布探店笔记</h2><p>探店笔记对应的表有两个：</p>
 <ul>
-<li>探店店笔记表：<strong>包含笔记中的标题、文字、图片等</strong></li>
-<li>探店笔记评论表：<strong>其他用户对探店笔记的评价</strong></li>
+<li><code>tb_blog</code> ：<strong>包含笔记中的标题、文字、图片等</strong></li>
+<li><code>tb_blog_comments</code>：<strong>其他用户对探店笔记的评价</strong></li>
 </ul>
-<div class="tabs" id="tab-数据库表"><ul class="nav-tabs"><li class="tab active"><a class="#数据库表-1">探店店笔记表tb_blog</a></li><li class="tab"><a class="#数据库表-2">探店笔记评论表tb_blog_comments</a></li></ul><div class="tab-content"><div class="tab-pane active" id="数据库表-1"><table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Collation</th>
-<th>Null</th>
-<th>Key</th>
-<th>Default</th>
-<th>Extra</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td>PRI</td>
-<td>(NULL)</td>
-<td>auto_increment</td>
-<td>主键</td>
-</tr>
-<tr>
-<td>shop_id</td>
-<td>bigint</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>商户id</td>
-</tr>
-<tr>
-<td>user_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>用户id</td>
-</tr>
-<tr>
-<td>title</td>
-<td>varchar(255)</td>
-<td>utf8mb4_unicode_ci</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>标题</td>
-</tr>
-<tr>
-<td>images</td>
-<td>varchar(2048)</td>
-<td>utf8mb4_general_ci</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>探店的照片，最多9张，多张以”,”隔开</td>
-</tr>
-<tr>
-<td>content</td>
-<td>varchar(2048)</td>
-<td>utf8mb4_unicode_ci</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>探店的文字描述</td>
-</tr>
-<tr>
-<td>liked</td>
-<td>int unsigned</td>
-<td>(NULL)</td>
-<td>YES</td>
-<td></td>
-<td>0</td>
-<td></td>
-<td>点赞数量</td>
-</tr>
-<tr>
-<td>comments</td>
-<td>int unsigned</td>
-<td>(NULL)</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>评论数量</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>update_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-</tbody></table></div><div class="tab-pane" id="数据库表-2"><table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Collation</th>
-<th>Null</th>
-<th>Key</th>
-<th>Default</th>
-<th>Extra</th>
-<th>Comment</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td>PRI</td>
-<td>(NULL)</td>
-<td>auto_increment</td>
-<td>主键</td>
-</tr>
-<tr>
-<td>user_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>用户id</td>
-</tr>
-<tr>
-<td>blog_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>探店id</td>
-</tr>
-<tr>
-<td>parent_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>关联的1级评论id，如果是一级评论，则值为0</td>
-</tr>
-<tr>
-<td>answer_id</td>
-<td>bigint unsigned</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>回复的评论id</td>
-</tr>
-<tr>
-<td>content</td>
-<td>varchar(255)</td>
-<td>utf8mb4_general_ci</td>
-<td>NO</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>回复的内容</td>
-</tr>
-<tr>
-<td>liked</td>
-<td>int unsigned</td>
-<td>(NULL)</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>点赞数</td>
-</tr>
-<tr>
-<td>status</td>
-<td>tinyint unsigned</td>
-<td>(NULL)</td>
-<td>YES</td>
-<td></td>
-<td>(NULL)</td>
-<td></td>
-<td>状态，0：正常，1：被举报，2：禁止查看</td>
-</tr>
-<tr>
-<td>create_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED</td>
-<td>创建时间</td>
-</tr>
-<tr>
-<td>update_time</td>
-<td>timestamp</td>
-<td>(NULL)</td>
-<td>NO</td>
-<td></td>
-<td>CURRENT_TIMESTAMP</td>
-<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
-<td>更新时间</td>
-</tr>
-</tbody></table></div></div></div>
+<p>对应Java的实体类如下：</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@EqualsAndHashCode(callSuper = false)</span></span><br><span class="line"><span class="meta">@Accessors(chain = true)</span></span><br><span class="line"><span class="meta">@TableName(&quot;tb_blog&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Blog</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 主键</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@TableId(value = &quot;id&quot;, type = IdType.AUTO)</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 商户id</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long shopId;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户id</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long userId;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户图标</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@TableField(exist = false)</span></span><br><span class="line">    <span class="keyword">private</span> String icon;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@TableField(exist = false)</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 是否点赞过了</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@TableField(exist = false)</span></span><br><span class="line">    <span class="keyword">private</span> Boolean isLike;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 标题</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String title;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 探店的照片，最多9张，多张以&quot;,&quot;隔开</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String images;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 探店的文字描述</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String content;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 点赞数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer liked;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 评论数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer comments;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> LocalDateTime createTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> LocalDateTime updateTime;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<ul>
+<li><p><strong>效果图如下</strong> ：<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0%E6%95%88%E6%9E%9C%E5%9B%BE.jpg"
+                      alt="alt 发布探店笔记效果图"
+                ></p>
+</li>
+<li><p><strong>保存笔记对应的代码</strong></p>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">saveBlog</span><span class="params">(<span class="meta">@RequestBody</span> Blog blog)</span> &#123;</span><br><span class="line">    <span class="comment">// 获取登录用户</span></span><br><span class="line">    <span class="type">UserDTO</span> <span class="variable">user</span> <span class="operator">=</span> UserHolder.getUser();</span><br><span class="line">    blog.setUserId(user.getId());</span><br><span class="line">    <span class="comment">// 保存探店博文</span></span><br><span class="line">    blogService.save(blog);</span><br><span class="line">    <span class="comment">// 返回id</span></span><br><span class="line">    <span class="keyword">return</span> Result.ok(blog.getId());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>上传图片的代码：<blockquote>
+<p>注意：这里我们需要修改<code>SystemConstants.IMAGE_UPLOAD_DIR</code>为自己图片保存的地址，在实际开发中图片一般会放在nginx或者云存储上</p>
+</blockquote>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;blog&quot;)</span></span><br><span class="line">  <span class="keyword">public</span> Result <span class="title function_">uploadImage</span><span class="params">(<span class="meta">@RequestParam(&quot;file&quot;)</span> MultipartFile image)</span> &#123;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// 获取原始文件名称</span></span><br><span class="line">          <span class="type">String</span> <span class="variable">originalFilename</span> <span class="operator">=</span> image.getOriginalFilename();</span><br><span class="line">          <span class="comment">// 生成新文件名</span></span><br><span class="line">          <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> createNewFileName(originalFilename);</span><br><span class="line">          <span class="comment">// 保存文件</span></span><br><span class="line">          image.transferTo(<span class="keyword">new</span> <span class="title class_">File</span>(SystemConstants.IMAGE_UPLOAD_DIR, fileName));</span><br><span class="line">          <span class="comment">// 返回结果</span></span><br><span class="line">          log.debug(<span class="string">&quot;文件上传成功，&#123;&#125;&quot;</span>, fileName);</span><br><span class="line">          <span class="keyword">return</span> Result.ok(fileName);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;文件上传失败&quot;</span>, e);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<h2 id="查看探店笔记"><a href="#查看探店笔记" class="headerlink" title="查看探店笔记"></a>查看探店笔记</h2><ul>
+<li><p>需求：点击首页的探店笔记，会进入详细页面，我们现在需要实现页面的查询接口。</p>
+</li>
+<li><p>随便点击一张图片，查看发送的请求</p>
+<blockquote>
+<p>请求网址: <a class="link"   target="_blank" rel="noopener" href="http://localhost:8080/api/blog/6" >http://localhost:8080/api/blog/6<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>请求路径: &#x2F;blog&#x2F;{id}<br>请求方法: GET</p>
+</blockquote>
+</li>
+</ul>
+<p>是<code>BlogController</code>下的方法，请求方式为GET，那我们直接来编写对应的方法<br>在Service类中创建对应方法之后，在Impl类中实现，我们查看用户探店笔记的时候，需要额外设置用户名和其头像，由于设置用户信息这个操作比较通用，所以这里封装成了一个方法</p>
+<div class="tabs" id="tab-blog代码"><ul class="nav-tabs"><li class="tab active"><a class="#blog代码-1">Controller层</a></li><li class="tab"><a class="#blog代码-2">Service层</a></li></ul><div class="tab-content"><div class="tab-pane active" id="blog代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/hot&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryHotBlog</span><span class="params">(<span class="meta">@RequestParam(value = &quot;current&quot;, defaultValue = &quot;1&quot;)</span> Integer current)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> blogService.queryHotBlog(current);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@GetMapping(&quot;/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryBlogById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> blogService.queryBlogById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="blog代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlogServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;BlogMapper, Blog&gt; <span class="keyword">implements</span> <span class="title class_">IBlogService</span> &#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> IUserService userService;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryHotBlog</span><span class="params">(Integer current)</span> &#123;</span><br><span class="line">        <span class="comment">// 根据用户查询</span></span><br><span class="line">        Page&lt;Blog&gt; page = query()</span><br><span class="line">                .orderByDesc(<span class="string">&quot;liked&quot;</span>)</span><br><span class="line">                .page(<span class="keyword">new</span> <span class="title class_">Page</span>&lt;&gt;(current, SystemConstants.MAX_PAGE_SIZE));</span><br><span class="line">        <span class="comment">// 获取当前页数据</span></span><br><span class="line">        List&lt;Blog&gt; records = page.getRecords();</span><br><span class="line">        <span class="comment">// 查询用户</span></span><br><span class="line">        records.forEach(<span class="built_in">this</span>::queryBlogUser);</span><br><span class="line">        <span class="keyword">return</span> Result.ok(records);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Result <span class="title function_">queryBlogById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">        <span class="comment">//1. 查询blog</span></span><br><span class="line">        <span class="type">Blog</span> <span class="variable">blog</span> <span class="operator">=</span> getById(id);</span><br><span class="line">        <span class="keyword">if</span> (blog == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> Result.fail(<span class="string">&quot;blog不存在！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//2. 查询blog有关的用户</span></span><br><span class="line">        queryBlogUser(blog);</span><br><span class="line">        <span class="keyword">return</span> Result.ok(blog);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">queryBlogUser</span><span class="params">(Blog blog)</span> &#123;</span><br><span class="line">        <span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> blog.getUserId();</span><br><span class="line">        <span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.getById(userId); <span class="comment">//通过userid获取user用户</span></span><br><span class="line">        blog.setName(user.getNickName());</span><br><span class="line">        blog.setIcon(user.getIcon());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+
+
+  <div class="note-large red">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p><strong>该功能是如何实现的🤨</strong></p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p><strong>可以看到我们的实现类只是将name和icon存到blog类里面，然后返回给前端，是如果做到显示blog的所有信息的呢</strong>？<br>我们看看表的实体类中有这样的代码</p>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户图标</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@TableField(exist = false)</span></span><br><span class="line"><span class="keyword">private</span> String icon;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户姓名</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@TableField(exist = false)</span></span><br><span class="line"><span class="keyword">private</span> String name;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 是否点赞过了</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@TableField(exist = false)</span></span><br><span class="line"><span class="keyword">private</span> Boolean isLike;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>这里MyBatisPlus语法将三个属性都设置为了false<br>这样这些属性就不会在数据库里存储了😄。<br>然后我们在功能类中获取这三个属性，把他们存到blog类中<br>再将完整的blog类返回给前端</p>
+<p>功能就是这样实现的！！！</p>
+
+    </div>
+  </div>
+
+<h2 id="实现点赞功能"><a href="#实现点赞功能" class="headerlink" title="实现点赞功能"></a>实现点赞功能</h2><ul>
+<li><p>点击点赞按钮，查看发送的请求：</p>
+<blockquote>
+<p>请求网址: <a class="link"   target="_blank" rel="noopener" href="http://localhost:8080/api/blog/like/4" >http://localhost:8080/api/blog/like/4<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br>请求方法: PUT</p>
+</blockquote>
+</li>
+<li><p>看样子是<code>BlogController</code>中的like方法，源码如下</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PutMapping(&quot;/like/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">likeBlog</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="comment">// 修改点赞数量</span></span><br><span class="line">    blogService.update()</span><br><span class="line">            .setSql(<span class="string">&quot;liked = liked + 1&quot;</span>).eq(<span class="string">&quot;id&quot;</span>, id).update();</span><br><span class="line">    <span class="keyword">return</span> Result.ok();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<li><p><strong>问题分析</strong>：这种方式会导致一个用户无限点赞，明显是不合理的。</p>
+</li>
+<li><p>造成这个问题的原因是：我们现在的逻辑，发起请求只是给数据库+1，所以才会出现这个问题</p>
+</li>
+<li><p><strong>需求</strong>：</p>
+<ol>
+<li>同一个用户只能对同一片笔记点赞一次，再次点击则取消点赞。</li>
+<li>如果当前用户已经点赞，则点赞按钮高亮显示(前端已经实现，判断字段Blog类的isLike属性)</li>
+</ol>
+</li>
+<li><p><strong>实现步骤</strong>：</p>
+<ol>
+<li>修改点赞功能，利用Redis中的set集合来判断是否点赞过，为点赞则点赞数+1，已点赞则点赞数-1</li>
+<li>根据修改id查询的业务，判断当前登录用户是否点赞过，复制给isLike字段。</li>
+<li>修改分页查询Blog业务，判断当前登录用户是否点赞过，复制给isLike字段。</li>
+</ol>
+</li>
+<li><p><strong>具体实现</strong>：</p>
+</li>
+</ul>
+<div class="tabs" id="tab-blog代码"><ul class="nav-tabs"><li class="tab active"><a class="#blog代码-1">Controller层</a></li><li class="tab"><a class="#blog代码-2">Service层</a></li></ul><div class="tab-content"><div class="tab-pane active" id="blog代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PutMapping(&quot;/like/&#123;id&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">likeBlog</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> blogService.likeBlog(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="blog代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">likeBlog</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">    <span class="comment">//1. 获取当前用户信息</span></span><br><span class="line">    <span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> UserHolder.getUser().getId();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//2. 如果当前用户为点赞，则点赞数+1，同时将用户加入set集合</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> BLOG_LIKED_KEY + id;</span><br><span class="line">    <span class="type">Boolean</span> <span class="variable">isLiked</span> <span class="operator">=</span> stringRedisTemplate.opsForSet().isMember(key, userId.toString());</span><br><span class="line">    <span class="keyword">if</span>(BooleanUtil.isFalse(isLiked))&#123;</span><br><span class="line">        <span class="comment">//点赞数+1 </span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">success</span> <span class="operator">=</span> update().setSql(<span class="string">&quot;liked = liked + 1&quot;</span>).eq(<span class="string">&quot;id&quot;</span>, id).update();</span><br><span class="line">        <span class="comment">//将用户添加到set集合</span></span><br><span class="line">        <span class="keyword">if</span>(success)&#123;</span><br><span class="line">            stringRedisTemplate.opsForSet().add(key, userId.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">//点赞数-1</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">success</span> <span class="operator">=</span> update().setSql(<span class="string">&quot;liked = liked - 1&quot;</span>).eq(<span class="string">&quot;id&quot;</span>, id).update();</span><br><span class="line">        <span class="keyword">if</span>(success)&#123;</span><br><span class="line">            <span class="comment">//从set集合移除</span></span><br><span class="line">            stringRedisTemplate.opsForSet().remove(key, userId.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> Result.ok();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+<ul>
+<li>修改完毕之后，页面上还不能立即显示点赞完毕的后果，我们还需要修改查询Blog业务，判断Blog是否被当前用户点赞过</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryHotBlog</span><span class="params">(Integer current)</span> &#123;</span><br><span class="line">    <span class="comment">// 根据用户查询</span></span><br><span class="line">    Page&lt;Blog&gt; page = query()</span><br><span class="line">            .orderByDesc(<span class="string">&quot;liked&quot;</span>)</span><br><span class="line">            .page(<span class="keyword">new</span> <span class="title class_">Page</span>&lt;&gt;(current, SystemConstants.MAX_PAGE_SIZE));</span><br><span class="line">    <span class="comment">// 获取当前页数据</span></span><br><span class="line">    List&lt;Blog&gt; records = page.getRecords();</span><br><span class="line">    <span class="comment">// 查询用户</span></span><br><span class="line">    records.forEach(blog -&gt; &#123;</span><br><span class="line">        queryBlogUser(blog);</span><br><span class="line">        <span class="comment">//追加判断blog是否被用户点赞过，逻辑封装到isBlogLiked方法中</span></span><br><span class="line">        isBlogLiked(blog);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> Result.ok(records);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Result <span class="title function_">queryBlogById</span><span class="params">(Long id)</span> &#123;</span><br><span class="line">    <span class="comment">//1. 查询blog</span></span><br><span class="line">    <span class="type">Blog</span> <span class="variable">blog</span> <span class="operator">=</span> getById(id);</span><br><span class="line">    <span class="keyword">if</span> (blog == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> Result.fail(<span class="string">&quot;blog不存在！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//2. 查询blog有关的用户</span></span><br><span class="line">    queryBlogUser(blog);</span><br><span class="line">    <span class="comment">//追加判断blog是否被当前用户点赞，逻辑封装到isBlogLiked方法中</span></span><br><span class="line">    isBlogLiked(blog);</span><br><span class="line">    <span class="keyword">return</span> Result.ok(blog);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">isBlogLiked</span><span class="params">(Blog blog)</span> &#123;</span><br><span class="line">    <span class="comment">//1. 获取当前用户信息</span></span><br><span class="line">    <span class="type">Long</span> <span class="variable">userId</span> <span class="operator">=</span> UserHolder.getUser().getId();</span><br><span class="line">    <span class="comment">//2. 判断当前用户是否点赞</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">key</span> <span class="operator">=</span> BLOG_LIKED_KEY + blog.getId();</span><br><span class="line">    <span class="type">Boolean</span> <span class="variable">isMember</span> <span class="operator">=</span> stringRedisTemplate.opsForSet().isMember(key, userId.toString());</span><br><span class="line">    <span class="comment">//3. 如果点赞了，则将isLike设置为true</span></span><br><span class="line">    blog.setIsLike(BooleanUtil.isTrue(isMember));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="实现点赞排行榜"><a href="#实现点赞排行榜" class="headerlink" title="实现点赞排行榜"></a>实现点赞排行榜</h2><ul>
+<li><p>当我们点击探店笔记详情页面时，应该按点赞顺序展示点赞用户，比如显示最早点赞的TOP5，形成点赞排行榜，就跟QQ空间发的说说一样，可以看到有哪些人点了赞</p>
+</li>
+<li><p>之前的点赞是放到Set集合中，但是Set集合又不能排序，所以这个时候，我们就可以改用SortedSet(Zset)</p>
+</li>
+<li><p><strong>那我们这里顺便就来对比一下这些集合的区别</strong>：<br>|          | List                 | Set          | SortedSet       |</p>
+</li>
+</ul>
+<p>| ——– | ——————– | ———— | ————— |<br>| 排序方式 | 按添加顺序排序       | 无法排序     | 根据score值排序 |<br>| 唯一性   | 不唯一               | 唯一         | 唯一            |<br>| 查找方式 | 按索引查找或首尾查找 | 根据元素查找 | 根据元素查找    |</p>
+
 		</div>
 
 		
@@ -3761,7 +3635,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-18 17:58:20
+                    :</strong> 2025-11-18 19:48:13
             </li>
         
         <li>
@@ -3844,7 +3718,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Lua%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">6.5 Lua脚本解决分布式锁的原子性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-%E5%88%A9%E7%94%A8Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Lua%E8%84%9A%E6%9C%AC%E6%94%B9%E9%80%A0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.7 利用Java代码调用Lua脚本改造分布式锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-Redisson"><span class="nav-text">7. 分布式锁-Redisson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Redisson%E5%85%A5%E9%97%A8"><span class="nav-text">7.1 Redisson入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-Redisson%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E5%8E%9F%E7%90%86-%E5%B7%B2%E7%BB%8F%E8%A2%AB%E5%B0%81%E8%A3%85%E7%9A%84%E7%8E%A9%E6%84%8F"><span class="nav-text">7.2 Redisson可重入锁原理(已经被封装的玩意)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-Redisson%E9%94%81%E9%87%8D%E8%AF%95%E5%92%8CWatchDog%E6%9C%BA%E5%88%B6"><span class="nav-text">7.3 Redisson锁重试和WatchDog机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-Redisson%E9%94%81%E7%9A%84MutiLock%E5%8E%9F%E7%90%86"><span class="nav-text">7.4 Redisson锁的MutiLock原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-%E5%B0%8F%E7%BB%93"><span class="nav-text">7.5 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8. 秒杀优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF"><span class="nav-text">8.1 异步秒杀思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E8%B5%84%E6%A0%BC%E5%88%A4%E6%96%AD"><span class="nav-text">8.2 异步秒杀资格判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%9F%BA%E4%BA%8E%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8.3 基于阻塞队列实现秒杀优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%B0%8F%E7%BB%93"><span class="nav-text">8.4 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9. Redis消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E8%AE%A4%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.1 认识消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%9F%BA%E4%BA%8EList%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.2 基于List实现消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.3 基于PubSub的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.4 基于Stream的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E2%80%94-%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-text">9.5 基于Stream的消息队列—-消费者组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-6-Stream%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">9.6 Stream消息队列实现异步秒杀下单</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-%E8%BE%BE%E4%BA%BA%E6%8E%A2%E5%BA%97"><span class="nav-text">10. 达人探店</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-1-%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0"><span class="nav-text">10.1 发布探店笔记</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Lua%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">6.5 Lua脚本解决分布式锁的原子性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-%E5%88%A9%E7%94%A8Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Lua%E8%84%9A%E6%9C%AC%E6%94%B9%E9%80%A0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.7 利用Java代码调用Lua脚本改造分布式锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-Redisson"><span class="nav-text">7. 分布式锁-Redisson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Redisson%E5%85%A5%E9%97%A8"><span class="nav-text">7.1 Redisson入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-Redisson%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E5%8E%9F%E7%90%86-%E5%B7%B2%E7%BB%8F%E8%A2%AB%E5%B0%81%E8%A3%85%E7%9A%84%E7%8E%A9%E6%84%8F"><span class="nav-text">7.2 Redisson可重入锁原理(已经被封装的玩意)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-Redisson%E9%94%81%E9%87%8D%E8%AF%95%E5%92%8CWatchDog%E6%9C%BA%E5%88%B6"><span class="nav-text">7.3 Redisson锁重试和WatchDog机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-Redisson%E9%94%81%E7%9A%84MutiLock%E5%8E%9F%E7%90%86"><span class="nav-text">7.4 Redisson锁的MutiLock原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-%E5%B0%8F%E7%BB%93"><span class="nav-text">7.5 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8. 秒杀优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF"><span class="nav-text">8.1 异步秒杀思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E8%B5%84%E6%A0%BC%E5%88%A4%E6%96%AD"><span class="nav-text">8.2 异步秒杀资格判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%9F%BA%E4%BA%8E%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8.3 基于阻塞队列实现秒杀优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%B0%8F%E7%BB%93"><span class="nav-text">8.4 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9. Redis消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E8%AE%A4%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.1 认识消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%9F%BA%E4%BA%8EList%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.2 基于List实现消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.3 基于PubSub的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.4 基于Stream的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E2%80%94-%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-text">9.5 基于Stream的消息队列—-消费者组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-6-Stream%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">9.6 Stream消息队列实现异步秒杀下单</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-%E8%BE%BE%E4%BA%BA%E6%8E%A2%E5%BA%97"><span class="nav-text">10. 达人探店</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-1-%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0"><span class="nav-text">10.1 发布探店笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0"><span class="nav-text">查看探店笔记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%82%B9%E8%B5%9E%E5%8A%9F%E8%83%BD"><span class="nav-text">实现点赞功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%82%B9%E8%B5%9E%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="nav-text">实现点赞排行榜</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -3877,7 +3751,7 @@
                     </span>
                     
                         <span>
-                            共 44k 字
+                            共 45.5k 字
                         </span>
                     
                 </p>
