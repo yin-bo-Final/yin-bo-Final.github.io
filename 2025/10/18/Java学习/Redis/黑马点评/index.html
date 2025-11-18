@@ -181,7 +181,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97.png">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-16T09:25:43.201Z">
+<meta property="article:modified_time" content="2025-11-18T09:58:20.389Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -712,8 +712,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-16 17:25:43</span>
-            <span class="mobile">2025-11-16 17:25:43</span>
+            <span class="desktop">2025-11-18 17:58:20</span>
+            <span class="mobile">2025-11-18 17:58:20</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -743,12 +743,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>36.3k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>36.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>147 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>148 分钟</span>
         </span>
     
     
@@ -3516,7 +3516,238 @@
 </ul>
  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不再是获取阻塞队列的消息，而是获取stream消息队列的消息</span></span><br><span class="line"><span class="type">String</span> <span class="variable">queueName</span> <span class="operator">=</span> <span class="string">&quot;stream.orders&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">VoucherOrderHandler</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//1. 获取队列中的订单信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS stream.orders &gt;</span></span><br><span class="line">                List&lt;MapRecord&lt;String, Object, Object&gt;&gt; records = stringRedisTemplate.opsForStream().read(Consumer.from(<span class="string">&quot;g1&quot;</span>, <span class="string">&quot;c1&quot;</span>),</span><br><span class="line">                        StreamReadOptions.empty().count(<span class="number">1</span>).block(Duration.ofSeconds(<span class="number">2</span>)),</span><br><span class="line">                        <span class="comment">//ReadOffset.lastConsumed()底层就是 &#x27;&gt;&#x27;</span></span><br><span class="line">                        StreamOffset.create(queueName, ReadOffset.lastConsumed()));</span><br><span class="line">                <span class="comment">//2. 判断消息是否获取成功</span></span><br><span class="line">                <span class="keyword">if</span> (records == <span class="literal">null</span> || records.isEmpty()) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//3. 消息获取成功之后，我们需要将其转为对象</span></span><br><span class="line">                MapRecord&lt;String, Object, Object&gt; record = records.get(<span class="number">0</span>);</span><br><span class="line">                Map&lt;Object, Object&gt; values = record.getValue();</span><br><span class="line">                <span class="type">VoucherOrder</span> <span class="variable">voucherOrder</span> <span class="operator">=</span> BeanUtil.fillBeanWithMap(values, <span class="keyword">new</span> <span class="title class_">VoucherOrder</span>(), <span class="literal">true</span>);</span><br><span class="line">                <span class="comment">//4. 获取成功，执行下单逻辑，将数据保存到数据库中</span></span><br><span class="line">                handleVoucherOrder(voucherOrder);</span><br><span class="line">                <span class="comment">//5. 手动ACK，SACK stream.orders g1 id</span></span><br><span class="line">                stringRedisTemplate.opsForStream().acknowledge(queueName, <span class="string">&quot;g1&quot;</span>, record.getId());</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                log.error(<span class="string">&quot;订单处理异常&quot;</span>, e);</span><br><span class="line">                <span class="comment">//订单异常的处理方式我们封装成一个函数，避免代码太臃肿</span></span><br><span class="line">                handlePendingList();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">handlePendingList</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//1. 获取pending-list中的订单信息 XREADGROUP GROUP g1 c1 COUNT 1 BLOCK 2000 STREAMS stream.orders 0</span></span><br><span class="line">            List&lt;MapRecord&lt;String, Object, Object&gt;&gt; records = stringRedisTemplate.opsForStream().read(</span><br><span class="line">                    Consumer.from(<span class="string">&quot;g1&quot;</span>, <span class="string">&quot;c1&quot;</span>),</span><br><span class="line">                    StreamReadOptions.empty().count(<span class="number">1</span>),</span><br><span class="line">                    StreamOffset.create(queueName, ReadOffset.from(<span class="string">&quot;0&quot;</span>)));</span><br><span class="line">            <span class="comment">//2. 判断pending-list中是否有未处理消息</span></span><br><span class="line">            <span class="keyword">if</span> (records == <span class="literal">null</span> || records.isEmpty()) &#123;</span><br><span class="line">                <span class="comment">//如果没有就说明没有异常消息，直接结束循环</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//3. 消息获取成功之后，我们需要将其转为对象</span></span><br><span class="line">            MapRecord&lt;String, Object, Object&gt; record = records.get(<span class="number">0</span>);</span><br><span class="line">            Map&lt;Object, Object&gt; values = record.getValue();</span><br><span class="line">            <span class="type">VoucherOrder</span> <span class="variable">voucherOrder</span> <span class="operator">=</span> BeanUtil.fillBeanWithMap(values, <span class="keyword">new</span> <span class="title class_">VoucherOrder</span>(), <span class="literal">true</span>);</span><br><span class="line">            <span class="comment">//4. 获取成功，执行下单逻辑，将数据保存到数据库中</span></span><br><span class="line">            handleVoucherOrder(voucherOrder);</span><br><span class="line">            <span class="comment">//5. 手动ACK，SACK stream.orders g1 id</span></span><br><span class="line">            stringRedisTemplate.opsForStream().acknowledge(queueName, <span class="string">&quot;g1&quot;</span>, record.getId());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.info(<span class="string">&quot;处理pending-list异常&quot;</span>);</span><br><span class="line">            <span class="comment">//如果怕异常多次出现，可以在这里休眠一会儿</span></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">50</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 </ol>
-
+<h1 id="10-达人探店"><a href="#10-达人探店" class="headerlink" title="10. 达人探店"></a>10. 达人探店</h1><h2 id="10-1-发布探店笔记"><a href="#10-1-发布探店笔记" class="headerlink" title="10.1 发布探店笔记"></a>10.1 发布探店笔记</h2><p>探店笔记对应的表有两个：</p>
+<ul>
+<li>探店店笔记表：<strong>包含笔记中的标题、文字、图片等</strong></li>
+<li>探店笔记评论表：<strong>其他用户对探店笔记的评价</strong></li>
+</ul>
+<div class="tabs" id="tab-数据库表"><ul class="nav-tabs"><li class="tab active"><a class="#数据库表-1">探店店笔记表tb_blog</a></li><li class="tab"><a class="#数据库表-2">探店笔记评论表tb_blog_comments</a></li></ul><div class="tab-content"><div class="tab-pane active" id="数据库表-1"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Collation</th>
+<th>Null</th>
+<th>Key</th>
+<th>Default</th>
+<th>Extra</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td>PRI</td>
+<td>(NULL)</td>
+<td>auto_increment</td>
+<td>主键</td>
+</tr>
+<tr>
+<td>shop_id</td>
+<td>bigint</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>商户id</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>用户id</td>
+</tr>
+<tr>
+<td>title</td>
+<td>varchar(255)</td>
+<td>utf8mb4_unicode_ci</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>标题</td>
+</tr>
+<tr>
+<td>images</td>
+<td>varchar(2048)</td>
+<td>utf8mb4_general_ci</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>探店的照片，最多9张，多张以”,”隔开</td>
+</tr>
+<tr>
+<td>content</td>
+<td>varchar(2048)</td>
+<td>utf8mb4_unicode_ci</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>探店的文字描述</td>
+</tr>
+<tr>
+<td>liked</td>
+<td>int unsigned</td>
+<td>(NULL)</td>
+<td>YES</td>
+<td></td>
+<td>0</td>
+<td></td>
+<td>点赞数量</td>
+</tr>
+<tr>
+<td>comments</td>
+<td>int unsigned</td>
+<td>(NULL)</td>
+<td>YES</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>评论数量</td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>timestamp</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>CURRENT_TIMESTAMP</td>
+<td>DEFAULT_GENERATED</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>update_time</td>
+<td>timestamp</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>CURRENT_TIMESTAMP</td>
+<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
+<td>更新时间</td>
+</tr>
+</tbody></table></div><div class="tab-pane" id="数据库表-2"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Collation</th>
+<th>Null</th>
+<th>Key</th>
+<th>Default</th>
+<th>Extra</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td>PRI</td>
+<td>(NULL)</td>
+<td>auto_increment</td>
+<td>主键</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>用户id</td>
+</tr>
+<tr>
+<td>blog_id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>探店id</td>
+</tr>
+<tr>
+<td>parent_id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>关联的1级评论id，如果是一级评论，则值为0</td>
+</tr>
+<tr>
+<td>answer_id</td>
+<td>bigint unsigned</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>回复的评论id</td>
+</tr>
+<tr>
+<td>content</td>
+<td>varchar(255)</td>
+<td>utf8mb4_general_ci</td>
+<td>NO</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>回复的内容</td>
+</tr>
+<tr>
+<td>liked</td>
+<td>int unsigned</td>
+<td>(NULL)</td>
+<td>YES</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>点赞数</td>
+</tr>
+<tr>
+<td>status</td>
+<td>tinyint unsigned</td>
+<td>(NULL)</td>
+<td>YES</td>
+<td></td>
+<td>(NULL)</td>
+<td></td>
+<td>状态，0：正常，1：被举报，2：禁止查看</td>
+</tr>
+<tr>
+<td>create_time</td>
+<td>timestamp</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>CURRENT_TIMESTAMP</td>
+<td>DEFAULT_GENERATED</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>update_time</td>
+<td>timestamp</td>
+<td>(NULL)</td>
+<td>NO</td>
+<td></td>
+<td>CURRENT_TIMESTAMP</td>
+<td>DEFAULT_GENERATED on update CURRENT_TIMESTAMP</td>
+<td>更新时间</td>
+</tr>
+</tbody></table></div></div></div>
 		</div>
 
 		
@@ -3530,7 +3761,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-16 17:25:43
+                    :</strong> 2025-11-18 17:58:20
             </li>
         
         <li>
@@ -3613,7 +3844,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">黑马点评</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Lua%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">6.5 Lua脚本解决分布式锁的原子性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-%E5%88%A9%E7%94%A8Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Lua%E8%84%9A%E6%9C%AC%E6%94%B9%E9%80%A0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.7 利用Java代码调用Lua脚本改造分布式锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-Redisson"><span class="nav-text">7. 分布式锁-Redisson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Redisson%E5%85%A5%E9%97%A8"><span class="nav-text">7.1 Redisson入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-Redisson%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E5%8E%9F%E7%90%86-%E5%B7%B2%E7%BB%8F%E8%A2%AB%E5%B0%81%E8%A3%85%E7%9A%84%E7%8E%A9%E6%84%8F"><span class="nav-text">7.2 Redisson可重入锁原理(已经被封装的玩意)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-Redisson%E9%94%81%E9%87%8D%E8%AF%95%E5%92%8CWatchDog%E6%9C%BA%E5%88%B6"><span class="nav-text">7.3 Redisson锁重试和WatchDog机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-Redisson%E9%94%81%E7%9A%84MutiLock%E5%8E%9F%E7%90%86"><span class="nav-text">7.4 Redisson锁的MutiLock原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-%E5%B0%8F%E7%BB%93"><span class="nav-text">7.5 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8. 秒杀优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF"><span class="nav-text">8.1 异步秒杀思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E8%B5%84%E6%A0%BC%E5%88%A4%E6%96%AD"><span class="nav-text">8.2 异步秒杀资格判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%9F%BA%E4%BA%8E%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8.3 基于阻塞队列实现秒杀优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%B0%8F%E7%BB%93"><span class="nav-text">8.4 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9. Redis消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E8%AE%A4%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.1 认识消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%9F%BA%E4%BA%8EList%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.2 基于List实现消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.3 基于PubSub的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.4 基于Stream的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E2%80%94-%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-text">9.5 基于Stream的消息队列—-消费者组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-6-Stream%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">9.6 Stream消息队列实现异步秒杀下单</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="nav-text">1. 内容概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AF%BC%E5%85%A5%E9%A1%B9%E7%9B%AE"><span class="nav-text">2. 导入项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3. 短信登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Session%E5%AE%9E%E7%8E%B0%E5%8F%91%E9%80%81%E9%AA%8C%E8%AF%81%E7%A0%81%E5%8A%9F%E8%83%BD"><span class="nav-text">3.1 Session实现发送验证码功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Session%E5%AE%9E%E7%8E%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E5%8A%9F%E8%83%BD"><span class="nav-text">3.2 Session实现验证码登录功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Session%E5%AE%9E%E7%8E%B0%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C%E6%8B%A6%E6%88%AA%E5%8A%9F%E8%83%BD"><span class="nav-text">3.3 Session实现登录校验拦截功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Session%E5%85%B1%E4%BA%AB%E9%97%AE%E9%A2%98"><span class="nav-text">3.4 Session共享问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Redis%E4%BB%A3%E6%9B%BFsession%E7%9A%84%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">3.5 Redis代替session的业务流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-%E5%9F%BA%E4%BA%8ERedis%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="nav-text">3.6 基于Redis实现短信登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-%E9%BB%91%E9%A9%AC%E6%B2%A1%E8%AE%B2%E7%9F%A5%E8%AF%86%E7%9A%84%E8%A1%A5%E5%85%85"><span class="nav-text">3.7 黑马没讲知识的补充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%95%86%E5%93%81%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98"><span class="nav-text">4. 商品查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%EF%BC%9F"><span class="nav-text">4.1 什么是缓存？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E6%B7%BB%E5%8A%A0Redis%E7%BC%93%E5%AD%98"><span class="nav-text">4.2 添加Redis缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%BC%93%E5%AD%98%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4.3 缓存更新策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E5%AE%9E%E7%8E%B0%E5%95%86%E9%93%BA%E7%BC%93%E5%AD%98%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4"><span class="nav-text">4.4 实现商铺缓存双写一致</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F"><span class="nav-text">4.5 缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-text">4.6 缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF"><span class="nav-text">4.7 缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E5%B0%81%E8%A3%85%E7%BC%93%E5%AD%98%E5%B7%A5%E5%85%B7"><span class="nav-text">4.8 封装缓存工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80"><span class="nav-text">5. 优惠券秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Redis%E5%AE%9E%E7%8E%B0%E5%85%A8%E5%B1%80%E5%94%AF%E4%B8%80ID"><span class="nav-text">5.1 Redis实现全局唯一ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E5%AE%9E%E7%8E%B0%E4%BC%98%E6%83%A0%E5%88%B8%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.2 实现优惠券秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">5.3 实现秒杀下单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.4 超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E9%94%81%E8%A7%A3%E5%86%B3%E5%BA%93%E5%AD%98%E8%B6%85%E5%8D%96%E9%97%AE%E9%A2%98"><span class="nav-text">5.5 使用乐观锁解决库存超卖问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%BA%BA%E4%B8%80%E5%8D%95%E5%8A%9F%E8%83%BD"><span class="nav-text">5.6 实现一人一单功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E9%9B%86%E7%BE%A4%E4%B8%8B%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98"><span class="nav-text">5.7 集群下的线程并发安全问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6. 分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F%E6%AF%94%E5%AF%B9"><span class="nav-text">6.1 基本原理和实现方式比对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-text">6.2 Redis分布式锁的实现核心思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E7%A1%80%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.3 实现基础分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E8%A7%A3%E5%86%B3%E8%AF%AF%E5%88%A0%E9%97%AE%E9%A2%98"><span class="nav-text">6.4 解决误删问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Lua%E8%84%9A%E6%9C%AC%E8%A7%A3%E5%86%B3%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-text">6.5 Lua脚本解决分布式锁的原子性问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-%E5%88%A9%E7%94%A8Java%E4%BB%A3%E7%A0%81%E8%B0%83%E7%94%A8Lua%E8%84%9A%E6%9C%AC%E6%94%B9%E9%80%A0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-text">6.7 利用Java代码调用Lua脚本改造分布式锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81-Redisson"><span class="nav-text">7. 分布式锁-Redisson</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Redisson%E5%85%A5%E9%97%A8"><span class="nav-text">7.1 Redisson入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-Redisson%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81%E5%8E%9F%E7%90%86-%E5%B7%B2%E7%BB%8F%E8%A2%AB%E5%B0%81%E8%A3%85%E7%9A%84%E7%8E%A9%E6%84%8F"><span class="nav-text">7.2 Redisson可重入锁原理(已经被封装的玩意)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-Redisson%E9%94%81%E9%87%8D%E8%AF%95%E5%92%8CWatchDog%E6%9C%BA%E5%88%B6"><span class="nav-text">7.3 Redisson锁重试和WatchDog机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-Redisson%E9%94%81%E7%9A%84MutiLock%E5%8E%9F%E7%90%86"><span class="nav-text">7.4 Redisson锁的MutiLock原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-5-%E5%B0%8F%E7%BB%93"><span class="nav-text">7.5 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8. 秒杀优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E6%80%9D%E8%B7%AF"><span class="nav-text">8.1 异步秒杀思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E8%B5%84%E6%A0%BC%E5%88%A4%E6%96%AD"><span class="nav-text">8.2 异步秒杀资格判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-%E5%9F%BA%E4%BA%8E%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E7%A7%92%E6%9D%80%E4%BC%98%E5%8C%96"><span class="nav-text">8.3 基于阻塞队列实现秒杀优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-%E5%B0%8F%E7%BB%93"><span class="nav-text">8.4 小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9. Redis消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E8%AE%A4%E8%AF%86%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.1 认识消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%9F%BA%E4%BA%8EList%E5%AE%9E%E7%8E%B0%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.2 基于List实现消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.3 基于PubSub的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-text">9.4 基于Stream的消息队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E5%9F%BA%E4%BA%8EStream%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E2%80%94-%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84"><span class="nav-text">9.5 基于Stream的消息队列—-消费者组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-6-Stream%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%AE%9E%E7%8E%B0%E5%BC%82%E6%AD%A5%E7%A7%92%E6%9D%80%E4%B8%8B%E5%8D%95"><span class="nav-text">9.6 Stream消息队列实现异步秒杀下单</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-%E8%BE%BE%E4%BA%BA%E6%8E%A2%E5%BA%97"><span class="nav-text">10. 达人探店</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-1-%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0"><span class="nav-text">10.1 发布探店笔记</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -3646,7 +3877,7 @@
                     </span>
                     
                         <span>
-                            共 43.6k 字
+                            共 44k 字
                         </span>
                     
                 </p>
