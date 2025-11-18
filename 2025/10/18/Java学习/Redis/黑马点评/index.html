@@ -182,7 +182,7 @@
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%9F%BA%E4%BA%8EPubSub%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97.png">
 <meta property="og:image" content="http://example.com/images/%E9%BB%91%E9%A9%AC%E7%82%B9%E8%AF%84/%E5%8F%91%E5%B8%83%E6%8E%A2%E5%BA%97%E7%AC%94%E8%AE%B0%E6%95%88%E6%9E%9C%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-10-18T04:24:35.039Z">
-<meta property="article:modified_time" content="2025-11-18T11:48:13.281Z">
+<meta property="article:modified_time" content="2025-11-18T11:50:20.755Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="Redis">
@@ -713,8 +713,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-18 19:48:13</span>
-            <span class="mobile">2025-11-18 19:48:13</span>
+            <span class="desktop">2025-11-18 19:50:20</span>
+            <span class="mobile">2025-11-18 19:50:20</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -3617,10 +3617,37 @@
 </li>
 <li><p>之前的点赞是放到Set集合中，但是Set集合又不能排序，所以这个时候，我们就可以改用SortedSet(Zset)</p>
 </li>
-<li><p><strong>那我们这里顺便就来对比一下这些集合的区别</strong>：<br>|          | List                 | Set          | SortedSet       |</p>
+<li><p><strong>那我们这里顺便就来对比一下这些集合的区别</strong>：</p>
 </li>
 </ul>
-<p>| ——– | ——————– | ———— | ————— |<br>| 排序方式 | 按添加顺序排序       | 无法排序     | 根据score值排序 |<br>| 唯一性   | 不唯一               | 唯一         | 唯一            |<br>| 查找方式 | 按索引查找或首尾查找 | 根据元素查找 | 根据元素查找    |</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>List</th>
+<th>Set</th>
+<th>SortedSet</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>排序方式</td>
+<td>按添加顺序排序</td>
+<td>无法排序</td>
+<td>根据score值排序</td>
+</tr>
+<tr>
+<td>唯一性</td>
+<td>不唯一</td>
+<td>唯一</td>
+<td>唯一</td>
+</tr>
+<tr>
+<td>查找方式</td>
+<td>按索引查找或首尾查找</td>
+<td>根据元素查找</td>
+<td>根据元素查找</td>
+</tr>
+</tbody></table>
 
 		</div>
 
@@ -3635,7 +3662,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-18 19:48:13
+                    :</strong> 2025-11-18 19:50:20
             </li>
         
         <li>
