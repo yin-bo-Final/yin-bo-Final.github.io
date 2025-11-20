@@ -145,7 +145,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-20T07:44:28.706Z">
-<meta property="article:modified_time" content="2025-11-20T13:00:42.077Z">
+<meta property="article:modified_time" content="2025-11-20T14:01:23.348Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
@@ -673,8 +673,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-20 21:42</span>
-            <span class="mobile">2025-11-20 21:42</span>
+            <span class="desktop">2025-11-20 22:01:23</span>
+            <span class="mobile">2025-11-20 22:01:23</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -696,12 +696,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>19 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>25 分钟</span>
         </span>
     
     
@@ -1032,7 +1032,7 @@
  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">streamTest04</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="comment">//迭代（有规律的无限流）</span></span><br><span class="line">    <span class="comment">//遍历前10个数  iterate第一个参数为seed，即是种子，为初始元素，第二个参数是执行的函数，limit是限制元素的大小</span></span><br><span class="line">    Stream.iterate(<span class="number">0</span>,t-&gt;t+<span class="number">1</span>).limit(<span class="number">10</span>).forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生成（随机或自定义规则）</span></span><br><span class="line">    <span class="comment">//10个随机数</span></span><br><span class="line">    Stream.generate(Math::random).limit(<span class="number">10</span>).forEach(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <h2 id="中间操作：过滤，筛选，截断，跳过"><a href="#中间操作：过滤，筛选，截断，跳过" class="headerlink" title="中间操作：过滤，筛选，截断，跳过"></a>中间操作：过滤，筛选，截断，跳过</h2><ul>
-<li>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理，而在终止操作时一次性全部处理，称为<code>惰性求值</code></li>
+<li><strong>多个中间操作可以连接起来形成一个流水线，除非流水线上触发终止操作，否则中间操作不会执行任何的处理，而在终止操作时一次性全部处理，称为<code>惰性求值</code></strong></li>
 </ul>
 <table>
 <thead>
@@ -1091,6 +1091,125 @@
 <td>接收一个函数作为参数，将流中的每个值都换成另一个流，然后把所有流连接成一个流</td>
 </tr>
 </tbody></table>
+<ul>
+<li>测试Stream中间操作：映射  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">streamTest06</span><span class="params">()</span>&#123;</span><br><span class="line">    List&lt;String&gt; strings = Arrays.asList(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>);</span><br><span class="line">    List&lt;Employee&gt; employees = EmployeeData.getEmployees();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//map(Function f)  接受一个函数作为参数，将元素转换成其他类型或者提取信息，该函数会被应用到每个元素上，并将其映射成新元素</span></span><br><span class="line">    strings.stream().map(String::toUpperCase).forEach(System.out::println);</span><br><span class="line">    System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">    <span class="comment">// 练习：获取员工姓名长度大于3的员工的姓名。</span></span><br><span class="line">    employees.stream().map(Employee::getName).filter(employee -&gt; employee.length() &gt; <span class="number">3</span>).forEach(System.out::println);</span><br><span class="line">    System.out.println(<span class="string">&quot;----------------------------&quot;</span>);</span><br><span class="line">    <span class="comment">//练习：将字符串中的多个字符构成的集合转换为对应的Stream实例</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="中间操作：排序"><a href="#中间操作：排序" class="headerlink" title="中间操作：排序"></a>中间操作：排序</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sorted()</td>
+<td>产生一个新流，其中按自然顺序排序</td>
+</tr>
+<tr>
+<td>sorted(Comparator com)</td>
+<td>产生一个新流，其中按比较器顺序排序</td>
+</tr>
+</tbody></table>
+<ul>
+<li>测试方法  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">streamTest07</span><span class="params">()</span>&#123;</span><br><span class="line">    List&lt;Integer&gt; nums = Arrays.asList(<span class="number">114</span>, <span class="number">514</span>, <span class="number">340</span>, <span class="number">199</span>, <span class="number">233</span>);</span><br><span class="line">    List&lt;Employee&gt; employees = EmployeeData.getEmployees();</span><br><span class="line">    <span class="comment">//1. 自然排序</span></span><br><span class="line">    nums.stream().sorted().forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 定制排序 先按照年龄升序排，再按照工资降序排  只输出名字</span></span><br><span class="line">    employees.stream().sorted((o1, o2) -&gt; &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">compare</span> <span class="operator">=</span> Integer.compare(o1.getAge(),o2.getAge());</span><br><span class="line">        <span class="keyword">if</span>(compare!=<span class="number">0</span>) <span class="keyword">return</span> compare;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">return</span> -Double.compare(o1.getSalary(),o2.getSalary());</span><br><span class="line">    &#125;).map(Employee::getName).forEach(System.out::println);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="终止操作：匹配与查找"><a href="#终止操作：匹配与查找" class="headerlink" title="终止操作：匹配与查找"></a>终止操作：匹配与查找</h2><ul>
+<li><p>终止操作会从流的流水线生成成果，其结果可以是任何不是流的值，例如List，Interger甚至是void</p>
+<blockquote>
+<p>因为流是个抽象的概念 不能被输出 输出的必须是流的流水线生成出来的成果</p>
+</blockquote>
+</li>
+<li><p>流进行了终止操作之后，不能再次使用</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>allMatch(Predicate p)</td>
+<td>检查是否匹配所有元素</td>
+</tr>
+<tr>
+<td>anyMatch(Predicate p)</td>
+<td>检查是否至少匹配一个元素</td>
+</tr>
+<tr>
+<td>noneMatch(Predicate p)</td>
+<td>检查是否没有匹配所有元素</td>
+</tr>
+<tr>
+<td>findFirst()</td>
+<td>返回第一个元素</td>
+</tr>
+<tr>
+<td>findAny()</td>
+<td>返回当前流中的任意元素</td>
+</tr>
+<tr>
+<td>count()</td>
+<td>返回流中元素总数</td>
+</tr>
+<tr>
+<td>max(Comparator c)</td>
+<td>返回流中最大值</td>
+</tr>
+<tr>
+<td>min(Comparator c)</td>
+<td>返回流中最小值</td>
+</tr>
+<tr>
+<td>forEach(Consumer c)</td>
+<td>内部迭代(使用Collection 接口需要用户去做迭代，称为外部迭代。相反，Stream API 使用内部迭代——它帮你把迭代做了)</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>测试方法：</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">streamTest08</span><span class="params">()</span>&#123;</span><br><span class="line">    List&lt;Employee&gt; employees = EmployeeData.getEmployees();</span><br><span class="line">    <span class="comment">// allMatch(Predicate p)——检查是否匹配所有元素。</span></span><br><span class="line">    <span class="comment">// 练习：是否所有的员工的工资是否都大于5000</span></span><br><span class="line">    System.out.print(<span class="string">&quot;所有的员工的工资是否都大于5000? 结果是&quot;</span> +</span><br><span class="line">            employees.stream().allMatch(employee -&gt; employee.getSalary() &gt; <span class="number">5000</span>)</span><br><span class="line">            + <span class="string">&quot;那么是哪些人公司没大于5000呢？ 是&quot;</span></span><br><span class="line">    );</span><br><span class="line">    employees.stream().filter(employee -&gt; employee.getSalary() &gt; <span class="number">5000</span>).map(Employee::getName).forEach(name -&gt; System.out.print(name + <span class="string">&quot; &quot;</span>));</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="终止操作：归约"><a href="#终止操作：归约" class="headerlink" title="终止操作：归约"></a>终止操作：归约</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>reduce(T iden, BinaryOperator b)</td>
+<td>可以将流中元素反复结合起来，得到一个值。返回T</td>
+</tr>
+<tr>
+<td>reduce(BinaryOperator b)</td>
+<td>可以将流中元素反复结合起来，得到一个值。返回Optional</td>
+</tr>
+</tbody></table>
+<ul>
+<li>测试方法：  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test22</span><span class="params">()</span> &#123;</span><br><span class="line">    List&lt;Integer&gt; nums = Arrays.asList(<span class="number">13</span>, <span class="number">32</span>, <span class="number">23</span>, <span class="number">31</span>, <span class="number">94</span>, <span class="number">20</span>, <span class="number">77</span>, <span class="number">21</span>, <span class="number">17</span>);</span><br><span class="line">    List&lt;Employee&gt; employees = EmployeeData.getEmployees();</span><br><span class="line">    <span class="comment">// reduce(T identity, BinaryOperator)——可以将流中元素反复结合起来，得到一个值。返回 T</span></span><br><span class="line">    <span class="comment">// 练习1：计算1-10的自然数的和</span></span><br><span class="line">    System.out.println(nums.stream().reduce(<span class="number">0</span>, Integer::sum));</span><br><span class="line">    <span class="comment">//reduce(BinaryOperator) ——可以将流中元素反复结合起来，得到一个值。返回 Optional&lt;T&gt;</span></span><br><span class="line">    <span class="comment">// 练习2：计算公司所有员工工资总和</span></span><br><span class="line">    System.out.println(employees.stream().map(Employee::getSalary).reduce((o1, o2) -&gt; o1 + o2));</span><br><span class="line">    <span class="comment">// 别的写法，计算年龄总和</span></span><br><span class="line">    System.out.println(employees.stream().map(Employee::getAge).reduce(Integer::sum));</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h2 id="终止操作：收集"><a href="#终止操作：收集" class="headerlink" title="终止操作：收集"></a>终止操作：收集</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>collect(Collector c)</td>
+<td>将流转换为其他形式。接收一个Collector接口的实现，用于给Stream中元素做汇总的方法</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>测试方法：</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test23</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// collect(Collector c)——将流转换为其他形式。接收一个 Collector接口的实现，用于给Stream中元素做汇总的方法</span></span><br><span class="line">    <span class="comment">// 练习1：查找工资大于6000的员工，结果返回为一个List</span></span><br><span class="line">    List&lt;Employee&gt; employees = EmployeeData.getEmployees();</span><br><span class="line">    List&lt;Employee&gt; list = employees.stream().filter(employee -&gt; employee.getSalary() &gt; <span class="number">6000</span>).collect(Collectors.toList());</span><br><span class="line">    list.forEach(System.out::println);</span><br><span class="line">    System.out.println(<span class="string">&quot;--------------------&quot;</span>);</span><br><span class="line">    <span class="comment">// 练习2：查找年龄大于20的员工，结果返回为一个List</span></span><br><span class="line">    employees.add(<span class="keyword">new</span> <span class="title class_">Employee</span>(<span class="number">9527</span>,<span class="string">&quot;yin_bo_&quot;</span>,<span class="number">21</span>,<span class="number">9999</span>));</span><br><span class="line">    Set&lt;Employee&gt; set = employees.stream().filter(employee -&gt; employee.getAge() &gt; <span class="number">20</span>).collect(Collectors.toSet());</span><br><span class="line">    set.forEach(System.out::println);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+</li>
+<li><p>好了，终于学完了Stream API  这里去解读一下黑马点评中用到它的代码：</p>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">List&lt;UserDTO&gt; userDTOS = userService</span><br><span class="line">    .listByIds(ids)                                   </span><br><span class="line">    .stream()                                          </span><br><span class="line">    .map(user -&gt; BeanUtil.copyProperties(user, UserDTO.class))  </span><br><span class="line">    .collect(Collectors.toList());           </span><br><span class="line">....................</span><br><span class="line">List&lt;Long&gt; ids = intersect.stream().map(Long::valueOf).collect(Collectors.toList());          </span><br></pre></td></tr></table></figure></div>
+<p>  好吧，简单的不想去解释，但是当时做项目的时候难了我大半天😄</p>
+</li>
+</ul>
+<h1 id="6-结语"><a href="#6-结语" class="headerlink" title="6. 结语"></a>6. 结语</h1><p>半天时间搞定，以后我也是掌握Java8新特性的javaer了😍</p>
 
 		</div>
 
@@ -1105,7 +1224,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-20 21:00:42
+                    :</strong> 2025-11-20 22:01:23
             </li>
         
         <li>
@@ -1168,7 +1287,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Java8新特性</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java8%E6%96%B0%E7%89%B9%E6%80%A7%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-text">Java8新特性的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%B9%B6%E8%A1%8C%E6%B5%81%E4%B8%8E%E4%B8%B2%E8%A1%8C%E6%B5%81"><span class="nav-text">1. 并行流与串行流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">2. Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="nav-text">Lambda表达式使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">Lambda表达式语法的使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-text">3. 函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%86%85%E7%BD%AE%E7%9A%84%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-text">Java内置的函数式接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8"><span class="nav-text">4. 方法引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">方法引用的使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Stream-API"><span class="nav-text">5. Stream API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-API%E6%A6%82%E8%BF%B0"><span class="nav-text">Stream API概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-text">Stream实例化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C%EF%BC%9A%E8%BF%87%E6%BB%A4%EF%BC%8C%E7%AD%9B%E9%80%89%EF%BC%8C%E6%88%AA%E6%96%AD%EF%BC%8C%E8%B7%B3%E8%BF%87"><span class="nav-text">中间操作：过滤，筛选，截断，跳过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C%EF%BC%9A%E6%98%A0%E5%B0%84"><span class="nav-text">中间操作：映射</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java8%E6%96%B0%E7%89%B9%E6%80%A7%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-text">Java8新特性的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%B9%B6%E8%A1%8C%E6%B5%81%E4%B8%8E%E4%B8%B2%E8%A1%8C%E6%B5%81"><span class="nav-text">1. 并行流与串行流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">2. Lambda表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="nav-text">Lambda表达式使用举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E8%AF%AD%E6%B3%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">Lambda表达式语法的使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-text">3. 函数式接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E5%86%85%E7%BD%AE%E7%9A%84%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3"><span class="nav-text">Java内置的函数式接口</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8"><span class="nav-text">4. 方法引用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-text">方法引用的使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Stream-API"><span class="nav-text">5. Stream API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream-API%E6%A6%82%E8%BF%B0"><span class="nav-text">Stream API概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stream%E5%AE%9E%E4%BE%8B%E5%8C%96"><span class="nav-text">Stream实例化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C%EF%BC%9A%E8%BF%87%E6%BB%A4%EF%BC%8C%E7%AD%9B%E9%80%89%EF%BC%8C%E6%88%AA%E6%96%AD%EF%BC%8C%E8%B7%B3%E8%BF%87"><span class="nav-text">中间操作：过滤，筛选，截断，跳过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C%EF%BC%9A%E6%98%A0%E5%B0%84"><span class="nav-text">中间操作：映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E6%93%8D%E4%BD%9C%EF%BC%9A%E6%8E%92%E5%BA%8F"><span class="nav-text">中间操作：排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C%EF%BC%9A%E5%8C%B9%E9%85%8D%E4%B8%8E%E6%9F%A5%E6%89%BE"><span class="nav-text">终止操作：匹配与查找</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C%EF%BC%9A%E5%BD%92%E7%BA%A6"><span class="nav-text">终止操作：归约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C%EF%BC%9A%E6%94%B6%E9%9B%86"><span class="nav-text">终止操作：收集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E7%BB%93%E8%AF%AD"><span class="nav-text">6. 结语</span></a></li></ol>
 
 	</div>
 </div>
@@ -1201,7 +1320,7 @@
                     </span>
                     
                         <span>
-                            共 58.3k 字
+                            共 59.4k 字
                         </span>
                     
                 </p>
