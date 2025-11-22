@@ -2667,7 +2667,7 @@ html.is-animating .scroll-progress-bar {
   transition: all 0.1s linear;
 }
 .post-toc-wrap .post-toc .nav .nav-child {
-  display: none;
+  display: block;
 }
 .post-toc-wrap .post-toc .nav .active > .nav-child {
   display: block;
@@ -4038,7 +4038,7 @@ div.tabs .tab-content .tab-pane .note:last-child {
   position: relative;
   box-sizing: border-box;
   width: 80%;
-  max-width: 1000px;
+  max-width: 1200px;
   height: 100%;
   transition-property: color, background, box-shadow, border-color, max-width, width;
   transition-delay: 0s, 0s, 0s, 0s, 0s, 0s;
@@ -4056,7 +4056,7 @@ div.tabs .tab-content .tab-pane .note:last-child {
   }
 }
 .page-container .main-content-container .main-content-body .main-content.has-toc {
-  max-width: 1200px !important;
+  max-width: 1440px !important;
 }
 .page-container .main-content-container .main-content-body .main-content-footer {
   width: 100%;
@@ -4465,7 +4465,7 @@ html.is-animating .transition-fade-down {
   display: block;
   opacity: 1;
   transition: opacity 0.2s ease-in 0.2s;
-  width: 210px;
+  width: 300px;
 }
 .post-page-container.show-toc .toc-content-container:hover::-webkit-scrollbar-thumb {
   border: 3px solid rgba(183,183,183,0.3);
