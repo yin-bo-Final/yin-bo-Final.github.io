@@ -153,8 +153,11 @@
 <meta property="og:image" content="http://example.com/images/SpringCloud/Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E7%95%8C%E9%9D%A2.jpg">
 <meta property="og:image" content="http://example.com/images/SpringCloud/%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E7%BB%88%E7%AB%AF.jpg">
+<meta property="og:image" content="http://example.com/images/SpringCloud/%E4%B8%8D%E5%90%8C%E9%9B%86%E7%BE%A4Nacos.jpg">
+<meta property="og:image" content="http://example.com/images/SpringCloud/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.jpg">
+<meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-11-21T07:25:59.006Z">
-<meta property="article:modified_time" content="2025-11-22T10:11:53.926Z">
+<meta property="article:modified_time" content="2025-11-22T12:33:14.286Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="后端">
@@ -685,8 +688,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-22 18:11:53</span>
-            <span class="mobile">2025-11-22 18:11:53</span>
+            <span class="desktop">2025-11-22 20:33:14</span>
+            <span class="mobile">2025-11-22 20:33:14</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -698,11 +701,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
+                        <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Java/">Java</a>&nbsp;
+                        | <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
                     </li>
                 
                     <li>
@@ -716,12 +719,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.9k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>23 分钟</span>
         </span>
     
     
@@ -1218,7 +1221,162 @@
 </ul>
 </li>
 </ol>
-<h2 id="5-3-服务分级存储模型"><a href="#5-3-服务分级存储模型" class="headerlink" title="5.3 服务分级存储模型"></a>5.3 服务分级存储模型</h2>
+<h2 id="5-3-服务分级存储模型"><a href="#5-3-服务分级存储模型" class="headerlink" title="5.3 服务分级存储模型"></a>5.3 服务分级存储模型</h2><ul>
+<li><p>一个服务可以有多个实例，例如我们的user-service，可以有</p>
+<ul>
+<li>127.0.0.1:8081</li>
+<li>127.0.0.1:8082</li>
+<li>127.0.0.1:8083</li>
+</ul>
+</li>
+<li><p>假如这些实例分布于全国各地的不同机房，Nacos就会将同一个机房的所有实例划分成一个**<code>集群</code>**</p>
+</li>
+<li><p>也就是说.<strong>user-service是服务，一个服务可以包含多个集群，每个集群可以有多个实例，形成分级模型。</strong></p>
+</li>
+<li><p>微服务互相访问时，<strong>应该尽可能访问同集群实例</strong>，因为本地访问速度更快，本集群内不可用再去访问其他集群。</p>
+</li>
+</ul>
+<h3 id="5-3-1-集群配置"><a href="#5-3-1-集群配置" class="headerlink" title="5.3.1 集群配置"></a>5.3.1 集群配置</h3><ul>
+<li>修改user-service的<code>application.yml</code>文件，添加集群配置</li>
+</ul>
+  <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span></span><br><span class="line">    <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">cluster-name:</span> <span class="string">HZ</span> <span class="comment">## 集群名称，杭州</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><p>启动两个user-service实例</p>
+</li>
+<li><p>之后再复制一个user-service的启动配置，端口号设置8083，之后修改<code>application.yml</code>，将集群名称改为上海SH，之后启动该服务</p>
+</li>
+<li><p>然后刷新Nacos终端，可以发现有两个实例的集群HZ和只有一个实例的集群SH<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SpringCloud/%E4%B8%8D%E5%90%8C%E9%9B%86%E7%BE%A4Nacos.jpg"
+                      alt="alt 不同集群Nacos"
+                ><figcaption>alt 不同集群Nacos</figcaption></figure></p>
+</li>
+<li><p><strong>Nacos服务分级</strong></p>
+<ul>
+<li>一级：<strong>服务</strong> 如user-service<ul>
+<li>二级：<strong>集群</strong> 如上海或者杭州<ul>
+<li>三级：<strong>实例</strong> 如上海某台部署了user-service的服务器</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-3-2-同集群优先的负载均衡"><a href="#5-3-2-同集群优先的负载均衡" class="headerlink" title="5.3.2 同集群优先的负载均衡"></a>5.3.2 同集群优先的负载均衡</h3><ul>
+<li><p>默认的<code>ZoneAvoidanceRule</code>并不能根据同集群优先实现<strong>负载均衡</strong></p>
+</li>
+<li><p>因此Nacos中提供了一个NacosRule的实现，可以优先从集群中挑选实例</p>
+</li>
+<li><p>给order-service配置集群信息，修改<code>application.yml</code>，将集群改为HZ，</p>
+<ul>
+<li><strong>并修改负载均衡规则</strong>，规则是<code>com.alibaba.cloud.nacos.ribbon.NacosRule</code><div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">server-addr:</span> <span class="string">localhost:8848</span></span><br><span class="line">    <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">cluster-name:</span> <span class="string">HZ</span> <span class="comment"># 集群名称，杭州</span></span><br><span class="line"><span class="attr">user-service:</span></span><br><span class="line">  <span class="attr">ribbon:</span></span><br><span class="line">    <span class="attr">NFLoadBalancerRuleClassName:</span> <span class="string">com.alibaba.cloud.nacos.ribbon.NacosRule</span></span><br></pre></td></tr></table></figure></div></li>
+</ul>
+</li>
+<li><p>将三个实例的user-service的日志清空，重启order-service，然后多次调用向order-service发送请求，发现只有HZ集群的实例才会执行，<strong>而其他集群不会</strong>。</p>
+<ul>
+<li>并且是在相同集群的实例里<strong>随机挑选</strong></li>
+</ul>
+</li>
+<li><p>将HZ集群的实例停用，然后再次发送请求，这次SH集群的实例运行了。</p>
+</li>
+<li><p><strong>NacosRule负载均衡的策略</strong></p>
+<ol>
+<li>优先选择本地集群的服务实例列表</li>
+<li>本地集群找不到实例，才回去其他集群勋章，并且会<strong>报警告</strong></li>
+<li><strong>确定了可用实例列表之后，采用随机负载均衡挑选实例</strong>。</li>
+</ol>
+</li>
+</ul>
+<h2 id="5-4-权重配置"><a href="#5-4-权重配置" class="headerlink" title="5.4 权重配置"></a>5.4 权重配置</h2><ul>
+<li><p>实际部署中肯定会有这样的场景</p>
+<ul>
+<li>服务器设备性能有差异，部分实例所在的机器性能较好，而另一些较差，所以我们希望性能好的机器承担更多的用户请求。</li>
+<li>但默认下NacosRule是集群随机挑选，不会考虑机器性能问题。</li>
+</ul>
+</li>
+<li><p>因此Nacos<strong>提供了权重配置来控制访问频率，权重越大则访问频率越高(权重范围0~1之间)</strong></p>
+</li>
+<li><p>在Nacos控制台，找到user-service的实例列表，点击标记，即可以修改权重</p>
+<blockquote>
+<p>注意：若权重为0则该实例永远不会被访问<br>我们可以将某个服务的权重修改为0，然后进行更新，然后也不会影响到用户正常访问别的服务集群，之后我们可以给更新后的该服务设置一个很小的权重，这样就会有一小部分用户访问该服务，测试服务是否稳定(类似于灰度测试)。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="5-5-环境隔离"><a href="#5-5-环境隔离" class="headerlink" title="5.5 环境隔离"></a>5.5 环境隔离</h2><ul>
+<li>Nacos提供了namespace来实现环境隔离功能<ul>
+<li>nacos中可以有多个namespace</li>
+<li>namespace下可以有group，service等</li>
+<li>不同的namespace之间互相隔离，例如不同的namespace的服务互相不可见</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><p><strong>创建namespace</strong></p>
+<ul>
+<li>默认情况下，所有service,data,group都是在同一个namespace，名为public</li>
+<li>我们点击<code>命名空间</code>-&gt;<code>新建命名空间</code>-&gt;<code>填写表单</code>，可以创建一个新的namespcae</li>
+<li>如图，我们新建了个命名空间<code>dev</code><br> <figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SpringCloud/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.jpg"
+                      alt="alt 命名空间"
+                ><figcaption>alt 命名空间</figcaption></figure></li>
+</ul>
+</li>
+<li><p><strong>给微服务配置namespace</strong></p>
+<ul>
+<li>给微服务配置namespace只能通过修改配置了实现</li>
+<li>例如，修改order-service的<code>application.yml</code>文件</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cloud:</span><br><span class="line">  nacos:</span><br><span class="line">    server-addr: localhost:<span class="number">8848</span></span><br><span class="line">    discovery:</span><br><span class="line">      cluster-name: HZ # 集群名称，杭州</span><br><span class="line">      namespace: 982827c7-<span class="number">8362</span>-<span class="number">478f</span>-a1c5-c1a208fa5ab4 # 命名空间，填上图中的命名空间ID</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>重启order-service，访问nacos控制台，可以看到order-service在dev下，此时访问order-service，<strong>因为namespace不同，就会导致找不到user-service，若访问则会直接报错</strong></li>
+</ul>
+</li>
+</ol>
+<h2 id="5-6-Nacos和Eureka的区别"><a href="#5-6-Nacos和Eureka的区别" class="headerlink" title="5.6 Nacos和Eureka的区别"></a>5.6 Nacos和Eureka的区别</h2><ul>
+<li><p><strong>Nacos的服务实例可以分为两种类型</strong></p>
+<ol>
+<li>临时实例：如果实例宕机超过一定时间，会从服务列表中删除，<strong>是默认的类型</strong></li>
+<li>非临时实例：如果实例宕机，不会从服务列表剔除，<strong>也叫永久实例</strong></li>
+</ol>
+</li>
+<li><p>配置一个服务实例为永久实例</p>
+  <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">cloud:</span></span><br><span class="line">    <span class="attr">nacos:</span></span><br><span class="line">      <span class="attr">discovery:</span></span><br><span class="line">        <span class="attr">ephemeral:</span> <span class="literal">false</span> <span class="comment">## 设置为非临时实例</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>Nacos和Eureka整体结构相似，服务注册，服务拉取，心跳等待，但是也存在一定的差异<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SpringCloud/Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%8E%9F%E7%90%86%E5%9B%BE.jpg"
+                      alt="alt Nacos注册中心原理图"
+                ><figcaption>alt Nacos注册中心原理图</figcaption></figure></p>
+</li>
+<li><p><strong>Nacos与Eureka的共同点</strong></p>
+<ol>
+<li>都支持服务注册和服务拉取</li>
+<li>都支持服务提供者心跳方式做健康监测</li>
+</ol>
+</li>
+<li><p><strong>Nacos与Eureka的区别</strong></p>
+</li>
+</ul>
+<ol>
+<li>Nacos支持服务端主动检测提供者状态：<ul>
+<li>临时实例采用心跳模式。</li>
+<li>非临时实例采用主动检测模式 <strong>(但是对服务器压力比较大，不推荐)</strong></li>
+</ul>
+</li>
+<li>临时实例心跳不正常会被剔除，非临时实例则不会被剔除</li>
+<li>Nacos支持服务列表变更的消息推送模式，服务列表更新更及时</li>
+<li>Nacos集群默认采用AP方式，<strong>当集群中存在非临时实例时，采用CP模式</strong>；Eureka采用AP方式<blockquote>
+<p>AP方式：强调数据可用性<br>CP方式：强调数据一致性和可靠性</p>
+</blockquote>
+</li>
+</ol>
+
 		</div>
 
 		
@@ -1232,7 +1390,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-22 18:11:53
+                    :</strong> 2025-11-22 20:33:14
             </li>
         
         <li>
@@ -1258,11 +1416,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -1303,7 +1461,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SpringCloud</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3.1 集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%90%8C%E9%9B%86%E7%BE%A4%E4%BC%98%E5%85%88%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">5.3.2 同集群优先的负载均衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%9D%83%E9%87%8D%E9%85%8D%E7%BD%AE"><span class="nav-text">5.4 权重配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB"><span class="nav-text">5.5 环境隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-Nacos%E5%92%8CEureka%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">5.6 Nacos和Eureka的区别</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1336,7 +1494,7 @@
                     </span>
                     
                         <span>
-                            共 66.4k 字
+                            共 67.9k 字
                         </span>
                     
                 </p>
