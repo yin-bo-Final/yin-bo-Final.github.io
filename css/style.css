@@ -4038,7 +4038,7 @@ div.tabs .tab-content .tab-pane .note:last-child {
   position: relative;
   box-sizing: border-box;
   width: 80%;
-  max-width: 1200px;
+  max-width: 1100px;
   height: 100%;
   transition-property: color, background, box-shadow, border-color, max-width, width;
   transition-delay: 0s, 0s, 0s, 0s, 0s, 0s;
@@ -4056,7 +4056,7 @@ div.tabs .tab-content .tab-pane .note:last-child {
   }
 }
 .page-container .main-content-container .main-content-body .main-content.has-toc {
-  max-width: 1440px !important;
+  max-width: 1320px !important;
 }
 .page-container .main-content-container .main-content-body .main-content-footer {
   width: 100%;
