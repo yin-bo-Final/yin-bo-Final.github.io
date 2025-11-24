@@ -158,7 +158,7 @@
 <meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E9%9B%86%E7%BE%A4%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-11-21T07:25:59.006Z">
-<meta property="article:modified_time" content="2025-11-23T14:07:46.891Z">
+<meta property="article:modified_time" content="2025-11-24T10:52:35.833Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="后端">
@@ -689,8 +689,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-23 22:07:46</span>
-            <span class="mobile">2025-11-23 22:07:46</span>
+            <span class="desktop">2025-11-24 18:52:35</span>
+            <span class="mobile">2025-11-24 18:52:35</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -702,11 +702,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/Java/">Java</a>&nbsp;
+                        <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
+                        | <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
@@ -720,12 +720,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>8.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>9.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>34 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>40 分钟</span>
         </span>
     
     
@@ -1644,12 +1644,95 @@
 <li>主启动类添加@EnableFeignClients注解</li>
 <li>编写FeignClient接口</li>
 <li>使用FeignClient中定义的方法替代RestTemplate</li>
-<li>注意：<strong>这里两个服务的组必须一样</strong></li>
+<li>注意：<strong>这里两个服务的组必须一样(别踩坑)</strong></li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
+<h2 id="7-2-自定义配置"><a href="#7-2-自定义配置" class="headerlink" title="7.2 自定义配置"></a>7.2 自定义配置</h2><ul>
+<li>Feign可以支持很多自定义配置，如下表</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>feign.Logger.Level</td>
+<td>修改日志级别</td>
+<td>包含四种不同的级别：NONE、BASIC、HEADERS、FULL</td>
+</tr>
+<tr>
+<td>feign.codec.Decoder</td>
+<td>响应结果的解析器</td>
+<td>http远程调用的结果做解析，例如解析json字符串为java对象</td>
+</tr>
+<tr>
+<td>feign.codec.Encoder</td>
+<td>请求参数编码</td>
+<td>将请求参数编码，便于通过http请求发送</td>
+</tr>
+<tr>
+<td>feign. Contract</td>
+<td>支持的注解格式</td>
+<td>默认是SpringMVC的注解</td>
+</tr>
+<tr>
+<td>feign. Retryer</td>
+<td>失败重试机制</td>
+<td>请求失败的重试机制，默认是没有，不过会使用Ribbon的重试</td>
+</tr>
+</tbody></table>
+<ul>
+<li>一般情况下，默认值就能满足我们的使用，如果需要自定义，只需要创建自定义的<code>@Bean</code>覆盖默认的Bean即可，下面以<strong>日志</strong>为例演示如果自定义配置</li>
+</ul>
+<ol>
+<li><p>基于<strong>配置文件</strong>修改Feign的日志级别</p>
+<ul>
+<li><p><strong>可以针对单个服务</strong></p>
+   <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span>  </span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span> </span><br><span class="line">      <span class="attr">userservice:</span> <span class="comment">## 针对某个微服务的配置</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">FULL</span> <span class="comment">##  日志级别</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><strong>也可以针对所有服务</strong></p>
+   <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">feign:</span>  </span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span> </span><br><span class="line">      <span class="attr">default:</span> <span class="comment">## 这里用default就是全局配置，如果是写服务名称，则是针对某个微服务的配置</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">FULL</span> <span class="comment">##  日志级别 </span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>而日志的级别分为四种</p>
+<ul>
+<li><code>NONE</code>：不记录任何日志信息，这是默认值</li>
+<li><code>BASIC</code>：仅记录请求的方法，URL以及响应状态码和执行时间</li>
+<li><code>HEADERS</code>：在BASIC的基础上，额外记录了请求和响应头的信息</li>
+<li><code>FULL</code>：记录所有请求和响应的明细，包括头信息、请求体、元数据</li>
+</ul>
+</li>
+<li><p>修改之后<strong>发送请求</strong>，发现日志很完整</p>
+</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">11-24 18:40:17:623  INFO 32172 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet <span class="string">&#x27;dispatcherServlet&#x27;</span></span><br><span class="line">11-24 18:40:17:623  INFO 32172 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet <span class="string">&#x27;dispatcherServlet&#x27;</span></span><br><span class="line">11-24 18:40:17:626  INFO 32172 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization <span class="keyword">in</span> 3 ms</span><br><span class="line">11-24 18:40:17:654  INFO 32172 --- [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...</span><br><span class="line">11-24 18:40:17:768  INFO 32172 --- [nio-8080-exec-1] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.</span><br><span class="line">11-24 18:40:17:775 DEBUG 32172 --- [nio-8080-exec-1] c.i.order.mapper.OrderMapper.findById    : ==&gt;  Preparing: <span class="keyword">select</span> * from tb_order <span class="built_in">where</span> <span class="built_in">id</span> = ? </span><br><span class="line">11-24 18:40:17:785 DEBUG 32172 --- [nio-8080-exec-1] c.i.order.mapper.OrderMapper.findById    : ==&gt; Parameters: 101(Long)</span><br><span class="line">11-24 18:40:17:796 DEBUG 32172 --- [nio-8080-exec-1] c.i.order.mapper.OrderMapper.findById    : &lt;==      Total: 1</span><br><span class="line">11-24 18:40:17:800 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] ---&gt; GET http://user-service/user/1 HTTP/1.1</span><br><span class="line">11-24 18:40:17:800 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] ---&gt; END HTTP (0-byte body)</span><br><span class="line">11-24 18:40:18:402  INFO 32172 --- [nio-8080-exec-1] c.netflix.loadbalancer.BaseLoadBalancer  : Client: user-service instantiated a LoadBalancer: DynamicServerListLoadBalancer:&#123;NFLoadBalancer:name=user-service,current list of Servers=[],Load balancer stats=Zone stats: &#123;&#125;,Server stats: []&#125;ServerList:null</span><br><span class="line">11-24 18:40:18:406  INFO 32172 --- [nio-8080-exec-1] c.n.l.DynamicServerListLoadBalancer      : Using serverListUpdater PollingServerListUpdater</span><br><span class="line">11-24 18:40:18:455  WARN 32172 --- [nio-8080-exec-1] c.alibaba.cloud.nacos.ribbon.NacosRule   : A cross-cluster call occurs，name = user-service, clusterName = HZ, instance = [Instance&#123;instanceId=<span class="string">&#x27;192.168.74.1#8081#SH#DEFAULT_GROUP@@user-service&#x27;</span>, ip=<span class="string">&#x27;192.168.74.1&#x27;</span>, port=8081, weight=1.0, healthy=<span class="literal">true</span>, enabled=<span class="literal">true</span>, ephemeral=<span class="literal">true</span>, clusterName=<span class="string">&#x27;SH&#x27;</span>, serviceName=<span class="string">&#x27;DEFAULT_GROUP@@user-service&#x27;</span>, metadata=&#123;preserved.register.source=SPRING_CLOUD&#125;&#125;, Instance&#123;instanceId=<span class="string">&#x27;192.168.74.1#8082#SH#DEFAULT_GROUP@@user-service&#x27;</span>, ip=<span class="string">&#x27;192.168.74.1&#x27;</span>, port=8082, weight=1.0, healthy=<span class="literal">true</span>, enabled=<span class="literal">true</span>, ephemeral=<span class="literal">true</span>, clusterName=<span class="string">&#x27;SH&#x27;</span>, serviceName=<span class="string">&#x27;DEFAULT_GROUP@@user-service&#x27;</span>, metadata=&#123;preserved.register.source=SPRING_CLOUD&#125;&#125;]</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] &lt;--- HTTP/1.1 200 (671ms)</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] connection: keep-alive</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] content-type: application/json</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] <span class="built_in">date</span>: Mon, 24 Nov 2025 10:40:18 GMT</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] keep-alive: <span class="built_in">timeout</span>=60</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] transfer-encoding: chunked</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] </span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] &#123;<span class="string">&quot;id&quot;</span>:1,<span class="string">&quot;username&quot;</span>:<span class="string">&quot;柳岩&quot;</span>,<span class="string">&quot;address&quot;</span>:<span class="string">&quot;湖南省衡阳市&quot;</span>&#125;</span><br><span class="line">11-24 18:40:18:474 DEBUG 32172 --- [nio-8080-exec-1] cn.itcast.order.client.UserClient        : [UserClient#findById] &lt;--- END HTTP (59-byte body)</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>基于<code>Java代码</code>修改日志级别</p>
+<ul>
+<li>先声明一个类，然后声明一个Logger.Level的对象</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultFeignConfiguration</span> &#123;</span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> Logger.Level <span class="title function_">feignLogLevel</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Logger.Level.BASIC; <span class="comment">//日志级别设置为 BASIC</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>如果要全局生效，将其放到<strong>启动类</strong>的<code>@EnableFeignClients</code>这个注解中<ul>
+<li>注意，这里修改的是启动类里的<code>@EnableFeignClients</code>注解里</li>
+</ul>
+</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(defaultConfiguration = DefaultFeignConfiguration.class)</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>如果局部生效，则把它放到对应的<code>@FeignClient</code>注解中</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(value = &quot;user-service&quot;, configuration = DefaultFeignConfiguration.class)</span></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<blockquote>
+<p><strong>绝大部分情况下，我们都用第一种方式来实现对Feign的自定义配置</strong></p>
+</blockquote>
 
 		</div>
 
@@ -1664,7 +1747,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-23 22:07:46
+                    :</strong> 2025-11-24 18:52:35
             </li>
         
         <li>
@@ -1690,11 +1773,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -1735,7 +1818,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SpringCloud</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3.1 集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%90%8C%E9%9B%86%E7%BE%A4%E4%BC%98%E5%85%88%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">5.3.2 同集群优先的负载均衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%9D%83%E9%87%8D%E9%85%8D%E7%BD%AE"><span class="nav-text">5.4 权重配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB"><span class="nav-text">5.5 环境隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-Nacos%E5%92%8CEureka%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">5.6 Nacos和Eureka的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6. Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6.1 统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-%E5%9C%A8Nacos%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">6.1.1 在Nacos中配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-text">6.1.2 从微服务拉取配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-text">6.2 配置热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-text">6.3 配置共享</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-1-%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.1 添加一个环境共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-2-%E5%9C%A8user-service%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.2 在user-service中读取共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">6.3.3 配置共享的优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E6%90%AD%E5%BB%BANacos%E9%9B%86%E7%BE%A4"><span class="nav-text">6.4 搭建Nacos集群</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">7. Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-text">7.1 Feign代替RestTemplate</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3.1 集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%90%8C%E9%9B%86%E7%BE%A4%E4%BC%98%E5%85%88%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">5.3.2 同集群优先的负载均衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%9D%83%E9%87%8D%E9%85%8D%E7%BD%AE"><span class="nav-text">5.4 权重配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB"><span class="nav-text">5.5 环境隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-Nacos%E5%92%8CEureka%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">5.6 Nacos和Eureka的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6. Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6.1 统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-%E5%9C%A8Nacos%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">6.1.1 在Nacos中配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-text">6.1.2 从微服务拉取配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-text">6.2 配置热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-text">6.3 配置共享</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-1-%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.1 添加一个环境共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-2-%E5%9C%A8user-service%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.2 在user-service中读取共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">6.3.3 配置共享的优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E6%90%AD%E5%BB%BANacos%E9%9B%86%E7%BE%A4"><span class="nav-text">6.4 搭建Nacos集群</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">7. Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-text">7.1 Feign代替RestTemplate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-text">7.2 自定义配置</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1768,7 +1851,7 @@
                     </span>
                     
                         <span>
-                            共 70.5k 字
+                            共 71.7k 字
                         </span>
                     
                 </p>
