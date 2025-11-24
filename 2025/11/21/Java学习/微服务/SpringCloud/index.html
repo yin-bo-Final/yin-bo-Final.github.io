@@ -157,8 +157,9 @@
 <meta property="og:image" content="http://example.com/images/SpringCloud/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4.jpg">
 <meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SpringCloud/Nacos%E9%9B%86%E7%BE%A4%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/images/SpringCloud/Feign%E6%8A%BD%E5%8F%96%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8.jpg">
 <meta property="article:published_time" content="2025-11-21T07:25:59.006Z">
-<meta property="article:modified_time" content="2025-11-24T10:52:35.833Z">
+<meta property="article:modified_time" content="2025-11-24T12:46:32.074Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="后端">
@@ -689,8 +690,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-24 18:52:35</span>
-            <span class="mobile">2025-11-24 18:52:35</span>
+            <span class="desktop">2025-11-24 20:46:32</span>
+            <span class="mobile">2025-11-24 20:46:32</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -702,11 +703,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
+                        <a href="/tags/Java/">Java</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Java/">Java</a>&nbsp;
+                        | <a href="/tags/%E5%90%8E%E7%AB%AF/">后端</a>&nbsp;
                     </li>
                 
                     <li>
@@ -720,12 +721,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>9.7k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>10.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>40 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>44 分钟</span>
         </span>
     
     
@@ -1733,6 +1734,105 @@
 <blockquote>
 <p><strong>绝大部分情况下，我们都用第一种方式来实现对Feign的自定义配置</strong></p>
 </blockquote>
+<h2 id="7-3-Feign使用优化"><a href="#7-3-Feign使用优化" class="headerlink" title="7.3 Feign使用优化"></a>7.3 Feign使用优化</h2><ul>
+<li><p><strong>Feign底层发起http请求，依赖于其他的框架，其底层框架实现包括</strong></p>
+<ol>
+<li><code>URLconnnection</code>：默认实现，不知识连接池</li>
+<li><code>Apache HttpClient</code>：支持连接池</li>
+<li><code>OKHttp</code>：支持连接池</li>
+</ol>
+</li>
+<li><p>因此提高Feign的性能主要手段就是使用<strong>连接池</strong>,</p>
+</li>
+<li><p>这里使用<code>Apache HttpClient</code></p>
+</li>
+</ul>
+<ol>
+<li><p><strong>引入依赖</strong></p>
+<ul>
+<li>在 order-service的pom文件中引入Apache的HTTPClient依赖</li>
+</ul>
+ <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--httpClient的依赖 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-httpclient<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><strong>配置连接池</strong></p>
+<ul>
+<li>在order-service的<code>application.yml</code>文件中添加配置</li>
+</ul>
+ <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">httpclient:</span></span><br><span class="line">  <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">max-connections:</span> <span class="number">200</span> <span class="comment"># 最大连接数</span></span><br><span class="line">  <span class="attr">max-connections-per-route:</span> <span class="number">50</span> <span class="comment"># 每个路径的最大连接数</span></span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<ul>
+<li><strong>总结</strong><ol>
+<li>日志级别尽量用<code>BASIC</code></li>
+<li>使用<code>httpClient</code>或者<code>OKHttp</code>来代替<code>URLConnection</code></li>
+</ol>
+</li>
+</ul>
+<h2 id="7-4-最佳实践"><a href="#7-4-最佳实践" class="headerlink" title="7.4 最佳实践"></a>7.4 最佳实践</h2><ul>
+<li>仔细观察，Feign的客户端于服务提供者与Controller层的代码十分相似，</li>
+</ul>
+<div class="tabs" id="tab-页面内不重复的id"><ul class="nav-tabs"><li class="tab active"><a class="#页面内不重复的id-1">FeignClient</a></li><li class="tab"><a class="#页面内不重复的id-2">Controller层</a></li></ul><div class="tab-content"><div class="tab-pane active" id="页面内不重复的id-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FeignClient(&quot;user-service&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserClient</span> &#123;</span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;id&#125;&quot;)</span></span><br><span class="line">    User <span class="title function_">findById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(&quot;order&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderController</span> &#123;</span><br><span class="line"></span><br><span class="line">   <span class="meta">@Resource</span></span><br><span class="line">   <span class="keyword">private</span> OrderService orderService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping(&quot;&#123;orderId&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Order <span class="title function_">queryOrderByUserId</span><span class="params">(<span class="meta">@PathVariable(&quot;orderId&quot;)</span> Long orderId)</span> &#123;</span><br><span class="line">        <span class="comment">// 根据id查询订单并返回</span></span><br><span class="line">        <span class="keyword">return</span> orderService.queryOrderById(orderId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+<ul>
+<li>他们都有同样的请求方式<code>GET</code>，都是一样的参数，因为他们都是去实现一个功能：返回给前端用户信息，<strong>我们有什么方法取简化这种重复代码的编写呢？</strong></li>
+</ul>
+<h3 id="7-4-1-继承方法"><a href="#7-4-1-继承方法" class="headerlink" title="7.4.1 继承方法"></a>7.4.1 继承方法</h3><ul>
+<li><p>这两部分相同的代码，<strong>可以通过继承来共享</strong></p>
+<ol>
+<li>定义一个API接口，利用定义方法，并基于SpringMVC注解做声明</li>
+</ol>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserAPI</span>&#123;</span><br><span class="line"><span class="meta">@GetMapping(&quot;/user/&#123;id&#125;&quot;)</span></span><br><span class="line">User <span class="title function_">findById</span><span class="params">(<span class="meta">@PathVariable(&quot;id&quot;)</span> Long id)</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<ol start="2">
+<li>Feign客户端和Controller都继承该接口</li>
+</ol>
+<ul>
+<li>这里不做演示，直接说<strong>缺点</strong>了<ul>
+<li>服务提供方和消费方都继承了一个接口，造成了紧耦合。</li>
+<li><strong>参数列表中的注解映射不会被继承</strong>，所以Controller层必须再次声明方法，参数和注解</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="7-4-2-抽取方法"><a href="#7-4-2-抽取方法" class="headerlink" title="7.4.2 抽取方法"></a>7.4.2 抽取方法</h3><ul>
+<li>将Feign的Client抽取为独立的模块，并且把接口有关的POJO，默认的Feign都配置到这个模块，提供给所有消费者使用。</li>
+<li><strong>举例</strong>：<ul>
+<li>将UserClient，User，Feign的默认配置都抽取到一个feign-api包中，所有的微服务都引用该依赖包，即可直接使用<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SpringCloud/Feign%E6%8A%BD%E5%8F%96%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8.jpg"
+                      alt="alt Feign抽取方法实现远程调用"
+                ><figcaption>alt Feign抽取方法实现远程调用</figcaption></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="7-4-3-实现基于抽取的Feign远程调用"><a href="#7-4-3-实现基于抽取的Feign远程调用" class="headerlink" title="7.4.3 实现基于抽取的Feign远程调用"></a>7.4.3 实现基于抽取的Feign远程调用</h2><ol>
+<li><p>首先新建一个<code>module</code>，命名为feign-api，然后在POM文件中引入feign的starter依赖</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">&lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></div>
+
+</li>
+<li><p>将order-service中的UserClient,User等类和接口都转移到feign-api模块里，然后在order-service中的pom文件中引入我们自己编写的feign-api依赖</p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--        引入feign的统一api--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;cn.itcast.demo&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;feign-api&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;<span class="number">1.0</span>&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><strong>解决包扫描问题</strong></p>
+<ul>
+<li><p>我们实现了上面的代码，启动但是报错了，为什么？</p>
+</li>
+<li><p>现在UserClient在feign-api模块的feign.client包下，而order-service的<code>@EnableFeignClients</code>注解在order模块下，不在同一个模块同一个包，无法扫描UserClient</p>
+</li>
+<li><p><strong>解决方法一：指定Feign应该扫描的包</strong></p>
+</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(basePackages = &quot;cn.itcast.feign.clients&quot;)</span></span><br></pre></td></tr></table></figure></div>
+<ul>
+<li><strong>解决方法二：指定需要加载的Client字节码</strong></li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@EnableFeignClients(clients = &#123;UserClient.class&#125;)</span></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><strong>方法一有个缺陷，会扫描包里的所有客户端，第二个方法只会扫描指定的客户端，所以更推荐第二种</strong></li>
+</ul>
+</li>
+</ol>
 
 		</div>
 
@@ -1747,7 +1847,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-24 18:52:35
+                    :</strong> 2025-11-24 20:46:32
             </li>
         
         <li>
@@ -1773,11 +1873,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
+				<a href="/tags/Java/">#Java</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Java/">#Java</a>&nbsp;
+				<a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
@@ -1818,7 +1918,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SpringCloud</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3.1 集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%90%8C%E9%9B%86%E7%BE%A4%E4%BC%98%E5%85%88%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">5.3.2 同集群优先的负载均衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%9D%83%E9%87%8D%E9%85%8D%E7%BD%AE"><span class="nav-text">5.4 权重配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB"><span class="nav-text">5.5 环境隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-Nacos%E5%92%8CEureka%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">5.6 Nacos和Eureka的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6. Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6.1 统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-%E5%9C%A8Nacos%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">6.1.1 在Nacos中配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-text">6.1.2 从微服务拉取配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-text">6.2 配置热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-text">6.3 配置共享</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-1-%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.1 添加一个环境共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-2-%E5%9C%A8user-service%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.2 在user-service中读取共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">6.3.3 配置共享的优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E6%90%AD%E5%BB%BANacos%E9%9B%86%E7%BE%A4"><span class="nav-text">6.4 搭建Nacos集群</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">7. Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-text">7.1 Feign代替RestTemplate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-text">7.2 自定义配置</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%AE%A4%E8%AF%86%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1. 认识微服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%8D%95%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 单体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 分布式架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">1.4 微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-SpringCloud"><span class="nav-text">1.5 SpringCloud</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E6%80%BB%E7%BB%93"><span class="nav-text">1.6 总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%92%8C%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">2. 服务拆分和远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E5%8E%9F%E5%88%99"><span class="nav-text">2.1 服务拆分原则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%9C%8D%E5%8A%A1%E6%8B%86%E5%88%86%E7%A4%BA%E4%BE%8B"><span class="nav-text">2.2 服务拆分示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-text">2.3 实现远程调用案例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E5%AE%9E%E7%8E%B0%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E9%9C%80%E6%B1%82"><span class="nav-text">2.4 实现远程调用需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E6%8F%90%E4%BE%9B%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">2.5 提供者与消费者</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Eureka%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">3. Eureka注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Eureka%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E4%BD%9C%E7%94%A8"><span class="nav-text">3.1 Eureka的结构和作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%90%AD%E5%BB%BAeureka-server"><span class="nav-text">3.2 搭建eureka-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-text">3.2 服务注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">3.3 服务发现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Ribbon%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">4. Ribbon负载均衡</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%8E%9F%E7%90%86"><span class="nav-text">4.1 负载均衡原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Nacos%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83"><span class="nav-text">5. Nacos注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%AE%A4%E8%AF%86%E5%92%8C%E5%AE%89%E8%A3%85Nacos"><span class="nav-text">5.1 认识和安装Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C%E5%88%B0Nacos"><span class="nav-text">5.2 服务注册到Nacos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9C%8D%E5%8A%A1%E5%88%86%E7%BA%A7%E5%AD%98%E5%82%A8%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.3 服务分级存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="nav-text">5.3.1 集群配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%90%8C%E9%9B%86%E7%BE%A4%E4%BC%98%E5%85%88%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="nav-text">5.3.2 同集群优先的负载均衡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%9D%83%E9%87%8D%E9%85%8D%E7%BD%AE"><span class="nav-text">5.4 权重配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-%E7%8E%AF%E5%A2%83%E9%9A%94%E7%A6%BB"><span class="nav-text">5.5 环境隔离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-Nacos%E5%92%8CEureka%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">5.6 Nacos和Eureka的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Nacos%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6. Nacos配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E7%BB%9F%E4%B8%80%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-text">6.1 统一配置管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-%E5%9C%A8Nacos%E4%B8%AD%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-text">6.1.1 在Nacos中配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E4%BB%8E%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8B%89%E5%8F%96%E9%85%8D%E7%BD%AE"><span class="nav-text">6.1.2 从微服务拉取配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E9%85%8D%E7%BD%AE%E7%83%AD%E6%9B%B4%E6%96%B0"><span class="nav-text">6.2 配置热更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB"><span class="nav-text">6.3 配置共享</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-1-%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E7%8E%AF%E5%A2%83%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.1 添加一个环境共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-2-%E5%9C%A8user-service%E4%B8%AD%E8%AF%BB%E5%8F%96%E5%85%B1%E4%BA%AB%E9%85%8D%E7%BD%AE"><span class="nav-text">6.3.2 在user-service中读取共享配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-3-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">6.3.3 配置共享的优先级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-%E6%90%AD%E5%BB%BANacos%E9%9B%86%E7%BE%A4"><span class="nav-text">6.4 搭建Nacos集群</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">7. Feign远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-Feign%E4%BB%A3%E6%9B%BFRestTemplate"><span class="nav-text">7.1 Feign代替RestTemplate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE"><span class="nav-text">7.2 自定义配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-Feign%E4%BD%BF%E7%94%A8%E4%BC%98%E5%8C%96"><span class="nav-text">7.3 Feign使用优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">7.4 最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-1-%E7%BB%A7%E6%89%BF%E6%96%B9%E6%B3%95"><span class="nav-text">7.4.1 继承方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-4-2-%E6%8A%BD%E5%8F%96%E6%96%B9%E6%B3%95"><span class="nav-text">7.4.2 抽取方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-4-3-%E5%AE%9E%E7%8E%B0%E5%9F%BA%E4%BA%8E%E6%8A%BD%E5%8F%96%E7%9A%84Feign%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">7.4.3 实现基于抽取的Feign远程调用</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1851,7 +1951,7 @@
                     </span>
                     
                         <span>
-                            共 71.7k 字
+                            共 72.6k 字
                         </span>
                     
                 </p>
