@@ -149,8 +149,10 @@
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E7%9A%84%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/Docker%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/Docker%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4.jpg">
 <meta property="article:published_time" content="2025-11-25T10:43:15.074Z">
-<meta property="article:modified_time" content="2025-11-26T06:12:36.872Z">
+<meta property="article:modified_time" content="2025-11-26T07:25:07.890Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -679,8 +681,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-26 14:12:36</span>
-            <span class="mobile">2025-11-26 14:12:36</span>
+            <span class="desktop">2025-11-26 15:25:07</span>
+            <span class="mobile">2025-11-26 15:25:07</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -702,12 +704,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.8k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>7 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>11 分钟</span>
         </span>
     
     
@@ -846,24 +848,24 @@
 </ul>
 <ol>
 <li><p>如果之前有安装过Docker，先<strong>卸载所有冲突的软件包</strong></p>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove <span class="variable">$</span>(dpkg <span class="literal">--get-selections</span> docker.io docker<span class="literal">-compose</span> docker<span class="literal">-compose-v2</span> docker<span class="literal">-doc</span> podman<span class="literal">-docker</span> containerd runc | cut <span class="literal">-f1</span>)</span><br></pre></td></tr></table></figure></div>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt remove $(dpkg --get-selections docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc | <span class="built_in">cut</span> -f1)</span><br></pre></td></tr></table></figure></div>
 </li>
 <li><p>更新系统软件并且设置Docker<code>apt</code>仓库</p>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add Docker&#x27;s official GPG key:</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install ca<span class="literal">-certificates</span> <span class="built_in">curl</span></span><br><span class="line">sudo install <span class="literal">-m</span> <span class="number">0755</span> <span class="literal">-d</span> /etc/apt/keyrings</span><br><span class="line">sudo <span class="built_in">curl</span> <span class="literal">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="literal">-o</span> /etc/apt/keyrings/docker.asc</span><br><span class="line">sudo chmod a+<span class="built_in">r</span> /etc/apt/keyrings/docker.asc</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add the repository to Apt sources:</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.sources &lt;&lt;EOF</span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://download.docker.com/linux/ubuntu</span><br><span class="line">Suites: <span class="variable">$</span>(. /etc/os<span class="literal">-release</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$</span>&#123;UBUNTU_CODENAME:-<span class="variable">$VERSION_CODENAME</span>&#125;&quot;</span>)</span><br><span class="line">Components: stable</span><br><span class="line">Signed<span class="literal">-By</span>: /etc/apt/keyrings/docker.asc</span><br><span class="line">EOF</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure></div>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add Docker&#x27;s official GPG key:</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install ca-certificates curl</span><br><span class="line"><span class="built_in">sudo</span> install -m 0755 -d /etc/apt/keyrings</span><br><span class="line"><span class="built_in">sudo</span> curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> a+r /etc/apt/keyrings/docker.asc</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add the repository to Apt sources:</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.sources &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">Types: deb</span></span><br><span class="line"><span class="string">URIs: https://download.docker.com/linux/ubuntu</span></span><br><span class="line"><span class="string">Suites: $(. /etc/os-release &amp;&amp; echo &quot;$&#123;UBUNTU_CODENAME:-$VERSION_CODENAME&#125;&quot;)</span></span><br><span class="line"><span class="string">Components: stable</span></span><br><span class="line"><span class="string">Signed-By: /etc/apt/keyrings/docker.asc</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure></div>
 
 </li>
 <li><p><strong>安装Docker软件包</strong></p>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install docker<span class="literal">-ce</span> docker<span class="literal">-ce-cli</span> containerd.io docker<span class="literal">-buildx-plugin</span> docker<span class="literal">-compose-plugin</span></span><br></pre></td></tr></table></figure></div>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure></div>
 </li>
 <li><p><strong>启动Docker</strong></p>
 <ul>
 <li>安装完成后，Docker服务会自动启动，可以使用下面的命令来验证是否正在运行</li>
 </ul>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></figure></div>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl status docker</span><br></pre></td></tr></table></figure></div>
 <ul>
 <li><strong>查看Docker版本</strong></li>
 </ul>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker version</span><br></pre></td></tr></table></figure></div></li>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker version</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 
   <div class="note-large red">
@@ -877,9 +879,9 @@
 <li>创建并且编辑<code>daemon.json</code><ul>
 <li>如果没有nano编辑器就去下载一个</li>
 </ul>
- <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdie <span class="literal">-p</span> /etc/docker</span><br><span class="line">sudo nano /etc/docker/daemon.json</span><br></pre></td></tr></table></figure></div></li>
-<li><strong>把下面这段复制进去</strong> <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line"><span class="string">&quot;https://do.nark.eu.org&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://dc.j8.work&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.m.daocloud.io&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://dockerproxy.com&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.nju.edu.cn&quot;</span></span><br><span class="line">]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
-<li>保存并退出(<code>ctrl+o</code>保存，然后回车之后<code>ctrl+x</code>)，<strong>然后重启Docker服务</strong> <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl daemon<span class="literal">-reload</span></span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure></div></li>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> mkdie -p /etc/docker</span><br><span class="line"><span class="built_in">sudo</span> nano /etc/docker/daemon.json</span><br></pre></td></tr></table></figure></div></li>
+<li><strong>把下面这段复制进去</strong> <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line"><span class="string">&quot;https://do.nark.eu.org&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://dc.j8.work&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.m.daocloud.io&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://dockerproxy.com&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.mirrors.ustc.edu.cn&quot;</span>,</span><br><span class="line"><span class="string">&quot;https://docker.nju.edu.cn&quot;</span></span><br><span class="line">]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<li>保存并退出(<code>ctrl+o</code>保存，然后回车之后<code>ctrl+x</code>)，<strong>然后重启Docker服务</strong> <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl daemon-reload</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 
     </div>
@@ -892,6 +894,146 @@
 </ul>
 </li>
 </ol>
+<h1 id="4-Docker基本操作"><a href="#4-Docker基本操作" class="headerlink" title="4. Docker基本操作"></a>4. Docker基本操作</h1><h2 id="4-1-镜像操作"><a href="#4-1-镜像操作" class="headerlink" title="4.1 镜像操作"></a>4.1 镜像操作</h2><ol>
+<li><strong>镜像名称</strong></li>
+</ol>
+<ul>
+<li>镜像的<strong>名称组成</strong>：<code>[repository]:[tag]</code></li>
+<li>例如<code>mysql:5.7</code> 代表5.7版本的MySQL镜像</li>
+<li>在没有指定tag时，默认是latest，<strong>代表最新版本的镜像</strong>，例如<code>mysql</code>就是<code>mysql:latest</code></li>
+</ul>
+<ol start="2">
+<li><strong>镜像相关命令</strong><ul>
+<li>常见的镜像命令如下图<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/Docker%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4.jpg"
+                      alt="alt Docker镜像命令"
+                ><figcaption>alt Docker镜像命令</figcaption></figure></li>
+</ul>
+</li>
+</ol>
+<h3 id="4-1-1-案例一"><a href="#4-1-1-案例一" class="headerlink" title="4.1.1 案例一"></a>4.1.1 案例一</h3><ul>
+<li>这个案例里，我们练习<strong>拉取和查看镜像</strong><blockquote>
+<p><strong>需求</strong>：从DockerHub拉取一个Nginx镜像并查看</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>通过命令<code>docker pull nginx</code>来拉取最新的nginx镜像</li>
+<li>通过命令<code>docker images</code>查看拉取的镜像 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA</span><br><span class="line">hello-world:latest   f7931603f70e       20.3kB         3.96kB    U</span><br><span class="line">nginx:latest         553f64aecdc3        225MB         59.8MB</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h3 id="4-1-2-案例二"><a href="#4-1-2-案例二" class="headerlink" title="4.1.2 案例二"></a>4.1.2 案例二</h3><ul>
+<li><p>这个案例中，我们练习<strong>保存和导入镜像</strong></p>
+</li>
+<li><blockquote>
+<p><strong>需求</strong>：利用<code>docker save</code>将nginx导出磁盘，然后通过<code>docker load</code>加载回来</p>
+</blockquote>
+</li>
+<li><p>保存镜像成压缩包<strong>语法</strong>：<code>docker save -o[保存的目标文件名称][镜像名称]</code></p>
+</li>
+<li><p>将压缩包导入镜像<strong>语法</strong>：<code>docker load -i[镜像压缩文件名]</code></p>
+</li>
+</ul>
+<ol>
+<li><p>将镜像导出到磁盘，然后用ls命令就可以看到nginx.tar文件</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> docker save -o nginx.tar nginx</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>使用<code>docker load</code>加载镜像，<strong>在此之前，我们使用命令删除本地nginx镜像</strong></p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi nginx <span class="comment"># rmi为 remove image的缩写</span></span><br></pre></td></tr></table></figure></div>
+<p> 然后使用load加载镜像</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load -i nginx.tar</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h2 id="4-2-容器操作"><a href="#4-2-容器操作" class="headerlink" title="4.2 容器操作"></a>4.2 容器操作</h2><ol>
+<li><strong>容器相关命令</strong><ul>
+<li>操作命令如图<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/Docker%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4.jpg"
+                      alt="alt Docker容器命令"
+                ><figcaption>alt Docker容器命令</figcaption></figure></li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>容器包括三个状态<ul>
+<li><strong>运行</strong>：进程正常运行</li>
+<li><strong>暂停</strong>：进程暂停，CPU不再运行，<strong>但是不释放内存</strong>。</li>
+<li><strong>停止</strong>：进程终止，回收进程占用的内存，CPU等资源</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>暂停和停止的处理方式的区别</strong></p>
+<ul>
+<li>暂停是操作系统将容器内的进程挂起，容器关联的内存暂存起来，CPU不再执行这个程序，使用<code>unpause</code>命令恢复，内存空间被恢复，程序继续运行。</li>
+<li>停止是直接将进程杀死，容器占的内存被回收，保存静态资源。<br><code>docker rm</code>是将文件系统也彻底删除，也就是将容器彻底删除</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>docker ps</code>：查看容器</li>
+<li><code>docker ps -a</code>查看所有容器，包括已停止的</li>
+<li><code>docker run</code>：创建并运行一个容器，处于运行状态</li>
+<li><code>docker pause</code>：暂停一个运行的容器</li>
+<li><code>docker unpause</code>：运行一个暂停的容器</li>
+<li><code>docker stop</code>：停止一个运行的容器</li>
+<li><code>docker start</code>：运行一个停止的容器</li>
+<li><code>docker rm</code>：删除一个容器</li>
+</ul>
+<h3 id="4-2-1-案例一"><a href="#4-2-1-案例一" class="headerlink" title="4.2.1 案例一"></a>4.2.1 案例一</h3><ul>
+<li><p><strong>需求</strong>：创建并运行nginx容器，然后查看</p>
+</li>
+<li><p>创建并运行容器的<strong>语法</strong>：<code>docker run --name [容器名] -p [宿主机端口]:[容器端口] -d [镜像名称]</code></p>
+</li>
+<li><p>创建并运行nginx容器</p>
+  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name myNginx -p 80:80 -d nginx</span><br></pre></td></tr></table></figure></div></li>
+<li><p>这里的<code>-p</code>参数，是将容器端口映射到宿主机端口</p>
+</li>
+<li><p>因为我们这里用的是WSL，所以宿主机端口也是在本地IP里</p>
+</li>
+<li><p>访问<code>localhost:80</code>即可看到nginx默认页面</p>
+</li>
+</ul>
+<h3 id="4-2-2-案例二"><a href="#4-2-2-案例二" class="headerlink" title="4.2.2 案例二"></a>4.2.2 案例二</h3><ul>
+<li><strong>需求</strong>：进入Nginx容器，修改HTML文件内容，添加<code>God Drinks Java</code></li>
+<li><strong>提示</strong>：进入容器要用到<code>docker exec</code>命令</li>
+</ul>
+<ol>
+<li><p>进入我们刚刚创建好的Nginx容器</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it myNginx bash</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>命令解读：<ul>
+<li><code>-it</code>：给当前进入的容器创建一个标准输入输出终端，允许我们与容器交互</li>
+<li><code>bash</code>：进入容器后执行的命令，<code>Bash</code>是Linux终端交互命令，Windows的是<code>PowerShell</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>进入nginx的HTML所在目录</strong></p>
+<ul>
+<li>容器内部会模拟一个独立的Linux系统文件，看起来就如同一个Linux服务器一样，Nginx的环境，配置，运行文件全都在这个文件系统中，包括我们要修改的HTML文件</li>
+<li>查看DockerHub网站中的Nginx网页，可以知道Nginx的HTML目录位置在<code>/usr/share/nginx/html</code>里</li>
+<li>我们执行下面的命令进去这个目录</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/nginx/html</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>输入<code>ls</code>查看该目录下的文件</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">root@0a4b3ad8e316:/usr/share/nginx/html# <span class="built_in">ls</span></span><br><span class="line">50x.html  index.html</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><strong>修改<code>index.html</code>的内容</strong></p>
+<ul>
+<li>容器内没有vi命令，无法直接修改，我们使用下面的命令来修改</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i -e <span class="string">&#x27;s#Welcome to nginx!#God Drinks Java#g&#x27;</span> index.html</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>然后访问<code>localhost:80</code>或者<code>localhost</code>就会发现已经修改了</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>现在是不是感觉修改文件好麻烦，因为没给提供vi命令，不能直接编辑，所以这就要用到我们下面说的数据卷了</p>
+</blockquote>
 
 		</div>
 
@@ -906,7 +1048,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-26 14:12:36
+                    :</strong> 2025-11-26 15:25:07
             </li>
         
         <li>
@@ -969,7 +1111,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Docker</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4. Docker基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="nav-text">4.1 镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.1.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.1.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.2.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.2.2 案例二</span></a></li></ol></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1002,7 +1144,7 @@
                     </span>
                     
                         <span>
-                            共 77k 字
+                            共 78.1k 字
                         </span>
                     
                 </p>
