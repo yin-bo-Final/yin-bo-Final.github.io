@@ -150,7 +150,7 @@
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E7%9A%84%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-11-25T10:43:15.074Z">
-<meta property="article:modified_time" content="2025-11-26T06:09:01.185Z">
+<meta property="article:modified_time" content="2025-11-26T06:12:36.872Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -679,8 +679,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-26 14:09:01</span>
-            <span class="mobile">2025-11-26 14:09:01</span>
+            <span class="desktop">2025-11-26 14:12:36</span>
+            <span class="mobile">2025-11-26 14:12:36</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -845,11 +845,9 @@
 </li>
 </ul>
 <ol>
-<li>如果之前有安装过Docker，先<strong>卸载所有冲突的软件包</strong></li>
-</ol>
-<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove <span class="variable">$</span>(dpkg <span class="literal">--get-selections</span> docker.io docker<span class="literal">-compose</span> docker<span class="literal">-compose-v2</span> docker<span class="literal">-doc</span> podman<span class="literal">-docker</span> containerd runc | cut <span class="literal">-f1</span>)</span><br></pre></td></tr></table></figure></div>
-
-<ol start="2">
+<li><p>如果之前有安装过Docker，先<strong>卸载所有冲突的软件包</strong></p>
+ <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove <span class="variable">$</span>(dpkg <span class="literal">--get-selections</span> docker.io docker<span class="literal">-compose</span> docker<span class="literal">-compose-v2</span> docker<span class="literal">-doc</span> podman<span class="literal">-docker</span> containerd runc | cut <span class="literal">-f1</span>)</span><br></pre></td></tr></table></figure></div>
+</li>
 <li><p>更新系统软件并且设置Docker<code>apt</code>仓库</p>
  <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add Docker&#x27;s official GPG key:</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install ca<span class="literal">-certificates</span> <span class="built_in">curl</span></span><br><span class="line">sudo install <span class="literal">-m</span> <span class="number">0755</span> <span class="literal">-d</span> /etc/apt/keyrings</span><br><span class="line">sudo <span class="built_in">curl</span> <span class="literal">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="literal">-o</span> /etc/apt/keyrings/docker.asc</span><br><span class="line">sudo chmod a+<span class="built_in">r</span> /etc/apt/keyrings/docker.asc</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add the repository to Apt sources:</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.sources &lt;&lt;EOF</span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://download.docker.com/linux/ubuntu</span><br><span class="line">Suites: <span class="variable">$</span>(. /etc/os<span class="literal">-release</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$</span>&#123;UBUNTU_CODENAME:-<span class="variable">$VERSION_CODENAME</span>&#125;&quot;</span>)</span><br><span class="line">Components: stable</span><br><span class="line">Signed<span class="literal">-By</span>: /etc/apt/keyrings/docker.asc</span><br><span class="line">EOF</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure></div>
 
@@ -908,7 +906,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-26 14:09:01
+                    :</strong> 2025-11-26 14:12:36
             </li>
         
         <li>
