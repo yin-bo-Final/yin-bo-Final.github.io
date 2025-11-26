@@ -151,8 +151,12 @@
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E7%9A%84%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E9%95%9C%E5%83%8F%E5%91%BD%E4%BB%A4.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E5%AE%B9%E5%99%A8%E5%91%BD%E4%BB%A4.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%88%86%E6%9E%90.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/%E7%9B%B4%E6%8E%A5%E6%8C%82%E8%BD%BD%E5%88%86%E6%9E%90.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/MySQL%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/%E9%A1%B5%E9%9D%A2%E6%95%88%E6%9E%9C.jpg">
 <meta property="article:published_time" content="2025-11-25T10:43:15.074Z">
-<meta property="article:modified_time" content="2025-11-26T07:25:07.890Z">
+<meta property="article:modified_time" content="2025-11-26T14:08:27.244Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -681,8 +685,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-26 15:25:07</span>
-            <span class="mobile">2025-11-26 15:25:07</span>
+            <span class="desktop">2025-11-26 22:08:27</span>
+            <span class="mobile">2025-11-26 22:08:27</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -704,12 +708,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>6.4k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>11 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>25 分钟</span>
         </span>
     
     
@@ -1034,6 +1038,343 @@
 <blockquote>
 <p>现在是不是感觉修改文件好麻烦，因为没给提供vi命令，不能直接编辑，所以这就要用到我们下面说的数据卷了</p>
 </blockquote>
+<h2 id="4-3-数据卷"><a href="#4-3-数据卷" class="headerlink" title="4.3 数据卷"></a>4.3 数据卷</h2><ul>
+<li><p>在之前的Nginx案例中，修改Nginx的HTML页面需要进入到Nginx内部。</p>
+</li>
+<li><p>并且也没有编译器，修改文件很麻烦，<strong>这就是容器与数据(容器内文件)耦合带来的效果</strong>。</p>
+</li>
+<li><p>如果我们另外运行一台新的Nginx容器，那么这台新的Nginx容器也不能直接使用我们改好的HTML文件，具有很多缺点</p>
+<ol>
+<li><strong>不便于修改</strong>：当我们要修改Nginx的HTML内容时，要进入容器内部修改，很不方便</li>
+<li><strong>数据不可复用</strong>：由于容器内的修改对外不可见，所有的修改对新建的容器也是不可服用的。</li>
+<li><strong>升级维护困难</strong>：数据在容器内，如果要升级容器必然删除旧容器，那么旧容器中所有数据也跟着被删除了(包括改好的HTML文件)。</li>
+</ol>
+</li>
+<li><p>要解决这个问题，必须将数据和容器解耦，这就用到了<strong>数据卷</strong></p>
+</li>
+<li><p><strong>什么是数据卷</strong>？</p>
+<ul>
+<li>数据卷(volume)是一个虚拟目录，指向宿主机文件系统的某个目录<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%88%86%E6%9E%90.jpg"
+                      alt="alt 数据卷分析"
+                ><figcaption>alt 数据卷分析</figcaption></figure></li>
+<li>一旦完成数据卷挂载，对容器的一切操作都会对应的宿主机目录。</li>
+<li>这样我们宿主机的<code>/var/lib/docker/volumes/html</code>目录就等同于容器内的<code>/usr/share/nginx/html</code>了</li>
+<li>数据卷的作用：将容器和数据分离，解耦合，方便操作容器内数据，保证数据安全</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-1-数据卷操作命令"><a href="#4-3-1-数据卷操作命令" class="headerlink" title="4.3.1 数据卷操作命令"></a>4.3.1 数据卷操作命令</h3><ul>
+<li>数据卷操作的基本语法如图下  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume [COMMAND]</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>其中有以下的命令</li>
+<li><code>create</code>：创建一个volume</li>
+<li><code>inspect</code>：显示一个或多个volume的信息</li>
+<li><code>ls</code>：列出来所有的volume</li>
+<li><code>prune</code>：删除未使用的volume</li>
+<li><code>rm</code>：删除一个或多个指定的volume</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-2-创建和查看数据集"><a href="#4-3-2-创建和查看数据集" class="headerlink" title="4.3.2 创建和查看数据集"></a>4.3.2 创建和查看数据集</h3><blockquote>
+<p><strong>需求</strong>：创建一个数据卷，并查看数据卷在宿主机的目录位置</p>
+</blockquote>
+<ol>
+<li>创建数据卷 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume create html</span><br></pre></td></tr></table></figure></div></li>
+<li>查看所有数据卷 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume <span class="built_in">ls</span></span><br></pre></td></tr></table></figure></div></li>
+<li>查看数据卷的详细信息 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker volume inspect html</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>可以看到我们创建的html这个数据卷关联的宿主机目录(MountPoint)为<code>/var/lib/docker/volumes/html/_data</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="4-3-3-挂载数据卷"><a href="#4-3-3-挂载数据卷" class="headerlink" title="4.3.3 挂载数据卷"></a>4.3.3 挂载数据卷</h3><ul>
+<li>我们在创建容器时，可以通过-v参数来挂载一个数据卷到某个容器内目录，命令格式如下：  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">--name myNginx \</span><br><span class="line">-v html:/root/html \</span><br><span class="line">-p 80:80 \</span><br><span class="line">nginx \</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>这里的-v就是挂载数据卷的地方</li>
+<li><code>-v html:/root/html</code>：把html数据卷挂载到容器内的&#x2F;root&#x2F;html这个目录下</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-3-4-案例一"><a href="#4-3-4-案例一" class="headerlink" title="4.3.4 案例一"></a>4.3.4 案例一</h3><blockquote>
+<p><strong>需求</strong>：创建一个nginx容器，修改容器内的HTML目录的<code>index.html</code>内容<br><strong>分析</strong>：我们已经知道了nginx的html目录所在位置是<code>/usr/share/nginx/html</code>，我们需要把这个目录挂载到<code>html</code>这个数据卷上</p>
+</blockquote>
+<ol>
+<li><p><strong>创建容器并挂载数据卷到容器内的HTML目录</strong></p>
+<ul>
+<li>首先删除我们之前创建的容器和数据卷</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name myNginx -v html:/usr/share/nginx/html -p 80:80 -d nginx</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>进入html数据卷所在位置，并且修改HTML内容</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看数据卷位置</span></span><br><span class="line">docker volume inspect html</span><br><span class="line"><span class="comment"># 修改文件</span></span><br><span class="line">nano /var/lib/docker/volumes/html/_data/index.html</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h3 id="4-3-5-案例二"><a href="#4-3-5-案例二" class="headerlink" title="4.3.5 案例二"></a>4.3.5 案例二</h3><ul>
+<li><p>容器不仅仅可以挂载数据卷，也可以直接挂载到宿主机目录上，关系如下：</p>
+<ul>
+<li><strong>数据卷挂载模式</strong>：宿主机目录–&gt;数据卷–&gt;容器内目录</li>
+<li><strong>直接挂载模式</strong>：宿主机目录–&gt;容器内目录<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/%E7%9B%B4%E6%8E%A5%E6%8C%82%E8%BD%BD%E5%88%86%E6%9E%90.jpg"
+                      alt="alt 直接挂载分析"
+                ><figcaption>alt 直接挂载分析</figcaption></figure></li>
+</ul>
+</li>
+<li><p>目录挂载和数据卷挂载的语法是类似的</p>
+<ul>
+<li><code>-v [宿主机目录]:[容器内目录]</code></li>
+<li><code>-v [宿主机文件]:[容器内文件]</code></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>需求</strong>：创建并运行一个MySQL容器，将宿主机目录直接挂载到容器</p>
+</blockquote>
+<ol>
+<li><p>拉取一个MySQL镜像</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mysql</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>创建目录<code>/tmp/mysql/data</code>   </p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /tmp/mysql/data</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>按照上面指令再创建<code>/tmp/mysql/conf</code>，将<code>myCnf.cnf</code>文件上传到这里</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">skip-name-resolve</span><br><span class="line">character_set_server=utf8</span><br><span class="line">datadir=/var/lib/mysql</span><br><span class="line">server-id=1000</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>去DockerHub查询资料，找到<strong>mysql容器</strong>的conf目录和data目录的位置</p>
+<ul>
+<li>conf目录：<code>/etc/mysql/conf.d</code></li>
+<li>data目录：<code>/var/lib/mysql</code></li>
+</ul>
+</li>
+<li><p>创建并运行MySQL容器，要求：</p>
+<ul>
+<li>挂载<code>/tmp/mysql/data</code>到mysql容器内数据存储目录</li>
+<li>挂载<code>/tmp/mysql/conf/myCnf.cnf</code>到mysql容器的配置文件</li>
+<li>设置mysql密码</li>
+<li>注意因为是WSL，所以主机的3306被占用了 这里我们使用3300来挂载容器的3306</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">--name mysql \ </span><br><span class="line">-e MYSQL_ROOT_PASSWORD=密码 \</span><br><span class="line">-v /tmp/mysql/conf:/etc/mysql/conf.d \</span><br><span class="line">-v /tmp/mysql/data:/var/lib/mysql \</span><br><span class="line">-p 3300:3306 \</span><br><span class="line">-d \</span><br><span class="line">mysql:8.0</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>使用IDEA或者DataGrip连接3030接口的数据库</p>
+</li>
+</ol>
+<h1 id="5-Dockerfile自定义镜像"><a href="#5-Dockerfile自定义镜像" class="headerlink" title="5. Dockerfile自定义镜像"></a>5. Dockerfile自定义镜像</h1><ul>
+<li>常见的镜像在DockerHub就能找到，但是我们自己写的项目就必须自己构建镜像了，而要自定义镜像，则必须先连接镜像的结构才行</li>
+</ul>
+<h2 id="5-1-镜像结构"><a href="#5-1-镜像结构" class="headerlink" title="5.1 镜像结构"></a>5.1 镜像结构</h2><ul>
+<li>镜像是将应用程序以及其所需要的系统函数库，环境，配置，依赖打包而成的</li>
+<li>以MySQL为例，看看他的镜像组成<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/MySQL%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84.jpg"
+                      alt="alt MySQL镜像结构"
+                ><figcaption>alt MySQL镜像结构</figcaption></figure></li>
+<li>简单来说，镜像就是在系统函数库，运行环境的基础上，添加应用程序文件，配置文件，依赖文件等组合，然后编写好启动脚本打包在一起形成的文件</li>
+<li>我们要构建镜像，其实就是<strong>实现上述打包过程</strong></li>
+</ul>
+<h2 id="5-2-Dockerfile语法"><a href="#5-2-Dockerfile语法" class="headerlink" title="5.2 Dockerfile语法"></a>5.2 Dockerfile语法</h2><ul>
+<li>构建自定义镜像时，并不需要一个个文件去拷贝，打包</li>
+<li>我们只需要告诉Docker我们的镜像组成，需要哪些BaseImage，需要拷贝什么文件，需要安装什么依赖，启动脚本是什么，Docker会帮助我们构建镜像</li>
+<li>而描述上述信息的就是<strong>Dockerfile文件</strong></li>
+<li>Dockerfile就是一个文本文件，其中包括一个个指令(Instruction)，用指令说明要执行什么操作来构建镜像，每一个指令都会形成一层Layer<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FROM</td>
+<td>指定基础镜像</td>
+<td>FROM centos:6</td>
+</tr>
+<tr>
+<td>ENV</td>
+<td>设置环境变量，可在后面指令使用</td>
+<td>ENV key value</td>
+</tr>
+<tr>
+<td>COPY</td>
+<td>拷贝本地文件到镜像的指定目录</td>
+<td>COPY .&#x2F;mysql-5.7.rpm &#x2F;tmp</td>
+</tr>
+<tr>
+<td>RUN</td>
+<td>执行Linux的shell命令，一般是安装过程的命令</td>
+<td>RUN yum install gcc</td>
+</tr>
+<tr>
+<td>EXPOSE</td>
+<td>指定容器运行时监听的端口，是给镜像使用者看的</td>
+<td>EXPOSE 8080</td>
+</tr>
+<tr>
+<td>ENTRYPOINT</td>
+<td>镜像中应用的启动命令，容器运行时调用</td>
+<td>ENTRYPOINTjava -jar xxjar</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="5-3-构建Java项目"><a href="#5-3-构建Java项目" class="headerlink" title="5.3 构建Java项目"></a>5.3 构建Java项目</h2><h3 id="5-3-1-基于Ubuntu构建Java项目"><a href="#5-3-1-基于Ubuntu构建Java项目" class="headerlink" title="5.3.1 基于Ubuntu构建Java项目"></a>5.3.1 基于Ubuntu构建Java项目</h3><blockquote>
+<p><strong>需求</strong>：基于Ubuntu镜像构建一个新镜像，运行一个Java项目</p>
+</blockquote>
+<ol>
+<li><p><strong>创建一个空文件夹<code>docker-demo</code></strong></p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /tmp/docker-demo</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>将<code>docker-demo.jar</code>文件拷贝到docker-demo这个目录</p>
+</li>
+<li><p>拷贝<code>jdk8.tar.gz</code>文件到docker-demo这个目录</p>
+</li>
+<li><p>在docker-demo目录下新建Dockerfile，并写入以下内容</p>
+ <div class="code-container" data-rel="Dockerfile"><figure class="iseeu highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> ubuntu:<span class="number">16.04</span></span><br><span class="line"><span class="comment"># 配置环境变量，JDK的安装目录</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_DIR=/usr/local</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拷贝jdk和java项目的包</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./jdk8.tar.gz <span class="variable">$JAVA_DIR</span>/</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> ./docker-demo.jar /tmp/app.jar</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装JDK</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> <span class="built_in">cd</span> <span class="variable">$JAVA_DIR</span> \</span></span><br><span class="line"><span class="language-bash"> &amp;&amp; tar -xf ./jdk8.tar.gz \</span></span><br><span class="line"><span class="language-bash"> &amp;&amp; <span class="built_in">mv</span> ./jdk1.8.0_144 ./java8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME=$JAVA_DIR/java8</span><br><span class="line"><span class="keyword">ENV</span> PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 暴露端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8090</span></span><br><span class="line"><span class="comment"># 入口，java项目的启动命令</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> java -jar /tmp/app.jar </span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>在docker-demo目录下使用<code>docker build</code>命令构建镜像</p>
+<ul>
+<li>注意最后有一个空格+一个<code>.</code> 这个<code>.</code>代表dockerfile构建的目录</li>
+</ul>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t docker_demo:1.0 .</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>使用<code>docker images</code>命令 可以看到我们的镜像</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker_demo:1.0      e556ad421144       1.18GB          441MB</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>创建并运行一个docker_demo容器</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name testDemo -p 8090:8090 -d docker_demo:1.0</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>浏览器访问localhost:8090&#x2F;hello&#x2F;count，可以查到页面效果<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/%E9%A1%B5%E9%9D%A2%E6%95%88%E6%9E%9C.jpg"
+                      alt="alt 页面效果"
+                ><figcaption>alt 页面效果</figcaption></figure></p>
+</li>
+</ol>
+<h3 id="5-3-2-基于Java8构建项目"><a href="#5-3-2-基于Java8构建项目" class="headerlink" title="5.3.2 基于Java8构建项目"></a>5.3.2 基于Java8构建项目</h3><ul>
+<li>虽然我们可以基于Ubuntu基础镜像，添加任意自己需要的安装包来构建镜像，但是比较麻烦，所以大多数情况下我们都可以在一些安装了部分软件的基础镜像上改造</li>
+<li>我们刚刚构建的Java项目有一个固定的死步骤，那<strong>就是安装JDK并配置环境变量</strong>，我们每次构建Java项目的镜像都需要这个步骤，<strong>所以我们可以找到一个已经安装好了JDK的基础镜像，然后在其基础上构建我们的Java项目的镜像</strong><blockquote>
+<p><strong>需求</strong>：基于java:8-alpine镜像，将一个Java项目构建为镜像</p>
+</blockquote>
+</li>
+</ul>
+<ol>
+<li>使用&#x2F;tmp&#x2F;docker-demo目录，修改Dockerfile <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 将openjdk:8作为基础镜像</span></span><br><span class="line">FROM openjdk:8</span><br><span class="line"><span class="comment">## 拷贝java项目的包到指定目录下，我这里是/tmp/app.jar</span></span><br><span class="line">COPY ./docker-demo.jar /tmp/app.jar</span><br><span class="line"><span class="comment">## 暴露端口</span></span><br><span class="line">EXPOSE 8090</span><br><span class="line"><span class="comment">## 入口</span></span><br><span class="line">ENTRYPOINT java -jar /tmp/app.jar</span><br></pre></td></tr></table></figure></div></li>
+<li>构建镜像 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t docker_demo:2.0 .</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h1 id="6-Docker-Compose"><a href="#6-Docker-Compose" class="headerlink" title="6. Docker-Compose"></a>6. Docker-Compose</h1><ul>
+<li>Docker Compose可以基于Compose文件帮我们快速的部署分布式应用，无需手动一个个创建和运行容器</li>
+</ul>
+<h2 id="6-1-初识DockerCompose"><a href="#6-1-初识DockerCompose" class="headerlink" title="6.1 初识DockerCompose"></a>6.1 初识DockerCompose</h2><ul>
+<li><p>Compose文件是一个文本文件，通过指令定义集群中的每个容器如何运行，格式如下</p>
+  <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">  <span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="comment">## docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 -v /tmp/mysql/data:/var/lib/mysql -v /tmp/mysql/conf/myCnf.cf:/etc/mysql/conf.d/myCnf.cnf -d mysql:5.7.25</span></span><br><span class="line">  <span class="attr">mysql:</span>  <span class="comment">## 对应docker run中的 --name</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7.25</span> <span class="comment">## 对应docker run中最后声明的镜像</span></span><br><span class="line">    <span class="attr">enviroment:</span>   <span class="comment">## 对应docker run中的 -e MYSQL_ROOT_PASSWIRD=root</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">volumes:</span> <span class="comment">## 对应docker run中的 -v /tmp/mysql/data:/var/lib/mysql</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;/tmp/mysql/data:/var/lib/mysql&quot;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;/tmp/mysql/conf/myCnf.cf:/etc/mysql/conf.d/myCnf.cnf&quot;</span></span><br><span class="line">  <span class="comment">## 这里并不需要-d参数来后台运行，因为此种方法默认就是后台运行</span></span><br><span class="line">  <span class="comment">## 同时也不需要暴露端口，在微服务集群部署中，MySQL仅仅是供给给集群内的服务使用的，所以不需要对外暴露端口</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">## 临时构建镜像并运行，下面的配置文件包含了docker build和docker run两个步骤</span></span><br><span class="line">  <span class="comment">## docker build -t web:1.0 .</span></span><br><span class="line">  <span class="comment">## docker run --name web -p 8090:8090 -d web:1.0</span></span><br><span class="line">  <span class="attr">web:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">.</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8090:8090&quot;</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>上面的Compose文件就描述一个项目，其中有两个容器</p>
+<ul>
+<li><code>mysql</code>：一个基于mysql:5.7.25镜像构建的容器，并且挂载了两个项目</li>
+<li><code>web</code>：一个基于docker build临时构建的镜像容器，映射端口为8090</li>
+</ul>
+</li>
+<li><p>其实DockerCompose文件可以看做是将多个docker run命令写到一个文件，只是语法稍有差异</p>
+</li>
+</ul>
+<h2 id="6-2-安装DockerCompose"><a href="#6-2-安装DockerCompose" class="headerlink" title="6.2 安装DockerCompose"></a>6.2 安装DockerCompose</h2><ul>
+<li><p>使用curl下载</p>
+  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">curl -L https://github.com/docker/compose/releases/download/1.23.1/docker-compose-`<span class="built_in">uname</span> -s`-`<span class="built_in">uname</span> -m` &gt; /usr/local/bin/docker-compose    </span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>修改文件权限</p>
+  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /usr/local/bin/docker-compose</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>Base自动补全命令</p>
+  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://raw.githubusercontent.com/docker/compose/1.29.1/contrib/completion/bash/docker-compose &gt; /etc/bash_completion.d/docker-compose</span><br></pre></td></tr></table></figure></div></li>
+</ul>
+<h1 id="7-部署微服务集群"><a href="#7-部署微服务集群" class="headerlink" title="7. 部署微服务集群"></a>7. 部署微服务集群</h1><blockquote>
+<p><strong>需求：将SpringCloud里学习的cloud-demo微服务集群利用DockerCompose部署</strong></p>
+</blockquote>
+<ul>
+<li><strong>实现思路</strong><ol>
+<li>编写docker-compose文件</li>
+<li>修改cloud-demo项目，将数据库，nacos地址都重命名为docker-compose的服务名</li>
+<li>使用maven打包工具，将项目中的每个微服务都打包为<code>app.jar</code>(打包名与Dockerfile中一致即可)</li>
+<li>将打包好的app.jar拷贝到cloud-demo中的每一个对应的子目录，编写Dockerfile文件</li>
+<li>将cloud-demo上传至虚拟机，利用<code>docker-compose up -d</code>来部署</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p>我们看一下黑马给出的<code>docker-compose.yml</code>文件</p>
+<ul>
+<li><code>$PWD</code>是执行linux命令，获取当前目录</li>
+</ul>
+ <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.2&quot;</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">nacos:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nacos/nacos-server</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MODE:</span> <span class="string">standalone</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8848:8848&quot;</span></span><br><span class="line">  <span class="attr">mysql:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:5.7.25</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="number">123</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;$PWD/mysql/data:/var/lib/mysql&quot;</span>  </span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;$PWD/mysql/conf:/etc/mysql/conf.d/&quot;</span></span><br><span class="line">  <span class="attr">userservice:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">./user-service</span></span><br><span class="line">  <span class="attr">orderservice:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">./order-service</span></span><br><span class="line">  <span class="attr">gateway:</span></span><br><span class="line">    <span class="attr">build:</span> <span class="string">./gateway</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;10010:10010&quot;</span></span><br></pre></td></tr></table></figure></div>
+<ul>
+<li><strong>其中包括了五个服务</strong>：<ol>
+<li>nacos：作为注册中心和配置中心<ul>
+<li><code>image</code>：nacos&#x2F;nacos-server  基于nacos&#x2F;nacos-server镜像构建</li>
+<li><code>environment</code>：环境变量<ul>
+<li><code>MODE</code>：standalone：单点模式启动</li>
+</ul>
+</li>
+<li><code>port</code>：端口 这里是8848</li>
+</ul>
+</li>
+<li>mysql：数据库<ul>
+<li><code>image</code>：mysql:5.7.25   mysql5的镜像</li>
+<li><code>environment</code>：环境变量<ul>
+<li><code>MYSQL_ROOT_PASSWORD</code>：mysql密码</li>
+</ul>
+</li>
+<li><code>volumes</code>：数据卷挂载地址</li>
+</ul>
+</li>
+<li>userservice：基于Dockerfile临时构建，userservice不需要暴露端口，网关才是微服务的入口，如果暴露了userservice的端口，那么网关的身份认证，权限校验就形同虚设了</li>
+<li>orderservice：基于Dockerfile临时构建，不需要暴露端口，理由同上</li>
+<li>gateway：基于Dockerfile临时构建，网关需要暴露端口，<strong>它是其他微服务的入口</strong></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>修改微服务配置</p>
+<ul>
+<li><strong>使用Docker Compose部署时，所有服务之间都可以用服务名互相访问</strong>(不同于正常开发环境)</li>
+<li>那我们现在就修改我们cloud-demo中微服务的yml配置文件，将所有地址都改成服务名称</li>
+<li>将user-service，order-service,gateway的所有暴露的端口都用微服务名代替</li>
+</ul>
+</li>
+<li><p>使用maven打包工具，将每个微服务都打包为app.jar</p>
+<ul>
+<li>查看user-service的pom文件，发现</li>
+</ul>
+ <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>app<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+<p> 这就是打包之后的名称为app，将其加到order-service和gateway的pom文件中<br> 打包完将app.jar拷贝到cloud-demo的每个子目录下</p>
+</li>
+<li><p>编写Dockerfile文件</p>
+<ol>
+<li>gateway</li>
+</ol>
+ <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="string">openjdk:8</span></span><br><span class="line"><span class="string">COPY</span> <span class="string">./app.jar</span> <span class="string">/tmp/app.jar</span></span><br><span class="line"><span class="string">ENTERPOINT</span> <span class="string">java</span> <span class="string">-jar</span> <span class="string">/tmp/app.jar</span></span><br></pre></td></tr></table></figure></div>
+<ol start="2">
+<li>order-service</li>
+</ol>
+ <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="string">openjdk:8</span></span><br><span class="line"><span class="string">COPY</span> <span class="string">./app.jar</span> <span class="string">/tmp/app.jar</span></span><br><span class="line"><span class="string">ENTERPOINT</span> <span class="string">java</span> <span class="string">-jar</span> <span class="string">/tmp/app.jar</span></span><br></pre></td></tr></table></figure></div>
+<ol start="3">
+<li>user-service</li>
+</ol>
+ <div class="code-container" data-rel="Yml"><figure class="iseeu highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">FROM</span> <span class="string">openjdk:8</span></span><br><span class="line"><span class="string">COPY</span> <span class="string">./app.jar</span> <span class="string">/tmp/app.jar</span></span><br><span class="line"><span class="string">ENTERPOINT</span> <span class="string">java</span> <span class="string">-jar</span> <span class="string">/tmp/app.jar</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>将cloud-demo上传到虚拟机 利用<code>docker-conpose -d</code>部署</p>
+</li>
+</ol>
+<h1 id="8-Docker镜像仓库"><a href="#8-Docker镜像仓库" class="headerlink" title="8. Docker镜像仓库"></a>8. Docker镜像仓库</h1><ul>
+<li>搭建镜像仓库可以基于Docker官方提供的DockerRegistry来实现</li>
+<li>官网地址：<a class="link"   target="_blank" rel="noopener" href="https://hub.docker.com/_/registry" >https://hub.docker.com/_/registry<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+</ul>
+<h2 id="8-1-搭建私有镜像仓库"><a href="#8-1-搭建私有镜像仓库" class="headerlink" title="8.1 搭建私有镜像仓库"></a>8.1 搭建私有镜像仓库</h2><ul>
+<li>我们自己编写的项目显然是不适合放到Docker的共有仓库的，所以需要我们搭建一个私服</li>
+</ul>
 
 		</div>
 
@@ -1048,7 +1389,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-26 15:25:07
+                    :</strong> 2025-11-26 22:08:27
             </li>
         
         <li>
@@ -1111,7 +1452,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Docker</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4. Docker基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="nav-text">4.1 镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.1.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.1.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.2.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.2.2 案例二</span></a></li></ol></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4. Docker基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="nav-text">4.1 镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.1.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.1.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.2.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.2.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3 数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-text">4.3.1 数据卷操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">4.3.2 创建和查看数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3.3 挂载数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.3.4 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.3.5 案例二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Dockerfile%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="nav-text">5. Dockerfile自定义镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84"><span class="nav-text">5.1 镜像结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Dockerfile%E8%AF%AD%E6%B3%95"><span class="nav-text">5.2 Dockerfile语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3 构建Java项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E5%9F%BA%E4%BA%8EUbuntu%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.1 基于Ubuntu构建Java项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%9F%BA%E4%BA%8EJava8%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.2 基于Java8构建项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Docker-Compose"><span class="nav-text">6. Docker-Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%9D%E8%AF%86DockerCompose"><span class="nav-text">6.1 初识DockerCompose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85DockerCompose"><span class="nav-text">6.2 安装DockerCompose</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E9%83%A8%E7%BD%B2%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4"><span class="nav-text">7. 部署微服务集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-text">8. Docker镜像仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-text">8.1 搭建私有镜像仓库</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1144,7 +1485,7 @@
                     </span>
                     
                         <span>
-                            共 78.1k 字
+                            共 81.6k 字
                         </span>
                     
                 </p>
