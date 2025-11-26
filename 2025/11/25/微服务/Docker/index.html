@@ -146,8 +146,11 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/Docker/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E9%94%99%E7%BB%BC%E5%A4%8D%E6%9D%82.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/Docker%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/Docker%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/images/Docker/Docker%E7%9A%84%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-11-25T10:43:15.074Z">
-<meta property="article:modified_time" content="2025-11-25T11:08:10.378Z">
+<meta property="article:modified_time" content="2025-11-26T05:44:07.938Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -676,8 +679,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-25 19:08:10</span>
-            <span class="mobile">2025-11-25 19:08:10</span>
+            <span class="desktop">2025-11-26 13:44:07</span>
+            <span class="mobile">2025-11-26 13:44:07</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +702,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>647 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
         </span>
     
     
@@ -778,6 +781,103 @@
 </ul>
 </li>
 </ul>
+<h2 id="1-4-Docker和虚拟机的区别"><a href="#1-4-Docker和虚拟机的区别" class="headerlink" title="1.4 Docker和虚拟机的区别"></a>1.4 Docker和虚拟机的区别</h2><ul>
+<li>Docker可以让一个应用在任何操作系统都能十分方便的运行，而我们之前接触的虚拟机，也能在一个操作系统中运行另外一个操作系统</li>
+<li>两者的差异：<ul>
+<li>虚拟机VM（Virtual machine）时操作系统中<strong>模拟</strong>硬件设备，然后运行另一个操作系统。</li>
+<li>而Docker<strong>只是封装函数库，并没有模拟完整的操作系统</strong><br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB.jpg"
+                      alt="alt Docker和虚拟机的区别"
+                ><figcaption>alt Docker和虚拟机的区别</figcaption></figure></li>
+</ul>
+</li>
+</ul>
+<h1 id="2-Docker架构"><a href="#2-Docker架构" class="headerlink" title="2. Docker架构"></a>2. Docker架构</h1><ul>
+<li>我们要使用Docker来操作镜像、容器，那就必须安装Docker</li>
+<li><code>Docker</code>是一个<strong>CS架构</strong>的程序，由两部分组成<ol>
+<li>服务端(server)：Docker守护进程，负责处理Docker指令，管理镜像、容器等</li>
+<li>客户端(client)：通过命令或RestAPI向Docker服务端发送指令，<strong>可以在本地或远程向服务端发送指令</strong><br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/Docker%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86%E5%9B%BE.jpg"
+                      alt="alt Docker工作原理图"
+                ><figcaption>alt Docker工作原理图</figcaption></figure></li>
+</ol>
+</li>
+</ul>
+<h2 id="2-1-镜像与容器"><a href="#2-1-镜像与容器" class="headerlink" title="2.1 镜像与容器"></a>2.1 镜像与容器</h2><ul>
+<li><p>Docker中有两个重要的概念:</p>
+<ol>
+<li><strong><code>镜像(Image)</code></strong>：Docker将<strong>应用程序以及其所需依赖，函数库，环境，配置</strong>配置**打包在一起，称为镜像。</li>
+<li><strong><code>容器(Controller)</code></strong>：镜像中应用程序形成后的<strong>进程</strong>就是<strong>容器</strong>，Docker会给容器进程做隔离，对外不可见。</li>
+</ol>
+</li>
+<li><p>一切应用最终都是代码组成，都是硬盘中一个个字节形成的文件，<strong>只有运行时才会加载到内存形成进程</strong></p>
+<ul>
+<li><strong>镜像</strong>就是把一个应用在硬盘上的文件，机器运行环境，部分系统函数库文件一起打包的文件包，这个文件包时只读的(防止对镜像文件进行修改或污染，从而导致镜像不可用，<strong>容器从镜像中拷贝一份文件到自己的空间来写数据</strong>)</li>
+<li><strong>容器</strong>就是把这些文件编写的程序，函数等加载到内存中形成进程，不过要隔离起来，<strong>因此一个镜像可以启动多次，形成多个容器进程</strong><br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Docker/Docker%E7%9A%84%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg"
+                      alt="alt Docker的架构图"
+                ><figcaption>alt Docker的架构图</figcaption></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-DockerHub"><a href="#2-2-DockerHub" class="headerlink" title="2.2 DockerHub"></a>2.2 DockerHub</h2><ul>
+<li>开源应用程序非常多，打包这些应用往往是重复性劳动，为了避免这些重复劳动，人们就会将自己打包的应用镜像，例如Redis，MySQL镜像放在网络上来共享。<ul>
+<li><code>DockerHub</code>：官方的Docker镜像托管平台。</li>
+<li>国内也有类似于DockerHub的公开服务，例如<strong>网易云镜像服务</strong>，<strong>阿里云镜像服务</strong>等</li>
+</ul>
+</li>
+<li>我们一方面可以将自己的镜像共享到DockerHub，另一方面也可以从DockerHub拉取镜像</li>
+</ul>
+<h1 id="3-安装Docker"><a href="#3-安装Docker" class="headerlink" title="3. 安装Docker"></a>3. 安装Docker</h1><ul>
+<li><p>Docker分为CE(社区版)和EE(企业版)两个版本，我们准备使用免费的社区版</p>
+</li>
+<li><p>Docker分为<code>stable</code>，<code>test</code>和<code>nightly</code>三个频道</p>
+</li>
+<li><p>我们这里使用的操作系统版本号为<code>Ubuntu 24.04 LTS</code> LTS(Long-Term Support)是长期支持版本的意思</p>
+</li>
+<li><p>查询官方Docs关于安装Ubuntu版本的教程 <a class="link"   target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/ubuntu/" >https://docs.docker.com/engine/install/ubuntu/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</li>
+</ul>
+<ol>
+<li>如果之前有安装过Docker，先写在所有冲突的软件包</li>
+</ol>
+<div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove <span class="variable">$</span>(dpkg <span class="literal">--get-selections</span> docker.io docker<span class="literal">-compose</span> docker<span class="literal">-compose-v2</span> docker<span class="literal">-doc</span> podman<span class="literal">-docker</span> containerd runc | cut <span class="literal">-f1</span>)</span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li><p>更新系统软件并且设置Docker<code>apt</code>仓库</p>
+ <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add Docker&#x27;s official GPG key:</span></span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install ca<span class="literal">-certificates</span> <span class="built_in">curl</span></span><br><span class="line">sudo install <span class="literal">-m</span> <span class="number">0755</span> <span class="literal">-d</span> /etc/apt/keyrings</span><br><span class="line">sudo <span class="built_in">curl</span> <span class="literal">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg <span class="literal">-o</span> /etc/apt/keyrings/docker.asc</span><br><span class="line">sudo chmod a+<span class="built_in">r</span> /etc/apt/keyrings/docker.asc</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add the repository to Apt sources:</span></span><br><span class="line">sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.sources &lt;&lt;EOF</span><br><span class="line">Types: deb</span><br><span class="line">URIs: https://download.docker.com/linux/ubuntu</span><br><span class="line">Suites: <span class="variable">$</span>(. /etc/os<span class="literal">-release</span> &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$</span>&#123;UBUNTU_CODENAME:-<span class="variable">$VERSION_CODENAME</span>&#125;&quot;</span>)</span><br><span class="line">Components: stable</span><br><span class="line">Signed<span class="literal">-By</span>: /etc/apt/keyrings/docker.asc</span><br><span class="line">EOF</span><br><span class="line">sudo apt update</span><br></pre></td></tr></table></figure></div>
+
+</li>
+<li><p>安装Docker软件包</p>
+ <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install docker<span class="literal">-ce</span> docker<span class="literal">-ce-cli</span> containerd.io docker<span class="literal">-buildx-plugin</span> docker<span class="literal">-compose-plugin</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>启动Docker</p>
+<ul>
+<li>安装完成后，Docker服务会自动启动，可以使用下面的命令来验证是否正在运行</li>
+</ul>
+ <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl status docker</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>查看Docker版本</li>
+</ul>
+ <div class="code-container" data-rel="Powershell"><figure class="iseeu highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker version</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+
+  <div class="note-large red">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>自定义标题</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>换行测试<br>换行测试<br>换行测试</p>
+
+    </div>
+  </div>
 
 		</div>
 
@@ -792,7 +892,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-25 19:08:10
+                    :</strong> 2025-11-26 13:44:07
             </li>
         
         <li>
@@ -855,7 +955,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Docker</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li></ol>
 
 	</div>
 </div>
@@ -888,7 +988,7 @@
                     </span>
                     
                         <span>
-                            共 75.8k 字
+                            共 76.8k 字
                         </span>
                     
                 </p>
