@@ -148,7 +148,7 @@
 <meta property="og:image" content="http://example.com/images/RocketMQ/MQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg">
 <meta property="og:image" content="http://example.com/images/RocketMQ/RocketMQ%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2.jpg">
 <meta property="article:published_time" content="2025-11-27T05:13:16.928Z">
-<meta property="article:modified_time" content="2025-11-27T10:36:56.626Z">
+<meta property="article:modified_time" content="2025-12-02T05:06:17.904Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="消息队列">
@@ -678,8 +678,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-27 18:36:56</span>
-            <span class="mobile">2025-11-27 18:36:56</span>
+            <span class="desktop">2025-12-02 13:06:17</span>
+            <span class="mobile">2025-12-02 13:06:17</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -705,12 +705,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2.4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.4k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 分钟</span>
         </span>
     
     
@@ -807,29 +807,34 @@
 <li><strong>NameServer</strong>：轻量级注册中心，类似“微型 Nacos”，提供路由发现与心跳检测</li>
 </ul>
 </li>
-<li><p>生产者集群发消息到**消息服务器集群(Broker)**当中，Broker收到消息立刻给生产者返回ACK(确认)，消息异步的推送&#x2F;拉取给消费者</p>
+<li><p><code>Porducer</code>发消息给<code>Broker</code>，<code>Broker</code>收到消息并持久化成功后，立刻给<code>Producer</code>返回<strong>ACK(确认)</strong>(这一步与Consumer无关)，<strong>同时</strong>消息异步的推送&#x2F;拉取给<code>Consumer</code></p>
 </li>
 <li><p><strong>这里将消息返回给消费者有两种方式</strong></p>
 <ol>
-<li><strong>拉取模式</strong>：消费者每秒发起请求去Broker拉取数据</li>
-<li><strong>推送模式</strong>：消费者和Broker建立一个长连接，监听着队列，如果有消息就返回给消费者</li>
+<li><strong>拉取模式</strong>：<code>Consumer</code>每秒发起请求去<code>Broker</code>拉取数据</li>
+<li><strong>推送模式</strong>：<code>Consumer</code>和<code>Broker</code>建立一个长连接，监听着<code>Broker</code>，如果有消息就返回给Consumer</li>
 </ol>
 </li>
-<li><p><strong>命名服务器集群(NameServer)<strong>去管理消息队列的IP，来实现多Broker组成集群(类似于Nacos)，能够让消费者和生产者获取Broker集群的信息，从而让它们发送到</strong>特定的消息队列(负载均衡)</strong>。</p>
+<li><p><strong>那么NameServer有什么用呢</strong>？</p>
 <ul>
-<li>如果消费者或者生产者有一个宕机了，我们的命名服务器会根据**心跳检测(也是注册中心的东西)**去查询它们的状态，<strong>从而避免将消息发送给宕机的消费者</strong></li>
+<li>之前我们学过SpringCloud吧，<code>NameServer</code>就充当注册中心(类似于Nacos)的角色。</li>
+<li>当我们的<code>Broker</code>是个集群的话，<code>Producer</code>应该如何知道发送给哪个<code>Broker</code>消息呢？<code>Consumer</code>应该监听哪个<code>Broker</code>？<ul>
+<li><code>Producer</code>和<code>Consumer</code><strong>会先经过<code>NameServer</code>路由</strong>，再去找可以用的Broker</li>
 </ul>
 </li>
-<li><p><strong>命名服务器集群和消息服务器集群组成了MQ也就是消息队列</strong></p>
-</li>
-</ul>
-<p><figure class="image-caption"><img  
+<li>那么NameServer是怎么知道Broker可用且没宕机的呢？<ul>
+<li><strong>用的是跟注册中心相同原理的心跳检测</strong><br><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/images/RocketMQ/MQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg"
                       alt="alt MQ工作原理"
-                ><figcaption>alt MQ工作原理</figcaption></figure></p>
-<h2 id="2-3-RocketMQ安装"><a href="#2-3-RocketMQ安装" class="headerlink" title="2.3 RocketMQ安装"></a>2.3 RocketMQ安装</h2><p>这里我们学过Docker了，所以直接在我们Ubuntu上的Docker安装RocketMQ就行了😊</p>
+                ><figcaption>alt MQ工作原理</figcaption></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-RocketMQ安装"><a href="#2-3-RocketMQ安装" class="headerlink" title="2.3 RocketMQ安装"></a>2.3 RocketMQ安装</h2><p>这里我们学过Docker了，所以直接在WSL上的Ubuntu系统上的Docker部署RocketMQ就行了😊</p>
 <blockquote>
 <p>在安装之前请保证您的服务器已经安装好Docker环境并且安装好JDK</p>
 </blockquote>
@@ -840,103 +845,26 @@
 
     </div>
     <div class="notel-content markdown-body">
-      <ul>
-<li>我们之前已经学过微服务了，那么应该知道，在部署微服务模块之前部署注册注册中心(如Nacos)的话，会报错，因为微服务找不到注册的地方。</li>
-<li>RocketMQ分为NameServer和Broker两部分，这里NameServer就是RocketMQ的注册中心，<strong>所以我们需要先部署NameServer容器</strong></li>
+      <ol>
+<li><p>首先我们需要拉取相关的镜像，如<strong>apache&#x2F;rocketmq:5.3.2(RocketMQ资源)<strong>和</strong>pangliang&#x2F;rocketmq-console-ng(可视化仪表盘资源)</strong></p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker pull apache/rocketmq:5.3.2</span><br><span class="line">docker pull pangliang/rocketmq-console-ng</span><br></pre></td></tr></table></figure></div>
+<blockquote>
+<p>如果拉取不了镜像，就要用魔法(🤫)，我们的魔法不会作用于终端，所以要配置一下。<br>在我们的魔法页面查到代理的端口，比如我的是<code>7890</code>,输入以下指令进行终端代理</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$env</span>:https_proxy=<span class="string">&quot;http://127.0.0.1:7890&quot;</span></span><br><span class="line"><span class="variable">$env</span>:http_proxy=<span class="string">&quot;http://127.0.0.1:7890&quot;</span></span><br></pre></td></tr></table></figure></div></blockquote>
+</li>
+<li><p>编写docker-compose <strong>(如果不知道docker-compose是什么看我之前的docker笔记)</strong></p>
+<ul>
+<li>介绍一下容器的配置</li>
 </ul>
 <ol>
-<li><p><strong>拉取RocketMQ的镜像</strong></p>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull rocketmqinc/rocketmq</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li>拉取成功后使用<code>docker images</code>查看镜像是否下载成功</li>
-</ul>
-</li>
-<li><p><strong>创建nameserver数据存储目录</strong></p>
-<ul>
-<li>之前分析了要先部署nameserver容器，我们这里先创建nameserver的日志和数据存放目录。<strong>这个目录我将其放在了data目录下</strong></li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/rocketmq/logs /data/rocketmq/store</span><br></pre></td></tr></table></figure></div>
-</li>
-<li><p><strong>构建nameserver容器并启动</strong></p>
-<ul>
-<li>我们已经创建好了nameserver的日志和数据的存放路径，现在挂载他们，执行以下命令启动nameserver即可</li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker run -d  \</span><br><span class="line">--restart=always --name rmqnamesrv -p 9876:9876  \</span><br><span class="line">-v  /data/rocketmq/logs:/root/logs   \</span><br><span class="line">-v /data/rocketmq/store:/root/store  \</span><br><span class="line">-e <span class="string">&quot;MAX_POSSIBLE_HEAP=100000000&quot;</span> \</span><br><span class="line">rocketmqinc/rocketmq \</span><br><span class="line">sh mqnamesrv \</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li><strong>分析以下以上的代码</strong>：<ul>
-<li><code>-d</code>：后台运行</li>
-<li><code>--name</code>：nameserver容器名字为<code>rmqnamesrv</code></li>
-<li><code>-p 9876:9876</code>：因为NameServer监听的是9876，这里将他对外暴露</li>
-<li><code>--restart=always</code>：主机重启或者容器崩溃会<strong>自动拉起</strong></li>
-<li><code>-v ...</code>：数据卷挂载到宿主机</li>
-<li><code>-e ...</code>：进程的Java堆内存上线改为100MB</li>
-<li><code>sh mqnamesrv</code>：启动mqnamesrv容器</li>
-</ul>
-</li>
-<li><strong>以后的docker命令就不会说的这么详细了🫥</strong></li>
-<li>执行完之后可以通过<code>docker ps</code>查看是否启动成功</li>
-</ul>
-</li>
-<li><p><strong>创建broker数据存储目录</strong></p>
-<ul>
-<li>接下来我们创建broker数据卷挂载目录和配置文件</li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p /data/rocketmqbroker/logs  /data/rocketmqbroker/store /data/rocketmqbroker/conf </span><br></pre></td></tr></table></figure></div>
-<blockquote>
-<p>logs:是broker的日志目录，store:是broker的数据目录，conf是broker的配置信息目录</p>
-</blockquote>
-</li>
-<li><p><strong>创建broker配置文件</strong></p>
-<ul>
-<li>我们之前创建的broker配置文件目录的路径是<code>/data/rocketmqbroker/conf</code>，我们在这里写一个broker配置文件，命名为<code>broker.conf</code></li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /data/rocketmqbroker/conf</span><br><span class="line">nano broker.conf</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li><strong>然后写一下配置文件，注意：这里修改namesrvAddr和brokerIP1(如果以后有集群全都要修改)的IP地址为我们WSL虚拟机的的IP地址</strong></li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询IP地址</span></span><br><span class="line">hostname -I</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li><strong>下面是配置文件的信息，复制完了记得修改IP地址</strong></li>
-</ul>
-</li>
+<li><code>rmqnamesrv</code>容器：端口为9876，因为是类似注册中心的作用，<strong>所以要先部署</strong></li>
+<li><code>rmqbroker</code>容器：端口有三个：10909，10911，10912，需要配置环境(nameserver的地址)，并且依赖于namesrv服务。</li>
+<li><code>rmqproxy</code>容器：端口为8080和8081，这里简单的负责路由</li>
+<li><code>rmqdashboard</code>容器：可视化界面，容器内端口为8080，<strong>映射到宿主机的端口为9999</strong>，所以我们要访问仪表盘直接访问 <a class="link"   target="_blank" rel="noopener" href="http://localhost:9999/" >http://localhost:9999<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 即可</li>
 </ol>
-<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Licensed to the Apache Software Foundation (ASF) under one or more</span></span><br><span class="line"><span class="comment"># contributor license agreements.  See the NOTICE file distributed with</span></span><br><span class="line"><span class="comment"># this work for additional information regarding copyright ownership.</span></span><br><span class="line"><span class="comment"># The ASF licenses this file to You under the Apache License, Version 2.0</span></span><br><span class="line"><span class="comment"># (the &quot;License&quot;); you may not use this file except in compliance with</span></span><br><span class="line"><span class="comment"># the License.  You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#  Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment">#  See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment">#  limitations under the License.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 所属集群名字</span></span><br><span class="line">brokerClusterName=DefaultCluster</span><br><span class="line"><span class="comment"># broker 名字，注意此处不同的配置文件填写的不一样，如果在 broker-a.properties 使用: broker-a,</span></span><br><span class="line"><span class="comment"># 在 broker-b.properties 使用: broker-b</span></span><br><span class="line">brokerName=broker-a</span><br><span class="line"><span class="comment"># 0 表示 Master，&gt; 0 表示 Slave</span></span><br><span class="line">brokerId=0</span><br><span class="line"><span class="comment"># nameServer地址，分号分割</span></span><br><span class="line">namesrvAddr=你的IP地址:9876</span><br><span class="line"><span class="comment"># 启动IP,如果 docker 报 com.alibaba.rocketmq.remoting.exception.RemotingConnectException: connect to &lt;192.168.0.120:10909&gt; failed</span></span><br><span class="line"><span class="comment"># 解决方式1 加上一句 producer.setVipChannelEnabled(false);，解决方式2 brokerIP1 设置宿主机IP，不要使用docker 内部IP</span></span><br><span class="line"><span class="comment">#producer.setVipChannelEnabled=false</span></span><br><span class="line">brokerIP1=你的IP地址</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在发送消息时，自动创建服务器不存在的topic，默认创建的队列数</span></span><br><span class="line">defaultTopicQueueNums=4</span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建 Topic，建议线下开启，线上关闭 ！！！这里仔细看是 false，false，false</span></span><br><span class="line">autoCreateTopicEnable=<span class="literal">true</span></span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭</span></span><br><span class="line">autoCreateSubscriptionGroup=<span class="literal">true</span></span><br><span class="line"><span class="comment"># Broker 对外服务的监听端口</span></span><br><span class="line">listenPort=10911</span><br><span class="line"><span class="comment"># 删除文件时间点，默认凌晨4点</span></span><br><span class="line">deleteWhen=04</span><br><span class="line"><span class="comment"># 文件保留时间，默认48小时</span></span><br><span class="line">fileReservedTime=120</span><br><span class="line"><span class="comment"># commitLog 每个文件的大小默认1G</span></span><br><span class="line">mapedFileSizeCommitLog=1073741824</span><br><span class="line"><span class="comment"># ConsumeQueue 每个文件默认存 30W 条，根据业务情况调整</span></span><br><span class="line">mapedFileSizeConsumeQueue=300000</span><br><span class="line"><span class="comment"># destroyMapedFileIntervalForcibly=120000</span></span><br><span class="line"><span class="comment"># redeleteHangedFileInterval=120000</span></span><br><span class="line"><span class="comment"># 检测物理文件磁盘空间</span></span><br><span class="line">diskMaxUsedSpaceRatio=88</span><br><span class="line"><span class="comment"># 存储路径</span></span><br><span class="line"><span class="comment"># storePathRootDir=/home/ztztdata/rocketmq-all-4.1.0-incubating/store</span></span><br><span class="line"><span class="comment"># commitLog 存储路径</span></span><br><span class="line"><span class="comment"># storePathCommitLog=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/commitlog</span></span><br><span class="line"><span class="comment"># 消费队列存储</span></span><br><span class="line"><span class="comment"># storePathConsumeQueue=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/consumequeue</span></span><br><span class="line"><span class="comment"># 消息索引存储路径</span></span><br><span class="line"><span class="comment"># storePathIndex=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/index</span></span><br><span class="line"><span class="comment"># checkpoint 文件存储路径</span></span><br><span class="line"><span class="comment"># storeCheckpoint=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/checkpoint</span></span><br><span class="line"><span class="comment"># abort 文件存储路径</span></span><br><span class="line"><span class="comment"># abortFile=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/abort</span></span><br><span class="line"><span class="comment"># 限制的消息大小</span></span><br><span class="line">maxMessageSize=65536</span><br><span class="line"><span class="comment"># flushCommitLogLeastPages=4</span></span><br><span class="line"><span class="comment"># flushConsumeQueueLeastPages=2</span></span><br><span class="line"><span class="comment"># flushCommitLogThoroughInterval=10000</span></span><br><span class="line"><span class="comment"># flushConsumeQueueThoroughInterval=60000</span></span><br><span class="line"><span class="comment"># Broker 的角色</span></span><br><span class="line"><span class="comment"># - ASYNC_MASTER 异步复制Master</span></span><br><span class="line"><span class="comment"># - SYNC_MASTER 同步双写Master</span></span><br><span class="line"><span class="comment"># - SLAVE</span></span><br><span class="line">brokerRole=ASYNC_MASTER</span><br><span class="line"><span class="comment"># 刷盘方式</span></span><br><span class="line"><span class="comment"># - ASYNC_FLUSH 异步刷盘</span></span><br><span class="line"><span class="comment"># - SYNC_FLUSH 同步刷盘</span></span><br><span class="line">flushDiskType=ASYNC_FLUSH</span><br><span class="line"><span class="comment"># 发消息线程池数量</span></span><br><span class="line"><span class="comment"># sendMessageThreadPoolNums=128</span></span><br><span class="line"><span class="comment"># 拉消息线程池数量</span></span><br><span class="line"><span class="comment"># pullMessageThreadPoolNums=128</span></span><br></pre></td></tr></table></figure></div>
-<ul>
-<li>查看我们的配置文件，获得了以下信<ol>
-<li>我们broker集群的名字为<code>DefaultCluster</code></li>
-<li>我们这个broker的名字是<code>broker-a</code></li>
-<li>我们这个broker为主机</li>
-</ol>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line"></span><br><span class="line">  namesrv:   <span class="comment"># NameServer配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqnamesrv</span><br><span class="line">    ports:</span><br><span class="line">     - 9876:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqnamesrv</span><br><span class="line"></span><br><span class="line">  broker:     <span class="comment"># broker配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqbroker</span><br><span class="line">    ports:</span><br><span class="line">    - 10909:10909</span><br><span class="line">    - 10911:10911</span><br><span class="line">    - 10912:10912</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqbroker</span><br><span class="line"></span><br><span class="line">  proxy:      <span class="comment"># 代理配置，类似于gateway</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqproxy</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - broker</span><br><span class="line">    - namesrv</span><br><span class="line">    ports:</span><br><span class="line">    - 8080:8080</span><br><span class="line">    - 8081:8081</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    <span class="built_in">command</span>: sh mqproxy</span><br><span class="line"></span><br><span class="line">  dashboard:     <span class="comment"># 仪表盘配置</span></span><br><span class="line">    image: pangliang/rocketmq-console-ng</span><br><span class="line">    container_name: rmqdashboard</span><br><span class="line">    ports:</span><br><span class="line">    - 9999:8080</span><br><span class="line">    environment:</span><br><span class="line">    - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    restart: on-failure</span><br><span class="line">networks:</span><br><span class="line">  rocketmq:</span><br><span class="line">    driver: bridge</span><br></pre></td></tr></table></figure></div>
 </li>
-</ul>
-<ol start="6">
-<li><p><strong>构造broker容器并启动</strong></p>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">--restart=always --name rmqbroker01  \</span><br><span class="line">--<span class="built_in">link</span> rmqnamesrv:namesrv \</span><br><span class="line">-p 10911:10911 -p 10909:10909  \</span><br><span class="line">-v /data/rocketmqbroker/logs:/root/logs \</span><br><span class="line">-v /data/rocketmqbroker/store:/root/store \</span><br><span class="line">-v  /data/rocketmqbroker/conf/broker.conf:/opt/rocketmq-4.4.0/conf/broker.conf \</span><br><span class="line">-e <span class="string">&quot;NAMESRV_ADDR=namesrv:9876&quot;</span> \</span><br><span class="line">-e <span class="string">&quot;MAX_POSSIBLE_HEAP=200000000&quot;</span> \</span><br><span class="line">apache/rocketmq:5.3.2 \</span><br><span class="line">sh mqbroker \</span><br><span class="line">-c /home/rocketmq/broker.conf \</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li>通过<code>docker ps</code>查看是否有rmqbroker01进程运行，如果运行了说明rocketMQ已经成功运行了😊</li>
-</ul>
-</li>
-<li><p><strong>拉取RocketMQ-Console可视化界面镜像</strong></p>
-<ul>
-<li>我们还需要一个可视化界面来监视RocketMQ的进程</li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull pangliang/rocketmq-console-ng</span><br></pre></td></tr></table></figure></div>
-
-</li>
-<li><p>构建RocketMQ-Console容器并启动</p>
-<ul>
-<li>记得改IP</li>
-</ul>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run \</span><br><span class="line">-d --restart=always \</span><br><span class="line">--name rmqadmin \</span><br><span class="line">-e <span class="string">&quot;JAVA_OPTS= \</span></span><br><span class="line"><span class="string">-Drocketmq.namesrv.addr=你的IP:9876   \</span></span><br><span class="line"><span class="string">-Dcom.rocketmqsendMessageWithVIPChannel=false&quot;</span> \</span><br><span class="line">-p 9999:8080 \</span><br><span class="line">pangliang/rocketmq-console-ng  \</span><br></pre></td></tr></table></figure></div>
-<ul>
-<li>代码解析<ol>
-<li><code>-Drocketmq.namesrv.addr=你的IP:9876</code>：告诉控制台我们的nameserver在哪</li>
-<li><code>-Dcom.rocketmqsendMessageWithVIPChannel=false&quot;</code>：控制台发测试消息时关闭VIP通道</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><p>通过访问9999端口查看RocketMQ-Console是否启动成功<br><figure class="image-caption"><img  
+<li><p>访问<a href="http://localhost:9999，**可以看到RocketMQ的仪表盘">http://localhost:9999，**可以看到RocketMQ的仪表盘</a>**<br><figure class="image-caption"><img  
                      lazyload
                      src="/images/loading.svg"
                      data-src="/images/RocketMQ/RocketMQ%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2.jpg"
@@ -953,6 +881,17 @@
 
 
 
+<h1 id="3-RocketMQ消息发送"><a href="#3-RocketMQ消息发送" class="headerlink" title="3. RocketMQ消息发送"></a>3. RocketMQ消息发送</h1><h2 id="3-1-简单生产者书写"><a href="#3-1-简单生产者书写" class="headerlink" title="3.1 简单生产者书写"></a>3.1 简单生产者书写</h2><ol>
+<li><p>新建一个Maven项目，并且<strong>引入rocketmq-client依赖</strong></p>
+ <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.3.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>写生产者代码</p>
+<ul>
+<li>写之前让我们想一下<strong>发送消息有哪几个步骤</strong>？</li>
+<li>谁来发 –&gt; 发给谁 –&gt; 怎么发？ –&gt; 发什么 –&gt; 发的结果是什么？ –&gt; 打扫战场</li>
+</ul>
+</li>
+</ol>
 
 		</div>
 
@@ -967,7 +906,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-27 18:36:56
+                    :</strong> 2025-12-02 13:06:17
             </li>
         
         <li>
@@ -1034,7 +973,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">RocketMQ</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ安装</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RocketMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81"><span class="nav-text">3. RocketMQ消息发送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E4%B9%A6%E5%86%99"><span class="nav-text">3.1 简单生产者书写</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1067,7 +1006,7 @@
                     </span>
                     
                         <span>
-                            共 83.9k 字
+                            共 82.9k 字
                         </span>
                     
                 </p>
