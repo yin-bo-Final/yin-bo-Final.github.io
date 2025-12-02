@@ -156,7 +156,7 @@
 <meta property="og:image" content="http://example.com/images/Docker/MySQL%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84.jpg">
 <meta property="og:image" content="http://example.com/images/Docker/%E9%A1%B5%E9%9D%A2%E6%95%88%E6%9E%9C.jpg">
 <meta property="article:published_time" content="2025-11-25T10:43:15.074Z">
-<meta property="article:modified_time" content="2025-11-27T06:41:03.574Z">
+<meta property="article:modified_time" content="2025-12-02T08:42:09.502Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta name="twitter:card" content="summary">
@@ -685,8 +685,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-11-27 14:41:03</span>
-            <span class="mobile">2025-11-27 14:41:03</span>
+            <span class="desktop">2025-12-02 16:42:09</span>
+            <span class="mobile">2025-12-02 16:42:09</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -1266,7 +1266,7 @@
 <li>构建镜像 <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t docker_demo:2.0 .</span><br></pre></td></tr></table></figure></div></li>
 </ol>
 <h1 id="6-Docker-Compose"><a href="#6-Docker-Compose" class="headerlink" title="6. Docker-Compose"></a>6. Docker-Compose</h1><ul>
-<li>Docker Compose可以基于Compose文件帮我们快速的部署分布式应用，无需手动一个个创建和运行容器</li>
+<li>Docker Compose可以基于Compose文件帮我们快速的部署分布式应用，<strong>无需手动一个个创建和运行容器</strong></li>
 </ul>
 <h2 id="6-1-初识DockerCompose"><a href="#6-1-初识DockerCompose" class="headerlink" title="6.1 初识DockerCompose"></a>6.1 初识DockerCompose</h2><ul>
 <li><p>Compose文件是一个文本文件，通过指令定义集群中的每个容器如何运行，格式如下</p>
@@ -1368,10 +1368,6 @@
 <li><p>将cloud-demo上传到虚拟机 利用<code>docker-conpose -d</code>部署</p>
 </li>
 </ol>
-<h1 id="8-Docker镜像仓库"><a href="#8-Docker镜像仓库" class="headerlink" title="8. Docker镜像仓库"></a>8. Docker镜像仓库</h1><ul>
-<li>搭建镜像仓库可以基于Docker官方提供的DockerRegistry来实现</li>
-<li>官网地址：<a class="link"   target="_blank" rel="noopener" href="https://hub.docker.com/_/registry" >https://hub.docker.com/_/registry<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-</ul>
 
 		</div>
 
@@ -1386,7 +1382,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-11-27 14:41:03
+                    :</strong> 2025-12-02 16:42:09
             </li>
         
         <li>
@@ -1429,7 +1425,7 @@
 						<i class="fa-solid fa-chevron-left"></i>
 					</span>
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">RocketMQ</span>
+						<span class="post-nav-title-item truncate max-w-48">RocketMQ 5.x</span>
 						<span class="post-nav-item">上一篇</span>
 					</span>
 				</a>
@@ -1461,7 +1457,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Docker</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4. Docker基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="nav-text">4.1 镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.1.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.1.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.2.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.2.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3 数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-text">4.3.1 数据卷操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">4.3.2 创建和查看数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3.3 挂载数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.3.4 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.3.5 案例二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Dockerfile%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="nav-text">5. Dockerfile自定义镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84"><span class="nav-text">5.1 镜像结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Dockerfile%E8%AF%AD%E6%B3%95"><span class="nav-text">5.2 Dockerfile语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3 构建Java项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E5%9F%BA%E4%BA%8EUbuntu%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.1 基于Ubuntu构建Java项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%9F%BA%E4%BA%8EJava8%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.2 基于Java8构建项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Docker-Compose"><span class="nav-text">6. Docker-Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%9D%E8%AF%86DockerCompose"><span class="nav-text">6.1 初识DockerCompose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85DockerCompose"><span class="nav-text">6.2 安装DockerCompose</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E9%83%A8%E7%BD%B2%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4"><span class="nav-text">7. 部署微服务集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Docker%E9%95%9C%E5%83%8F%E4%BB%93%E5%BA%93"><span class="nav-text">8. Docker镜像仓库</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%9D%E8%AF%86Docker"><span class="nav-text">1. 初识Docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E5%88%86%E5%B8%83%E5%BC%8F%E9%A1%B9%E7%9B%AE%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">1.1分布式项目遇到的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Docker%E8%A7%A3%E5%86%B3%E4%BE%9D%E8%B5%96%E5%85%BC%E5%AE%B9%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.2 Docker解决依赖兼容等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Docker%E8%A7%A3%E5%86%B3%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E5%B7%AE%E5%BC%82%E7%AD%89%E9%97%AE%E9%A2%98"><span class="nav-text">1.3 Docker解决系统环境差异等问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Docker%E5%92%8C%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">1.4 Docker和虚拟机的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E6%9E%B6%E6%9E%84"><span class="nav-text">2. Docker架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E9%95%9C%E5%83%8F%E4%B8%8E%E5%AE%B9%E5%99%A8"><span class="nav-text">2.1 镜像与容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-DockerHub"><span class="nav-text">2.2 DockerHub</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%AE%89%E8%A3%85Docker"><span class="nav-text">3. 安装Docker</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-text">4. Docker基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E9%95%9C%E5%83%8F%E6%93%8D%E4%BD%9C"><span class="nav-text">4.1 镜像操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.1.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.1.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-text">4.2 容器操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.2.1 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.2.2 案例二</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3 数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E6%95%B0%E6%8D%AE%E5%8D%B7%E6%93%8D%E4%BD%9C%E5%91%BD%E4%BB%A4"><span class="nav-text">4.3.1 数据卷操作命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E5%88%9B%E5%BB%BA%E5%92%8C%E6%9F%A5%E7%9C%8B%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="nav-text">4.3.2 创建和查看数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7"><span class="nav-text">4.3.3 挂载数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E6%A1%88%E4%BE%8B%E4%B8%80"><span class="nav-text">4.3.4 案例一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E6%A1%88%E4%BE%8B%E4%BA%8C"><span class="nav-text">4.3.5 案例二</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Dockerfile%E8%87%AA%E5%AE%9A%E4%B9%89%E9%95%9C%E5%83%8F"><span class="nav-text">5. Dockerfile自定义镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E9%95%9C%E5%83%8F%E7%BB%93%E6%9E%84"><span class="nav-text">5.1 镜像结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Dockerfile%E8%AF%AD%E6%B3%95"><span class="nav-text">5.2 Dockerfile语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3 构建Java项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-%E5%9F%BA%E4%BA%8EUbuntu%E6%9E%84%E5%BB%BAJava%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.1 基于Ubuntu构建Java项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E5%9F%BA%E4%BA%8EJava8%E6%9E%84%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="nav-text">5.3.2 基于Java8构建项目</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Docker-Compose"><span class="nav-text">6. Docker-Compose</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%9D%E8%AF%86DockerCompose"><span class="nav-text">6.1 初识DockerCompose</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E5%AE%89%E8%A3%85DockerCompose"><span class="nav-text">6.2 安装DockerCompose</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E9%83%A8%E7%BD%B2%E5%BE%AE%E6%9C%8D%E5%8A%A1%E9%9B%86%E7%BE%A4"><span class="nav-text">7. 部署微服务集群</span></a></li></ol>
 
 	</div>
 </div>
@@ -1494,7 +1490,7 @@
                     </span>
                     
                         <span>
-                            共 82.9k 字
+                            共 84.5k 字
                         </span>
                     
                 </p>

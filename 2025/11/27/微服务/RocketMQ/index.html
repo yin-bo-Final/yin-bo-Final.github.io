@@ -139,7 +139,7 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="RocketMQ">
+<meta property="og:title" content="RocketMQ 5.x">
 <meta property="og:url" content="http://example.com/2025/11/27/%E5%BE%AE%E6%9C%8D%E5%8A%A1/RocketMQ/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
@@ -148,7 +148,7 @@
 <meta property="og:image" content="http://example.com/images/RocketMQ/MQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86.jpg">
 <meta property="og:image" content="http://example.com/images/RocketMQ/RocketMQ%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2.jpg">
 <meta property="article:published_time" content="2025-11-27T05:13:16.928Z">
-<meta property="article:modified_time" content="2025-12-02T05:22:56.222Z">
+<meta property="article:modified_time" content="2025-12-02T12:42:30.308Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="消息队列">
@@ -165,7 +165,7 @@
     
     <title>
         
-            RocketMQ | yin_bo_&#39;s BLOG
+            RocketMQ 5.x | yin_bo_&#39;s BLOG
         
     </title>
 
@@ -650,7 +650,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">RocketMQ</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">RocketMQ 5.x</h1>
 			</div>
 			
 		</div>
@@ -678,8 +678,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-02 13:22:56</span>
-            <span class="mobile">2025-12-02 13:22:56</span>
+            <span class="desktop">2025-12-02 20:42:30</span>
+            <span class="mobile">2025-12-02 20:42:30</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -705,12 +705,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>13 分钟</span>
         </span>
     
     
@@ -834,10 +834,8 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-3-RocketMQ安装"><a href="#2-3-RocketMQ安装" class="headerlink" title="2.3 RocketMQ安装"></a>2.3 RocketMQ安装</h2><p>这里我们学过Docker了，所以直接在WSL上的Ubuntu系统上的Docker部署RocketMQ就行了😊</p>
-<blockquote>
-<p>在安装之前请保证您的服务器已经安装好Docker环境并且安装好JDK</p>
-</blockquote>
+<h2 id="2-3-RocketMQ-5-x安装"><a href="#2-3-RocketMQ-5-x安装" class="headerlink" title="2.3 RocketMQ 5.x安装"></a>2.3 RocketMQ 5.x安装</h2><p>这里我们学过Docker了，所以直接在WSL上的Ubuntu系统上的Docker部署RocketMQ就行了😊<br>具体可以看rocketmq的官网：<a class="link"   target="_blank" rel="noopener" href="http://rocketmq.apache.org/" >http://rocketmq.apache.org<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a><br><strong>现在RocketMQ主推的是5.0的大版本，4.0版本停止维护了，尽量不要用</strong>😚</p>
+<p>RocketMQ实质上就是Java代码，<strong>需要用JDK去运行</strong>，<strong>这里的RocketMQ镜像里已经自带JDK了</strong>，所以不需要再次安装</p>
 
   <div class="note-large blue">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
@@ -852,17 +850,20 @@
 <p>如果拉取不了镜像，就要用魔法(🤫)，我们的魔法不会作用于终端，所以要配置一下。<br>在我们的魔法页面查到代理的端口，比如我的是<code>7890</code>,输入以下指令进行终端代理</p>
  <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$env</span>:https_proxy=<span class="string">&quot;http://127.0.0.1:7890&quot;</span></span><br><span class="line"><span class="variable">$env</span>:http_proxy=<span class="string">&quot;http://127.0.0.1:7890&quot;</span></span><br></pre></td></tr></table></figure></div></blockquote>
 </li>
-<li><p>编写docker-compose <strong>(如果不知道docker-compose是什么看我之前的docker笔记)</strong></p>
+<li><p>编写<code>broker.conf</code>，用来配置broker</p>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">brokerClusterName = DefaultCluster</span><br><span class="line">brokerName = broker-a</span><br><span class="line">brokerId = 0</span><br><span class="line">deleteWhen = 04</span><br><span class="line">fileReservedTime = 48</span><br><span class="line">brokerRole = ASYNC_MASTER</span><br><span class="line">flushDiskType = ASYNC_FLUSH</span><br><span class="line"></span><br><span class="line">namesrvAddr = rmqnamesrv:9876</span><br><span class="line">listenPort = 10911</span><br><span class="line">brokerIP1 = rmqbroker</span><br><span class="line">brokerIP2 = rmqbroker</span><br><span class="line">haListenPort = 10912</span><br><span class="line"></span><br><span class="line">autoCreateTopicEnable = <span class="literal">true</span></span><br><span class="line">autoCreateSubscriptionGroup = <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">storePathRootDir = /home/rocketmq/store</span><br><span class="line">storePathCommitLog = /home/rocketmq/store/commitlog</span><br><span class="line">storePathConsumeQueue = /home/rocketmq/store/consumequeue</span><br><span class="line">storePathIndex = /home/rocketmq/store/index</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>编写<code>docker-compose</code> <strong>(如果不知道docker-compose是什么看我之前的docker笔记)</strong></p>
 <ul>
 <li>介绍一下容器的配置</li>
 </ul>
 <ol>
 <li><code>rmqnamesrv</code>容器：端口为9876，因为是类似注册中心的作用，<strong>所以要先部署</strong></li>
-<li><code>rmqbroker</code>容器：端口有三个：10909，10911，10912，需要配置环境(nameserver的地址)，并且依赖于namesrv服务。</li>
+<li><code>rmqbroker</code>容器：端口有三个：10909，10911，10912，需要配置环境(nameserver的地址)，并且依赖于namesrv服务。broker的配置挂载到&#x2F;broker.conf的文件里</li>
 <li><code>rmqproxy</code>容器：端口为8080和8081，这里简单的负责路由</li>
 <li><code>rmqdashboard</code>容器：可视化界面，容器内端口为8080，<strong>映射到宿主机的端口为9999</strong>，所以我们要访问仪表盘直接访问 <a class="link"   target="_blank" rel="noopener" href="http://localhost:9999/" >http://localhost:9999<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 即可</li>
 </ol>
- <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line"></span><br><span class="line">  namesrv:   <span class="comment"># NameServer配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqnamesrv</span><br><span class="line">    ports:</span><br><span class="line">     - 9876:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqnamesrv</span><br><span class="line"></span><br><span class="line">  broker:     <span class="comment"># broker配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqbroker</span><br><span class="line">    ports:</span><br><span class="line">    - 10909:10909</span><br><span class="line">    - 10911:10911</span><br><span class="line">    - 10912:10912</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqbroker</span><br><span class="line"></span><br><span class="line">  proxy:      <span class="comment"># 代理配置，类似于gateway</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqproxy</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - broker</span><br><span class="line">    - namesrv</span><br><span class="line">    ports:</span><br><span class="line">    - 8080:8080</span><br><span class="line">    - 8081:8081</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    <span class="built_in">command</span>: sh mqproxy</span><br><span class="line"></span><br><span class="line">  dashboard:     <span class="comment"># 仪表盘配置</span></span><br><span class="line">    image: pangliang/rocketmq-console-ng</span><br><span class="line">    container_name: rmqdashboard</span><br><span class="line">    ports:</span><br><span class="line">    - 9999:8080</span><br><span class="line">    environment:</span><br><span class="line">    - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    restart: on-failure</span><br><span class="line">networks:</span><br><span class="line">  rocketmq:</span><br><span class="line">    driver: bridge</span><br></pre></td></tr></table></figure></div>
+ <div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">services:</span><br><span class="line"></span><br><span class="line">  namesrv:   <span class="comment"># NameServer配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqnamesrv</span><br><span class="line">    ports:</span><br><span class="line">     - 9876:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqnamesrv</span><br><span class="line"></span><br><span class="line">  broker:     <span class="comment"># broker配置</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqbroker</span><br><span class="line">    ports:</span><br><span class="line">    - 10909:10909</span><br><span class="line">    - 10911:10911</span><br><span class="line">    - 10912:10912</span><br><span class="line">    volumes:</span><br><span class="line">    - ./broker.conf:/home/rocketmq/conf/broker.conf</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    <span class="built_in">command</span>: sh mqbroker  -c /home/rocketmq/conf/broker.conf</span><br><span class="line"></span><br><span class="line">  proxy:      <span class="comment"># 代理配置，类似于gateway</span></span><br><span class="line">    image: apache/rocketmq:5.3.2</span><br><span class="line">    container_name: rmqproxy</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - broker</span><br><span class="line">    - namesrv</span><br><span class="line">    ports:</span><br><span class="line">    - 8080:8080</span><br><span class="line">    - 8081:8081</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">    - NAMESRV_ADDR=rmqnamesrv:9876</span><br><span class="line">    <span class="built_in">command</span>: sh mqproxy</span><br><span class="line"></span><br><span class="line">  dashboard:     <span class="comment"># 仪表盘配置</span></span><br><span class="line">    image: pangliang/rocketmq-console-ng</span><br><span class="line">    container_name: rmqdashboard</span><br><span class="line">    ports:</span><br><span class="line">    - 9999:8080</span><br><span class="line">    environment:</span><br><span class="line">    - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876</span><br><span class="line">    networks:</span><br><span class="line">    - rocketmq</span><br><span class="line">    depends_on:</span><br><span class="line">    - namesrv</span><br><span class="line">    restart: on-failure</span><br><span class="line">networks:</span><br><span class="line">  rocketmq:</span><br><span class="line">    driver: bridge</span><br></pre></td></tr></table></figure></div>
 </li>
 <li><p>访问<a class="link"   target="_blank" rel="noopener" href="http://localhost:9999/" >http://localhost:9999<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> ，<strong>可以看到RocketMQ的仪表盘</strong><br><figure class="image-caption"><img  
                      lazyload
@@ -881,32 +882,103 @@
 
 
 
-<h1 id="3-RocketMQ消息发送"><a href="#3-RocketMQ消息发送" class="headerlink" title="3. RocketMQ消息发送"></a>3. RocketMQ消息发送</h1><h2 id="3-1-简单生产者书写"><a href="#3-1-简单生产者书写" class="headerlink" title="3.1 简单生产者书写"></a>3.1 简单生产者书写</h2><ol>
-<li><p>新建一个Maven项目，并且<strong>引入rocketmq-client依赖</strong></p>
- <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.3.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
-</li>
-<li><p>写生产者代码</p>
+<h1 id="3-RocketMQ消息发送"><a href="#3-RocketMQ消息发送" class="headerlink" title="3. RocketMQ消息发送"></a>3. RocketMQ消息发送</h1><h2 id="3-1-简单生产者-消费者书写"><a href="#3-1-简单生产者-消费者书写" class="headerlink" title="3.1 简单生产者&#x2F;消费者书写"></a>3.1 简单生产者&#x2F;消费者书写</h2><ol>
+<li><p><strong>引入rocketmq-client-java依赖</strong></p>
 <ul>
-<li>写之前让我们想一下<strong>发送消息有哪几个步骤</strong>？</li>
-<li>谁来发 –&gt; 发给谁 –&gt; 怎么发？ –&gt; 发什么 –&gt; 发的结果是什么？ –&gt; 打扫战场</li>
+<li>依赖的版本最好和RocketMQ的版本形同，这里引入的是rocketmq-client-java新API，而不是rocketmq-client旧的API</li>
+</ul>
+ <div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.rocketmq<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>rocketmq-client-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>5.3.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p><strong>生产者代码</strong></p>
+<ul>
+<li>生产者发送消息的代码，我们这里使用工厂模式来设置producer和message。</li>
+<li>先初始化工厂类<code>provider</code>的接入点</li>
+<li>这里获取<code>configuration</code>使用的是建造者模式，通过proxy代理的namesrv的地址来从nameserver里获取认证。</li>
+<li>使用工厂模式来获取producer和message的信息</li>
+<li>然后进行发送</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleProducer</span> &#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(SimpleProducer.class);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClientException &#123;</span><br><span class="line">    <span class="comment">//1. 接入点地址，这里必须是proxy代理的地址和端口</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">endpoint</span> <span class="operator">=</span> <span class="string">&quot;localhost:8081&quot;</span>;</span><br><span class="line">    <span class="comment">//2. 消息发送目标的Topic名称</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">topic</span> <span class="operator">=</span> <span class="string">&quot;TopicTest&quot;</span>;</span><br><span class="line">    <span class="comment">// 初始化工厂类的provicer接入点</span></span><br><span class="line">    <span class="type">ClientServiceProvider</span> <span class="variable">provider</span> <span class="operator">=</span> ClientServiceProvider.loadService();</span><br><span class="line">    <span class="comment">//3. 写一下conf，里面带有接入点地址，也就是MQ的代理地址</span></span><br><span class="line">    <span class="type">ClientConfiguration</span> <span class="variable">configuration</span> <span class="operator">=</span> ClientConfiguration</span><br><span class="line">            .newBuilder()</span><br><span class="line">            .setEndpoints(endpoint)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//4. 初始化Producer</span></span><br><span class="line">    <span class="type">Producer</span> <span class="variable">producer</span> <span class="operator">=</span> provider</span><br><span class="line">            .newProducerBuilder()</span><br><span class="line">            .setTopics(topic)</span><br><span class="line">            .setClientConfiguration(configuration)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//5. 设置发送的普通消息</span></span><br><span class="line">    <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> provider</span><br><span class="line">            .newMessageBuilder()</span><br><span class="line">            .setTopic(topic)</span><br><span class="line">            .setKeys(<span class="string">&quot;Key is me&quot;</span>)</span><br><span class="line">            .setTag(<span class="string">&quot;Tag is null&quot;</span>)</span><br><span class="line">            .setBody(<span class="string">&quot;God Drinks Java&quot;</span>.getBytes())</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//开始发送消息，需要关注发送的结果，并捕获失败异常  receipt是回执的意思</span></span><br><span class="line">        <span class="type">SendReceipt</span> <span class="variable">receipt</span> <span class="operator">=</span> producer.send(message);</span><br><span class="line">        log.info(receipt.toString());</span><br><span class="line">    &#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;Fail to send message&quot;</span>,e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+</li>
+<li><p><strong>消费者代码</strong></p>
+<ul>
+<li>这里我们使用推模式来进行消费者消息的推送</li>
+<li>跟生产者的思路差不多，除了topic还要指定消费者<strong>所属的消费者组</strong></li>
+<li>这里设置<strong>消费监听器</strong>来建立与broker的长连接，随时监听producer的消息</li>
+<li>当我们开启推模式消费者代码时，producer每发送一条消息，comsumer就会立刻从监听器里接受.</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SimpleConsumer</span> &#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> org.slf4j.<span class="type">Logger</span> <span class="variable">log</span> <span class="operator">=</span> LoggerFactory.getLogger(SimpleConsumer.class);</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClientException, InterruptedException &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">endpoint</span> <span class="operator">=</span> <span class="string">&quot;localhost:8081&quot;</span>;</span><br><span class="line">    <span class="comment">//2. 从namesrv里获取认证</span></span><br><span class="line">    <span class="type">ClientConfiguration</span> <span class="variable">clientConfiguration</span> <span class="operator">=</span> ClientConfiguration</span><br><span class="line">            .newBuilder()</span><br><span class="line">            .setEndpoints(endpoint)</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 订阅消息的过滤规则，    *表示订阅所有Tag的信息</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">tag</span> <span class="operator">=</span> <span class="string">&quot;*&quot;</span>;</span><br><span class="line">    <span class="type">FilterExpression</span> <span class="variable">filter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FilterExpression</span>(tag, FilterExpressionType.TAG);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 指定所属的消费者组</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">Group</span> <span class="operator">=</span> <span class="string">&quot;ConsumerGroup&quot;</span>;</span><br><span class="line">    <span class="comment">// 5. 指定订阅目标的Topic</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">topic</span> <span class="operator">=</span> <span class="string">&quot;TopicTest&quot;</span>;</span><br><span class="line">    <span class="comment">// 6 初始化工厂类provider的接入点</span></span><br><span class="line">    <span class="type">ClientServiceProvider</span> <span class="variable">provider</span> <span class="operator">=</span> ClientServiceProvider.loadService();</span><br><span class="line">    <span class="comment">// 7. 初始化PushConsumer，需要绑定消费者组，通信参数和订阅管理，这里还是使用provider工厂类来构建</span></span><br><span class="line">    <span class="type">PushConsumer</span> <span class="variable">pushConsumer</span> <span class="operator">=</span> provider.newPushConsumerBuilder()</span><br><span class="line">            .setConsumerGroup(Group)</span><br><span class="line">            .setClientConfiguration(clientConfiguration)</span><br><span class="line">            .setSubscriptionExpressions(Collections.singletonMap(topic, filter))</span><br><span class="line">            .setMessageListener(messageView -&gt; &#123;</span><br><span class="line">                <span class="comment">//处理消息并返回消费结果</span></span><br><span class="line">                <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> messageView.getBody();</span><br><span class="line">                <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> StandardCharsets.UTF_8.decode(</span><br><span class="line">                        byteBuffer.duplicate()</span><br><span class="line">                ).toString();</span><br><span class="line">                log.info(<span class="string">&quot;messageId=&#123;&#125; message=&#123;&#125;&quot;</span>, messageView.getMessageId(),content);</span><br><span class="line">                <span class="keyword">return</span> ConsumeResult.SUCCESS;</span><br><span class="line">            &#125;)</span><br><span class="line">            .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>总结：</p>
+<ul>
+<li>这是我producer发送消息的时间和我consumer接受消息的时间<ul>
+<li>可以看到只差0.1s，既是这样也是算上发送日志的时间</li>
+<li>足以见得推模式的效率有多么快</li>
+</ul>
+</li>
+</ul>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">18</span>:<span class="number">04</span>:<span class="number">59.774</span> [main] INFO ....</span><br><span class="line"><span class="number">18</span>:<span class="number">04</span>:<span class="number">59.784</span> [RocketmqMessageConsumption-<span class="number">0</span>-<span class="number">67</span>] INFO  ....</span><br></pre></td></tr></table></figure></div></li>
+</ol>
+<h2 id="3-2-单生产者多消费者模式"><a href="#3-2-单生产者多消费者模式" class="headerlink" title="3.2 单生产者多消费者模式"></a>3.2 单生产者多消费者模式</h2><ul>
+<li><strong>有如下场景</strong>：<ul>
+<li>我一个主题为<code>topic1</code>的生产者<strong>连续发送了10条消息</strong>，这时有两个消费者正在监听<code>topic1</code>。</li>
+<li><strong>这两个消费者获得的消息会是怎样的？</strong><ul>
+<li>是每个人都分到了全部的消息？</li>
+<li>还是平分了这十个消息？</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>我们来实验一下</strong></li>
+</ul>
+<ol>
+<li><strong>首先要让消费者代码能起多个实例</strong></li>
+</ol>
+<ul>
+<li><strong>运行配置</strong> —&gt; <strong>修改选项</strong> —&gt; <strong>允许多个实例</strong></li>
+</ul>
+<ol start="2">
+<li><p>我们修改一下producer部分代码，<strong>让代码连续发送十条消息</strong></p>
+ <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">//5. 设置发送的普通消息</span></span><br><span class="line">    <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> provider</span><br><span class="line">            .newMessageBuilder()</span><br><span class="line">            .setTopic(topic)</span><br><span class="line">            .setKeys(<span class="string">&quot;Key is me&quot;</span>)</span><br><span class="line">            .setTag(<span class="string">&quot;Tag is null&quot;</span>)</span><br><span class="line">            .setBody((<span class="string">&quot;God Drinks Java&quot;</span> + i).getBytes())</span><br><span class="line">            .build();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">//开始发送消息，需要关注发送的结果，并捕获失败异常  receipt是回执的意思</span></span><br><span class="line">    <span class="type">SendReceipt</span> <span class="variable">receipt</span> <span class="operator">=</span> producer.send(message);</span><br><span class="line">    log.info(receipt.toString());</span><br><span class="line">&#125;<span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    log.error(<span class="string">&quot;Fail to send message&quot;</span>,e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+</li>
+<li><p>启动两个consumer，然后再启动producer，发现如下结果</p>
+<ul>
+<li>可以看到producer发送的消息被两个consumer均分了，但是顺序是乱序，为什么？</li>
 </ul>
 </li>
 </ol>
+<div class="tabs" id="tab-多消费者"><ul class="nav-tabs"><li class="tab active"><a class="#多消费者-1">Producer</a></li><li class="tab"><a class="#多消费者-2">Consumer1</a></li><li class="tab"><a class="#多消费者-3">Consumer2</a></li></ul><div class="tab-content"><div class="tab-pane active" id="多消费者-1"><p>18:49:22.095 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3200000000, recallHandle&#x3D;}<br>18:49:22.106 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000001, recallHandle&#x3D;}<br>18:49:22.119 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000002, recallHandle&#x3D;}<br>18:49:22.126 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000003, recallHandle&#x3D;}<br>18:49:22.132 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000004, recallHandle&#x3D;}<br>18:49:22.139 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000005, recallHandle&#x3D;}<br>18:49:22.145 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000006, recallHandle&#x3D;}<br>18:49:22.152 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000007, recallHandle&#x3D;}<br>18:49:22.159 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000008, recallHandle&#x3D;}<br>18:49:22.166 [main] INFO cn.itcast.demo.simple.Producer - SendReceiptImpl{messageId&#x3D;01683421218C3DD25409405E3300000009, recallHandle&#x3D;}</p></div><div class="tab-pane" id="多消费者-2"><p>18:49:22.093 [RocketmqMessageConsumption-0-84] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3200000000 message&#x3D;God Drinks Java1<br>18:49:22.120 [RocketmqMessageConsumption-0-26] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000002 message&#x3D;God Drinks Java3<br>18:49:22.133 [RocketmqMessageConsumption-0-41] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000004 message&#x3D;God Drinks Java5<br>18:49:22.146 [RocketmqMessageConsumption-0-43] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000006 message&#x3D;God Drinks Java7<br>18:49:22.161 [RocketmqMessageConsumption-0-40] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000008 message&#x3D;God Drinks Java9</p></div><div class="tab-pane" id="多消费者-3"><p>18:49:22.108 [RocketmqMessageConsumption-0-76] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000001 message&#x3D;God Drinks Java2<br>18:49:22.128 [RocketmqMessageConsumption-0-77] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000003 message&#x3D;God Drinks Java4<br>18:49:22.142 [RocketmqMessageConsumption-0-78] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000005 message&#x3D;God Drinks Java6<br>18:49:22.155 [RocketmqMessageConsumption-0-79] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000007 message&#x3D;God Drinks Java8<br>18:49:22.167 [RocketmqMessageConsumption-0-80] INFO cn.itcast.demo.one2many.Consumer - messageId&#x3D;01683421218C3DD25409405E3300000009 message&#x3D;God Drinks Java10</p></div></div></div>
 
+
+<ul>
+<li><p><strong>如果我们想让两个consumer都接收到这十个消息，应该怎么做？</strong></p>
+<ul>
+<li>我们将consumer的消费者组改为group1，启动一个consumer，然后改为group2，再启动一个consumer</li>
+<li>这时我们运行producer发送十条消息，<strong>发现两个consumer都接收到了10条消息</strong></li>
+</ul>
+</li>
+<li><p>所以在<strong>单生产者多消费者</strong>消息发送中有两个方式</p>
+<ol>
+<li>两个消费者，<strong>相同的消费者组</strong>，他们会负载均衡的接受生产者的消息</li>
+<li>两个消费者，<strong>不同的消费者组</strong>，生产者会给每个组都发送相同的消息</li>
+</ol>
+</li>
+</ul>
+<h1 id="4-消息类型"><a href="#4-消息类型" class="headerlink" title="4. 消息类型"></a>4. 消息类型</h1><h2 id="4-1-同步"><a href="#4-1-同步" class="headerlink" title="4.1 同步"></a>4.1 同步</h2><h2 id="4-2-异步"><a href="#4-2-异步" class="headerlink" title="4.2 异步"></a>4.2 异步</h2><h2 id="4-3-单向消息"><a href="#4-3-单向消息" class="headerlink" title="4.3 单向消息"></a>4.3 单向消息</h2>
 		</div>
 
 		
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> RocketMQ</li>
+        <li><strong>标题:</strong> RocketMQ 5.x</li>
         <li><strong>作者:</strong> yin_bo_</li>
         <li><strong>创建于
                 :</strong> 2025-11-27 13:13:16</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-02 13:22:56
+                    :</strong> 2025-12-02 20:42:30
             </li>
         
         <li>
@@ -972,8 +1044,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
-		<div class="page-title">RocketMQ</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RocketMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81"><span class="nav-text">3. RocketMQ消息发送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E4%B9%A6%E5%86%99"><span class="nav-text">3.1 简单生产者书写</span></a></li></ol></li></ol>
+		<div class="page-title">RocketMQ 5.x</div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ-5-x%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ 5.x安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RocketMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81"><span class="nav-text">3. RocketMQ消息发送</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E4%B9%A6%E5%86%99"><span class="nav-text">3.1 简单生产者&#x2F;消费者书写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.2 单生产者多消费者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="nav-text">4. 消息类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%90%8C%E6%AD%A5"><span class="nav-text">4.1 同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%BC%82%E6%AD%A5"><span class="nav-text">4.2 异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E5%8D%95%E5%90%91%E6%B6%88%E6%81%AF"><span class="nav-text">4.3 单向消息</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1006,7 +1078,7 @@
                     </span>
                     
                         <span>
-                            共 82.9k 字
+                            共 84.5k 字
                         </span>
                     
                 </p>
