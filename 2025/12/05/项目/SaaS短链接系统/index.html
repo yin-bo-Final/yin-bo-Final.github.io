@@ -148,8 +148,9 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%A1%88%E4%BE%8B.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/Apifox.jpg">
+<meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E5%BC%82%E5%B8%B8%E7%A0%81%E8%A7%84%E8%8C%83%E7%94%B3%E8%AF%B7%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2025-12-05T12:27:07.482Z">
+<meta property="article:modified_time" content="2025-12-05T13:30:17.572Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -686,8 +687,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-05 20:27:07</span>
-            <span class="mobile">2025-12-05 20:27:07</span>
+            <span class="desktop">2025-12-05 21:30:17</span>
+            <span class="mobile">2025-12-05 21:30:17</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -741,12 +742,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.6k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>16 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>20 分钟</span>
         </span>
     
     
@@ -1016,8 +1017,262 @@
 
 <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/shortlink/v1&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * 根据用户名查找用户</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;username&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getUserByName(username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
 
+<ul>
+<li>我们去数据库里创建一条数据</li>
+<li>然后去Apifox里去发请求，<strong>发现返回成功了</strong></li>
+</ul>
+<div class="code-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;yin_bo_&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;realName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;音波&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;phone&quot;</span><span class="punctuation">:</span> <span class="string">&quot;12333333333&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;mail&quot;</span><span class="punctuation">:</span> <span class="string">&quot;yinbofinal@yinbo.com&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></div>
 
-<div class="tabs" id="tab-查询用户信息功能的代码"><ul class="nav-tabs"><li class="tab active"><a class="#查询用户信息功能的代码-1">UserController</a></li><li class="tab"><a class="#查询用户信息功能的代码-2">UserService</a></li><li class="tab"><a class="#查询用户信息功能的代码-3">UserServiceImpl</a></li><li class="tab"><a class="#查询用户信息功能的代码-4">UserDO</a></li><li class="tab"><a class="#查询用户信息功能的代码-5">UserMapper</a></li><li class="tab"><a class="#查询用户信息功能的代码-6">UserRespDTO</a></li></ul><div class="tab-content"><div class="tab-pane active" id="查询用户信息功能的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">**<span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户管理Controller层</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/shortlink/v1&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * 根据用户名查找用户</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;username&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getUserByName(username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">**</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户接口层</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;UserDO&gt; &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名查询用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username 用户名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 用户返回实体</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    UserRespDTO <span class="title function_">getUserByName</span><span class="params">(String username)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户接口实现层</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;UserMapper, UserDO&gt; <span class="keyword">implements</span>  <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByName</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="type">UserDO</span> <span class="variable">userDo</span> <span class="operator">=</span> lambdaQuery()</span><br><span class="line">                .eq(UserDO::getUsername, username)</span><br><span class="line">                .one();</span><br><span class="line">        <span class="comment">// one()方法：查到多条会抛出异常，查不到返回null</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (userDo == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//转换，使用BeanUtil的copyProperties</span></span><br><span class="line">        <span class="keyword">return</span> BeanUtil.copyProperties(userDo,UserRespDTO.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-4"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户持久层实体</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(&quot;t_user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDO</span>  &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      ID</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 密码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注销时间戳</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long deletionTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 修改时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date updateTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 删除标识 0：未删除 1：已删除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer delFlag;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserDO</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-5"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;UserDO&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-6"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRespDTO</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">  ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+<h3 id="4-3-9-功能相关的代码"><a href="#4-3-9-功能相关的代码" class="headerlink" title="4.3.9 功能相关的代码"></a>4.3.9 功能相关的代码</h3><div class="tabs" id="tab-查询用户信息功能的代码"><ul class="nav-tabs"><li class="tab active"><a class="#查询用户信息功能的代码-1">UserController</a></li><li class="tab"><a class="#查询用户信息功能的代码-2">UserService</a></li><li class="tab"><a class="#查询用户信息功能的代码-3">UserServiceImpl</a></li><li class="tab"><a class="#查询用户信息功能的代码-4">UserDO</a></li><li class="tab"><a class="#查询用户信息功能的代码-5">UserMapper</a></li><li class="tab"><a class="#查询用户信息功能的代码-6">UserRespDTO</a></li></ul><div class="tab-content"><div class="tab-pane active" id="查询用户信息功能的代码-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">**<span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户管理Controller层</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/shortlink/v1&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * 根据用户名查找用户</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;username&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getUserByName(username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">**</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户接口层</span></span><br><span class="line"><span class="comment">* */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;UserDO&gt; &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名查询用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username 用户名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 用户返回实体</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    UserRespDTO <span class="title function_">getUserByName</span><span class="params">(String username)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户接口实现层</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;UserMapper, UserDO&gt; <span class="keyword">implements</span>  <span class="title class_">UserService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByName</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="type">UserDO</span> <span class="variable">userDo</span> <span class="operator">=</span> lambdaQuery()</span><br><span class="line">                .eq(UserDO::getUsername, username)</span><br><span class="line">                .one();</span><br><span class="line">        <span class="comment">// one()方法：查到多条会抛出异常，查不到返回null</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (userDo == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">//转换，使用BeanUtil的copyProperties</span></span><br><span class="line">        <span class="keyword">return</span> BeanUtil.copyProperties(userDo,UserRespDTO.class);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-4"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户持久层实体</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(&quot;t_user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDO</span>  &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      ID</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 密码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注销时间戳</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long deletionTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 修改时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date updateTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 删除标识 0：未删除 1：已删除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer delFlag;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserDO</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-5"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;UserDO&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="查询用户信息功能的代码-6"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRespDTO</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">  ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+
+<h2 id="4-4-统一响应对象"><a href="#4-4-统一响应对象" class="headerlink" title="4.4 统一响应对象"></a>4.4 统一响应对象</h2><ul>
+<li><p>在之前我们实现的功能中，如果查询的用户不存在，<strong>会返回null</strong></p>
+<ul>
+<li>这样用户就会有疑惑：<strong>是没查询到还是没有这个账号？</strong></li>
+</ul>
+</li>
+<li><p>所以我们需要一个响应对象，可以全局返回状态</p>
+<ul>
+<li>如果查询到就success，如果查询不到返回异常状态码</li>
+</ul>
+</li>
+<li><p>所以这里我们在common包里建一个convention(规约)包，在<strong>里面编写Result统一响应对象</strong></p>
+<ul>
+<li><strong>这个Result基本都通用，这里直接给代码</strong></li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> lombok.Data;</span><br><span class="line"><span class="keyword">import</span> lombok.experimental.Accessors;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.Serial;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 全局返回对象</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Accessors(chain = true)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Result</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Serial</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">5679018624309023727L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 正确返回码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SUCCESS_CODE</span> <span class="operator">=</span> <span class="string">&quot;0&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 返回消息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 响应数据</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求ID</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String requestId;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isSuccess</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> SUCCESS_CODE.equals(code);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>然后编写Controller层的代码，去设置查询的状态码，查询的状态等</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Result&lt;UserRespDTO&gt; <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">    <span class="type">UserRespDTO</span> <span class="variable">result</span> <span class="operator">=</span> userService.getUserByName(username);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(result==<span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;UserRespDTO&gt;()</span><br><span class="line">                .setCode(<span class="string">&quot;404&quot;</span>).setData(<span class="literal">null</span>).setMessage(<span class="string">&quot;用户查询为空&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Result</span>&lt;UserRespDTO&gt;()</span><br><span class="line">                .setCode(<span class="string">&quot;0&quot;</span>)</span><br><span class="line">                .setData(result)</span><br><span class="line">                .setMessage(<span class="string">&quot;用户查询成功&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>这里我们发现，每次写一个功能都要new Result… 是不是太繁琐了？而且规定上我们不能在Controller层代码里做各种判断对吧</li>
+</ul>
+<h2 id="全局异常码设计"><a href="#全局异常码设计" class="headerlink" title="全局异常码设计"></a>全局异常码设计</h2><ul>
+<li><p><strong>这里我们学习一下对于异常码的设计</strong></p>
+<ul>
+<li>异常码是字符串类型<code>(这里我们的Result对象里也写了code是String类型)</code>,<strong>共五位 分为两个部分：<code>错误产生来源</code> + <code>四位数据编号</code></strong><ul>
+<li><strong>错误产生来源</strong>分为<code> A / B / C</code><ul>
+<li><code>A</code>表示错误<strong>来源于用户</strong>，比如参数错误，用户安装版本过低， 用户支付超时等</li>
+<li><code>B</code>表示错误<strong>来源于当前系统</strong>，往往是业务逻辑出错，或者代码健壮性差</li>
+<li><code>C</code>表示错误<strong>来源于第三方服务</strong>，比如CDN服务出错，消息投递超时</li>
+</ul>
+</li>
+<li><strong>四位数字编号从0001到9999</strong>，大类之间的步长间距预留100</li>
+</ul>
+</li>
+<li>异常码<strong>不与公司业务架构和组织架构挂钩</strong>，那是如何规约的呢？<ul>
+<li>如下图，去平台上提交异常码申请，<strong>先到先申请原则</strong>，一旦申请，编号永久固定<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E5%BC%82%E5%B8%B8%E7%A0%81%E8%A7%84%E8%8C%83%E7%94%B3%E8%AF%B7%E5%9B%BE.jpg"
+                      alt="alt 异常码规范申请图"
+                ><figcaption>alt 异常码规范申请图</figcaption></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>异常码分类：一级宏观错误码、二级宏观错误码、三级详细错误码。</strong></p>
+</li>
+</ul>
+<div class="tabs" id="tab-异常码举例"><ul class="nav-tabs"><li class="tab active"><a class="#异常码举例-1">客户端异常</a></li><li class="tab"><a class="#异常码举例-2">服务端异常</a></li><li class="tab"><a class="#异常码举例-3">远程调用异常</a></li></ul><div class="tab-content"><div class="tab-pane active" id="异常码举例-1"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>错误码</td>
+<td>中文描述</td>
+<td>说明</td>
+</tr>
+<tr>
+<td>A0001</td>
+<td>用户端错误</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>A0100</td>
+<td>用户注册错误</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A0101</td>
+<td>用户未同意隐私协议</td>
+<td></td>
+</tr>
+<tr>
+<td>A0102</td>
+<td>注册国家或地区受限</td>
+<td></td>
+</tr>
+<tr>
+<td>A0110</td>
+<td>用户名校验失败</td>
+<td></td>
+</tr>
+<tr>
+<td>A0111</td>
+<td>用户名已存在</td>
+<td></td>
+</tr>
+<tr>
+<td>A0112</td>
+<td>用户名包含敏感词</td>
+<td></td>
+</tr>
+<tr>
+<td>xxx</td>
+<td>xxx</td>
+<td></td>
+</tr>
+<tr>
+<td>A0200</td>
+<td>用户登录异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>A02101</td>
+<td>用户账户不存在</td>
+<td></td>
+</tr>
+<tr>
+<td>A02102</td>
+<td>用户密码错误</td>
+<td></td>
+</tr>
+<tr>
+<td>A02103</td>
+<td>用户账户已作废</td>
+<td></td>
+</tr>
+<tr>
+<td>xxx</td>
+<td>xxx</td>
+<td></td>
+</tr>
+</tbody></table></div><div class="tab-pane" id="异常码举例-2"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>错误码</td>
+<td>中文描述</td>
+<td>说明</td>
+</tr>
+<tr>
+<td>B0001</td>
+<td>系统执行出错</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>B0100</td>
+<td>系统执行超时</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0101</td>
+<td>系统订单处理超时</td>
+<td></td>
+</tr>
+<tr>
+<td>B0200</td>
+<td>系统容灾功能被触发</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0210</td>
+<td>系统限流</td>
+<td></td>
+</tr>
+<tr>
+<td>B0220</td>
+<td>系统功能降级</td>
+<td></td>
+</tr>
+<tr>
+<td>B0300</td>
+<td>系统资源异常</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>B0310</td>
+<td>系统资源耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0311</td>
+<td>系统磁盘空间耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>B0312</td>
+<td>系统内存耗尽</td>
+<td></td>
+</tr>
+<tr>
+<td>xxx</td>
+<td>xxx</td>
+<td></td>
+</tr>
+</tbody></table></div><div class="tab-pane" id="异常码举例-3"><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>错误码</td>
+<td>中文描述</td>
+<td>说明</td>
+</tr>
+<tr>
+<td>C0001</td>
+<td>调用第三方服务出错</td>
+<td>一级宏观错误码</td>
+</tr>
+<tr>
+<td>C0100</td>
+<td>中间件服务出错</td>
+<td>二级宏观错误码</td>
+</tr>
+<tr>
+<td>C0110</td>
+<td>RPC服务出错</td>
+<td></td>
+</tr>
+<tr>
+<td>C0111</td>
+<td>RPC服务未找到</td>
+<td></td>
+</tr>
+<tr>
+<td>C0112</td>
+<td>RPC服务未注册</td>
+<td></td>
+</tr>
+<tr>
+<td>xxx</td>
+<td>xxx</td>
+<td></td>
+</tr>
+</tbody></table></div></div></div>
 		</div>
 
 		
@@ -1031,7 +1286,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-05 20:27:07
+                    :</strong> 2025-12-05 21:30:17
             </li>
         
         <li>
@@ -1126,7 +1381,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SaaS短链接</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E7%94%A8%E6%88%B7%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2 用户表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E5%8A%9F%E8%83%BD"><span class="nav-text">4.3 查询用户信息功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E5%BC%95%E5%85%A5%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6%E5%92%8C%E6%8C%81%E4%B9%85%E5%B1%82%E9%85%8D%E7%BD%AE"><span class="nav-text">4.3.1 引入持久层框架和持久层配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E7%BC%96%E5%86%99entity%E7%B1%BB"><span class="nav-text">4.3.2 编写entity类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E5%9C%A8%E5%90%AF%E5%8A%A8%E7%B1%BB%E4%B8%8A%E5%8A%A0%E4%B8%8A%E6%8C%81%E4%B9%85%E5%B1%82%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">4.3.3 在启动类上加上持久层接口扫描器注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E5%86%99%E5%87%BA%E6%98%A0%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3.4 写出映射接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E5%AE%9E%E7%8E%B0Service%E5%B1%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">4.3.5 实现Service层的接口和实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-%E5%86%99%E5%87%BA%E7%94%A8%E6%88%B7%E5%93%8D%E5%BA%94%E7%9A%84DTO"><span class="nav-text">4.3.6 写出用户响应的DTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-7-%E7%BC%96%E5%86%99Impl%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.7 编写Impl实现方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-8-%E5%9C%A8Controller%E5%B1%82%E7%BC%96%E5%86%99%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.8 在Controller层编写请求方法</span></a></li></ol></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E7%94%A8%E6%88%B7%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2 用户表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E5%8A%9F%E8%83%BD"><span class="nav-text">4.3 查询用户信息功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E5%BC%95%E5%85%A5%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6%E5%92%8C%E6%8C%81%E4%B9%85%E5%B1%82%E9%85%8D%E7%BD%AE"><span class="nav-text">4.3.1 引入持久层框架和持久层配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E7%BC%96%E5%86%99entity%E7%B1%BB"><span class="nav-text">4.3.2 编写entity类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E5%9C%A8%E5%90%AF%E5%8A%A8%E7%B1%BB%E4%B8%8A%E5%8A%A0%E4%B8%8A%E6%8C%81%E4%B9%85%E5%B1%82%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">4.3.3 在启动类上加上持久层接口扫描器注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E5%86%99%E5%87%BA%E6%98%A0%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3.4 写出映射接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E5%AE%9E%E7%8E%B0Service%E5%B1%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">4.3.5 实现Service层的接口和实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-%E5%86%99%E5%87%BA%E7%94%A8%E6%88%B7%E5%93%8D%E5%BA%94%E7%9A%84DTO"><span class="nav-text">4.3.6 写出用户响应的DTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-7-%E7%BC%96%E5%86%99Impl%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.7 编写Impl实现方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-8-%E5%9C%A8Controller%E5%B1%82%E7%BC%96%E5%86%99%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.8 在Controller层编写请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-9-%E5%8A%9F%E8%83%BD%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">4.3.9 功能相关的代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E7%BB%9F%E4%B8%80%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="nav-text">4.4 统一响应对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E7%A0%81%E8%AE%BE%E8%AE%A1"><span class="nav-text">全局异常码设计</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1159,7 +1414,7 @@
                     </span>
                     
                         <span>
-                            共 89.1k 字
+                            共 90.2k 字
                         </span>
                     
                 </p>
