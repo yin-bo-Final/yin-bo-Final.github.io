@@ -149,7 +149,7 @@
 <meta property="og:image" content="http://example.com/images/RocketMQ/RocketMQ%E5%8F%AF%E8%A7%86%E5%8C%96%E7%95%8C%E9%9D%A2.jpg">
 <meta property="og:image" content="http://example.com/images/RocketMQ/%E4%B8%BB%E9%A2%98%E6%B5%81%E7%A8%8B%E4%B8%8E%E4%BD%8D%E7%BD%AE.jpg">
 <meta property="article:published_time" content="2025-11-27T05:13:16.928Z">
-<meta property="article:modified_time" content="2025-12-04T08:32:03.034Z">
+<meta property="article:modified_time" content="2025-12-04T09:53:41.301Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="消息队列">
@@ -620,7 +620,7 @@
 
         <div class="statistics flex justify-around my-2.5">
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">16</div>
         <div class="label text-third-text-color text-sm">标签</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
@@ -628,7 +628,7 @@
         <div class="label text-third-text-color text-sm">分类</div>
     </a>
     <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
-        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">11</div>
         <div class="label text-third-text-color text-sm">文章</div>
     </a>
 </div>
@@ -679,8 +679,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-04 16:32:03</span>
-            <span class="mobile">2025-12-04 16:32:03</span>
+            <span class="desktop">2025-12-04 17:53:41</span>
+            <span class="mobile">2025-12-04 17:53:41</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -706,12 +706,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>16 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>17 分钟</span>
         </span>
     
     
@@ -1023,7 +1023,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="5-3-异步消息"><a href="#5-3-异步消息" class="headerlink" title="5.3 异步消息"></a>5.3 异步消息</h2><ul>
+<h3 id="5-2-2-异步消息"><a href="#5-2-2-异步消息" class="headerlink" title="5.2.2 异步消息"></a>5.2.2 异步消息</h3><ul>
 <li><p><strong>异步消息特征</strong>：即时性最强，对回执的实时性要求不高，<strong>可以接受延迟收到回执</strong>。</p>
 </li>
 <li><p><strong>异步消息执行逻辑</strong>：</p>
@@ -1037,11 +1037,17 @@
 <ul>
 <li>使用producer的<code>sendAsync</code>方法，获取一个future，然后在future里写异步执行的机制</li>
 <li>然后把成功信息直接返回给用户</li>
-<li>等Broker返回ACK时，执行回调，返回<strong>回执</strong><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">//5. 设置发送的普通消息</span></span><br><span class="line">    <span class="type">MessageBuilder</span> <span class="variable">messageBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MessageBuilderImpl</span>();</span><br><span class="line">    <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> messageBuilder</span><br><span class="line">            .setTopic(topic)</span><br><span class="line">            .setKeys(<span class="string">&quot;Key is me&quot;</span>)</span><br><span class="line">            .setTag(<span class="string">&quot;Tag is null&quot;</span>)</span><br><span class="line">            .setBody((<span class="string">&quot;God Drinks Java&quot;</span> + i).getBytes())</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//开始发送消息，需要关注发送的结果，并捕获失败异常  receipt是回执的意思</span></span><br><span class="line">    CompletableFuture&lt;SendReceipt&gt; future = producer.sendAsync(message);</span><br><span class="line">    future.whenCompleteAsync((Receipt, throwable) -&gt; &#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != throwable) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;Failed to send message&quot;</span>, throwable);</span><br><span class="line">            <span class="comment">// Return early.</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//可以异步实现的功能</span></span><br><span class="line">        log.info(<span class="string">&quot;Send message successfully, messageId=&#123;&#125;&quot;</span>, Receipt.getMessageId());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
+<li>等Broker返回ACK时，执行回调，返回<strong>回执</strong></li>
+<li>这里返回的Throwable是检测Netty线程是否让Broker返回了ACK，如果没有返回ACK，则报错，让人员去补发消息<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="comment">//5. 设置发送的普通消息</span></span><br><span class="line">    <span class="type">MessageBuilder</span> <span class="variable">messageBuilder</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MessageBuilderImpl</span>();</span><br><span class="line">    <span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> messageBuilder</span><br><span class="line">            .setTopic(topic)</span><br><span class="line">            .setKeys(<span class="string">&quot;Key is me&quot;</span>)</span><br><span class="line">            .setTag(<span class="string">&quot;Tag is null&quot;</span>)</span><br><span class="line">            .setBody((<span class="string">&quot;God Drinks Java&quot;</span> + i).getBytes())</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//消息被Netty线程抢走，在Netty线程发送消息</span></span><br><span class="line">    CompletableFuture&lt;SendReceipt&gt; future = producer.sendAsync(message);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//直接给用户返回成功信息</span></span><br><span class="line">    log.info(<span class="string">&quot;用户的订单&#123;&#125;发送成功了&quot;</span>, i);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//等Netty线程把消息发给Broker,并且Broker返回ACK时，执行这里的回调</span></span><br><span class="line">    <span class="comment">//throwable是Netty线程返回的是否Broker返回ACK的结果</span></span><br><span class="line">    future.whenCompleteAsync((Receipt, throwable) -&gt; &#123;</span><br><span class="line">        <span class="comment">//这里用null != throwable 是因为要防止空指针</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> != throwable) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;Failed to send message&quot;</span>, throwable);</span><br><span class="line">            <span class="comment">// Return early.</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//可以异步实现的功能</span></span><br><span class="line">        log.info(<span class="string">&quot;Send message successfully, messageId=&#123;&#125;&quot;</span>, Receipt.getMessageId());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 </ul>
 </li>
+<li><p>这里回调消息也就是发送消息和返回用户成功信息是同时进行的，所以叫做<strong>异步消息</strong></p>
+</li>
 </ul>
-<h2 id="5-4-单向消息"><a href="#5-4-单向消息" class="headerlink" title="5.4 单向消息"></a>5.4 单向消息</h2>
+<h3 id="5-2-3-单向消息"><a href="#5-2-3-单向消息" class="headerlink" title="5.2.3 单向消息"></a>5.2.3 单向消息</h3><ul>
+<li><strong>单项消息特征</strong>：不需要有回执的消息，例如日志类的消息</li>
+</ul>
+<h2 id="5-3-顺序消息-FIFO"><a href="#5-3-顺序消息-FIFO" class="headerlink" title="5.3 顺序消息(FIFO)"></a>5.3 顺序消息(FIFO)</h2>
 		</div>
 
 		
@@ -1055,7 +1061,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-04 16:32:03
+                    :</strong> 2025-12-04 17:53:41
             </li>
         
         <li>
@@ -1096,6 +1102,18 @@
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
+			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+				<a class="prev" rel="prev" href="/2025/12/05/%E9%A1%B9%E7%9B%AE/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%B3%BB%E7%BB%9F/">
+					<span class="left arrow-icon flex justify-center items-center">
+						<i class="fa-solid fa-chevron-left"></i>
+					</span>
+					<span class="title flex justify-center items-center">
+						<span class="post-nav-title-item truncate max-w-48">SaaS短链接</span>
+						<span class="post-nav-item">上一篇</span>
+					</span>
+				</a>
+			</div>
+			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
 				<a class="next" rel="next" href="/2025/11/25/%E5%BE%AE%E6%9C%8D%E5%8A%A1/Docker/">
@@ -1122,7 +1140,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">RocketMQ 5.x</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ-5-x%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ 5.x安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RocketMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E4%B8%8E%E6%8E%A5%E6%94%B6"><span class="nav-text">3. RocketMQ消息发送与接收</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E4%B9%A6%E5%86%99"><span class="nav-text">3.1 简单生产者&#x2F;消费者书写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.2 单生产者多消费者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%B8%BB%E9%A2%98-Topic"><span class="nav-text">4. 主题(Topic)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%B6%88%E6%81%AF-Message"><span class="nav-text">5. 消息(Message)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E6%B6%88%E6%81%AF%E7%89%B9%E7%82%B9%E4%B8%8E%E5%88%86%E7%B1%BB"><span class="nav-text">5.1 消息特点与分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF-Normal"><span class="nav-text">5.2 普通消息(Normal)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-%E5%90%8C%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">5.2.1 同步消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">5.3 异步消息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E5%8D%95%E5%90%91%E6%B6%88%E6%81%AF"><span class="nav-text">5.4 单向消息</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MQ%E6%A6%82%E8%BF%B0"><span class="nav-text">1. MQ概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-RocketMQ%E5%85%A5%E9%97%A8"><span class="nav-text">2. RocketMQ入门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RocketMQ%E4%BB%8B%E7%BB%8D"><span class="nav-text">2.1 RocketMQ介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RocketMQ%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">2.2 RocketMQ工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-RocketMQ-5-x%E5%AE%89%E8%A3%85"><span class="nav-text">2.3 RocketMQ 5.x安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-RocketMQ%E6%B6%88%E6%81%AF%E5%8F%91%E9%80%81%E4%B8%8E%E6%8E%A5%E6%94%B6"><span class="nav-text">3. RocketMQ消息发送与接收</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E7%AE%80%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85-%E6%B6%88%E8%B4%B9%E8%80%85%E4%B9%A6%E5%86%99"><span class="nav-text">3.1 简单生产者&#x2F;消费者书写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%8D%95%E7%94%9F%E4%BA%A7%E8%80%85%E5%A4%9A%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.2 单生产者多消费者模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%B8%BB%E9%A2%98-Topic"><span class="nav-text">4. 主题(Topic)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%B6%88%E6%81%AF-Message"><span class="nav-text">5. 消息(Message)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E6%B6%88%E6%81%AF%E7%89%B9%E7%82%B9%E4%B8%8E%E5%88%86%E7%B1%BB"><span class="nav-text">5.1 消息特点与分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%99%AE%E9%80%9A%E6%B6%88%E6%81%AF-Normal"><span class="nav-text">5.2 普通消息(Normal)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-%E5%90%8C%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">5.2.1 同步消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-2-%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF"><span class="nav-text">5.2.2 异步消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-3-%E5%8D%95%E5%90%91%E6%B6%88%E6%81%AF"><span class="nav-text">5.2.3 单向消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF-FIFO"><span class="nav-text">5.3 顺序消息(FIFO)</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1151,11 +1169,11 @@
                 
                 <p class="post-count space-x-0.5">
                     <span>
-                        共撰写了 10 篇文章
+                        共撰写了 11 篇文章
                     </span>
                     
                         <span>
-                            共 85.4k 字
+                            共 87.3k 字
                         </span>
                     
                 </p>
