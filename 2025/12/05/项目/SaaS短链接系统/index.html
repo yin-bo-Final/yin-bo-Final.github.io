@@ -149,7 +149,7 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E6%9E%B6%E6%9E%84%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/Apifox.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2025-12-05T06:11:40.245Z">
+<meta property="article:modified_time" content="2025-12-05T12:17:14.787Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -686,8 +686,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-05 14:11:40</span>
-            <span class="mobile">2025-12-05 14:11:40</span>
+            <span class="desktop">2025-12-05 20:17:14</span>
+            <span class="mobile">2025-12-05 20:17:14</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -741,12 +741,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>9 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 分钟</span>
         </span>
     
     
@@ -895,14 +895,127 @@
 <li><p><strong>这里我们来简单测试一下</strong></p>
 <ul>
 <li>新建一个配置环境<code>后台管理Dev</code>，因为这里是admin模块，端口为8002，所以模块地址为： <a class="link"   target="_blank" rel="noopener" href="http://127.0.0.1:8002/" >http://127.0.0.1:8002<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
-<li>新建一个GET请求，就叫根据用户名查找用户 请求地址是<code>/api/shortlink/v1/user/{username}</code></li>
+<li>新建一个GET请求，就叫根据用户名查找用户 请求地址是<code>/api/shortlink/v1/user/&#123;username&#125;</code></li>
 <li>在admin模块里的controller层写一个getMapping，如下<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">* 根据用户名查找用户</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/api/shortlink/v1/user/&#123;username&#125;&quot;)</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;hello&quot;</span> + <span class="string">&quot; &quot;</span> + username;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></li>
 <li>然后在Apifox上填写username(例如yin_bo_)，查看返回是<code>hello yin_bo_</code></li>
 <li>这里Apifox编码问题不识别中文，可以这样配置： <code>设置</code> –&gt; <code>URL自动编码</code> –&gt; <code>遵循WHATWG</code></li>
 </ul>
 </li>
 </ul>
-<h1 id="4-用户模块"><a href="#4-用户模块" class="headerlink" title="4. 用户模块"></a>4. 用户模块</h1><h2 id="4-1-功能分析"><a href="#4-1-功能分析" class="headerlink" title="4.1 功能分析"></a>4.1 功能分析</h2>
+<h1 id="4-用户模块"><a href="#4-用户模块" class="headerlink" title="4. 用户模块"></a>4. 用户模块</h1><h2 id="4-1-功能分析"><a href="#4-1-功能分析" class="headerlink" title="4.1 功能分析"></a>4.1 功能分析</h2><ul>
+<li>我们这个项目主攻的是短链接，所以用户模块可以简化甚至不用，这里还是列举了该模块需要完成的功能：<ul>
+<li>检查用户名是否存在</li>
+<li>注册用户</li>
+<li>修改用户</li>
+<li>根据用户名查询用户</li>
+<li>用户登录</li>
+<li>检查用户是否登录</li>
+<li>用户退出登录</li>
+<li>注销用户</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-用户表设计"><a href="#4-2-用户表设计" class="headerlink" title="4.2 用户表设计"></a>4.2 用户表设计</h2><ul>
+<li>我们这个项目主攻短链接，所以用户表可以设计的短一点<ul>
+<li>ID使用bigint，以后使用雪花算法来设置唯一ID</li>
+<li>这里的数据设置的varchar数量这么大是因为我们以后<strong>要对数据库的数据进行加密</strong></li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Sql"><figure class="iseeu highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> `t_user` (</span><br><span class="line">        `id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;ID&#x27;</span>,</span><br><span class="line">        `username` <span class="type">varchar</span>(<span class="number">256</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户名&#x27;</span>,</span><br><span class="line">        `password` <span class="type">varchar</span>(<span class="number">512</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;密码&#x27;</span>,</span><br><span class="line">        `real_name` <span class="type">varchar</span>(<span class="number">256</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;真实姓名&#x27;</span>,</span><br><span class="line">        `phone` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;手机号&#x27;</span>,</span><br><span class="line">        `mail` <span class="type">varchar</span>(<span class="number">512</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;邮箱&#x27;</span>,                    </span><br><span class="line">        `deletion_time` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;注销时间戳&#x27;</span>,</span><br><span class="line">        `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">        `update_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">        `del_flag` tinyint(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;删除标识 0：未删除 1：已删除&#x27;</span>,</span><br><span class="line">        <span class="keyword">PRIMARY KEY</span> (`id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4;</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="4-3-查询用户信息功能"><a href="#4-3-查询用户信息功能" class="headerlink" title="4.3 查询用户信息功能"></a>4.3 查询用户信息功能</h2><h3 id="4-3-1-引入持久层框架和持久层配置"><a href="#4-3-1-引入持久层框架和持久层配置" class="headerlink" title="4.3.1 引入持久层框架和持久层配置"></a>4.3.1 引入持久层框架和持久层配置</h3><div class="tabs" id="tab-持久层框架*持久层的配置文件"><ul class="nav-tabs"><li class="tab active"><a class="#持久层框架*持久层的配置文件-1">pom.xml</a></li><li class="tab"><a class="#持久层框架*持久层的配置文件-2">application.yml</a></li></ul><div class="tab-content"><div class="tab-pane active" id="持久层框架*持久层的配置文件-1"><div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.baomidou<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mybatis-plus-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">scope</span>&gt;</span>runtime<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="持久层框架*持久层的配置文件-2"><div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://127.0.0.1:3306/link?characterEncoding=utf-8&amp;zeroDateTimeBehavior=convertToNull&amp;transformedBitIsBoolean=true&amp;serverTimezone=GMT%2B8</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">    <span class="attr">hikari:</span></span><br><span class="line">      <span class="attr">connection-test-query:</span> <span class="string">select</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">connection-timeout:</span> <span class="number">20000</span></span><br><span class="line">      <span class="attr">idle-timeout:</span> <span class="number">300000</span></span><br><span class="line">      <span class="attr">maximum-pool-size:</span> <span class="number">5</span></span><br><span class="line">      <span class="attr">minimum-idle:</span> <span class="number">5</span></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+<h3 id="4-3-2-编写entity类"><a href="#4-3-2-编写entity类" class="headerlink" title="4.3.2 编写entity类"></a>4.3.2 编写entity类</h3><ol>
+<li><strong>然后编写entity类</strong>，这里我推荐一个自动编写实体类的网站，可以将SQL转变为entity</li>
+</ol>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://java.bejson.com/generator/" >https://java.bejson.com/generator/<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li>复习一下@Data注解：自动封装get&#x2F;set方法，有参无参构造，hashcode什么的</li>
+<li><strong>DO代表实体类(Domain Object)</strong></li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 用户持久层实体 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(&quot;t_user&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserDO</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Serial</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TableId(type = IdType.AUTO)</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">      ID</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 密码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注销时间戳</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long deletionTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date createTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 修改时间</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Date updateTime;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 删除标识 0：未删除 1：已删除</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer delFlag;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserDO</span><span class="params">()</span> &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="4-3-3-在启动类上加上持久层接口扫描器注解"><a href="#4-3-3-在启动类上加上持久层接口扫描器注解" class="headerlink" title="4.3.3 在启动类上加上持久层接口扫描器注解"></a>4.3.3 在启动类上加上持久层接口扫描器注解</h3><div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">@MapperScan(&quot;com.yin_bo_.shortlink.admin.dao.mapper&quot;)</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h3 id="4-3-4-写出映射接口"><a href="#4-3-4-写出映射接口" class="headerlink" title="4.3.4 写出映射接口"></a>4.3.4 写出映射接口</h3><ul>
+<li>这里继承MyBatisPlus的<code>BaseMapper</code><ul>
+<li>这个BaseMapper就是MyBatisPlus实现<strong>insert&#x2F;update等一众ORM工具</strong>的类</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.baomidou.mybatisplus.core.mapper.BaseMapper;</span><br><span class="line"><span class="keyword">import</span> com.yin_bo_.shortlink.admin.dao.entity.UserDO;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;UserDO&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<h3 id="4-3-5-实现Service层的接口和实现类"><a href="#4-3-5-实现Service层的接口和实现类" class="headerlink" title="4.3.5 实现Service层的接口和实现类"></a>4.3.5 实现Service层的接口和实现类</h3><ul>
+<li>先写用户服务的<strong>接口层</strong></li>
+<li><strong>这里继承MyBatisPlus的IService接口，使通过泛型来读取实体类的数据</strong></li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> <span class="keyword">extends</span> <span class="title class_">IService</span>&lt;UserDO&gt; &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li>再去写用户服务的<strong>实现类</strong><ul>
+<li><strong>这里Impl规约性的写法</strong>：<ul>
+<li>继承ServiceImpl，第一个参数是UserMapper，第二个参数是实体类</li>
+<li>实现服务的接口层，例如这里是UserService</li>
+<li>注意这里一定要加上<code>@Service</code>注解，<strong>让Spring管理接口层</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户接口实现层</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">extends</span> <span class="title class_">ServiceImpl</span>&lt;UserMapper, UserDO&gt; <span class="keyword">implements</span>  <span class="title class_">UserService</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+
+<h3 id="4-3-6-写出用户响应的DTO"><a href="#4-3-6-写出用户响应的DTO" class="headerlink" title="4.3.6 写出用户响应的DTO"></a>4.3.6 写出用户响应的DTO</h3><ul>
+<li>注意：<strong>这里密码，创建时间等等不需要让用户看到的数据千万不要写</strong><ul>
+<li>一定要加上@Data注解！！！</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户返回参数响应</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserRespDTO</span> &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">  ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 真实姓名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String realName;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 手机号</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String phone;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 邮箱</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String mail;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-3-7-编写Impl实现方法"><a href="#4-3-7-编写Impl实现方法" class="headerlink" title="4.3.7 编写Impl实现方法"></a>4.3.7 编写Impl实现方法</h3><ul>
+<li>这里采用<code>hutool</code>的BeanUtil方法，所以要引入这个依赖</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByName</span><span class="params">(String username)</span> &#123;</span><br><span class="line">    <span class="type">UserDO</span> <span class="variable">userDo</span> <span class="operator">=</span> lambdaQuery()</span><br><span class="line">            .eq(UserDO::getUsername, username)</span><br><span class="line">            .one();</span><br><span class="line">    <span class="comment">// one()方法：查到多条会抛出异常，查不到返回null</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//转换，使用BeanUtil的copyProperties</span></span><br><span class="line">    <span class="keyword">return</span> BeanUtil.copyProperties(userDo,UserRespDTO.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<h3 id="4-3-8-在Controller层编写请求方法"><a href="#4-3-8-在Controller层编写请求方法" class="headerlink" title="4.3.8 在Controller层编写请求方法"></a>4.3.8 在Controller层编写请求方法</h3>
+  <div class="note-large red">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>注入方法的转变</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li><strong>注入一般都用注解注入</strong><ul>
+<li>一般是@<code>Authwired</code>，<strong>但是这个注解会造成风险</strong></li>
+<li>然后用的最多的就是<code>@Resource</code>，但是这个注解在JDK17之后做了改版:<ul>
+<li>导入的jar包变成了<code>import jakarta.annotation.Resource;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>所以这里推荐使用构造器注入</strong><ul>
+<li>在控制器层代码里引入<code>@RequiredArgsConstructor</code>注解</li>
+<li>以后我们想注入方法的时候直接<code>private final 实现类名 方法名</code>就可以了</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="meta">@RequestMapping(&quot;/api/shortlink/v1&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserController</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * 根据用户名查找用户</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/user/&#123;username&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> UserRespDTO <span class="title function_">getUserByUsername</span><span class="params">(<span class="meta">@PathVariable(&quot;username&quot;)</span> String username)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getUserByName(username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
 		</div>
 
 		
@@ -916,7 +1029,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-05 14:11:40
+                    :</strong> 2025-12-05 20:17:14
             </li>
         
         <li>
@@ -1011,7 +1124,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SaaS短链接</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E7%94%A8%E6%88%B7%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2 用户表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E5%8A%9F%E8%83%BD"><span class="nav-text">4.3 查询用户信息功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E5%BC%95%E5%85%A5%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6%E5%92%8C%E6%8C%81%E4%B9%85%E5%B1%82%E9%85%8D%E7%BD%AE"><span class="nav-text">4.3.1 引入持久层框架和持久层配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E7%BC%96%E5%86%99entity%E7%B1%BB"><span class="nav-text">4.3.2 编写entity类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E5%9C%A8%E5%90%AF%E5%8A%A8%E7%B1%BB%E4%B8%8A%E5%8A%A0%E4%B8%8A%E6%8C%81%E4%B9%85%E5%B1%82%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">4.3.3 在启动类上加上持久层接口扫描器注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E5%86%99%E5%87%BA%E6%98%A0%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3.4 写出映射接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E5%AE%9E%E7%8E%B0Service%E5%B1%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">4.3.5 实现Service层的接口和实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-%E5%86%99%E5%87%BA%E7%94%A8%E6%88%B7%E5%93%8D%E5%BA%94%E7%9A%84DTO"><span class="nav-text">4.3.6 写出用户响应的DTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-7-%E7%BC%96%E5%86%99Impl%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.7 编写Impl实现方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-8-%E5%9C%A8Controller%E5%B1%82%E7%BC%96%E5%86%99%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.8 在Controller层编写请求方法</span></a></li></ol></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1044,7 +1157,7 @@
                     </span>
                     
                         <span>
-                            共 87.6k 字
+                            共 88.8k 字
                         </span>
                     
                 </p>
