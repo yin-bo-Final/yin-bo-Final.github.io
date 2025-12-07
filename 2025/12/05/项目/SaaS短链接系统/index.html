@@ -152,7 +152,7 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E5%BC%82%E5%B8%B8%E4%BD%93%E7%B3%BB.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E6%89%8B%E6%9C%BA%E5%8F%B7%E8%84%B1%E6%95%8F%E8%BF%87%E7%A8%8B.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2025-12-07T07:19:09.924Z">
+<meta property="article:modified_time" content="2025-12-07T09:18:28.416Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -689,8 +689,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-07 15:19:09</span>
-            <span class="mobile">2025-12-07 15:19:09</span>
+            <span class="desktop">2025-12-07 17:18:28</span>
+            <span class="mobile">2025-12-07 17:18:28</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -744,12 +744,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>7.1k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>7.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>31 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>33 分钟</span>
         </span>
     
     
@@ -1442,6 +1442,60 @@
 </ul>
 </li>
 </ul>
+<h2 id="4-9-布隆过滤器实战"><a href="#4-9-布隆过滤器实战" class="headerlink" title="4.9 布隆过滤器实战"></a>4.9 布隆过滤器实战</h2><ol>
+<li><strong>引入redis和redisson依赖</strong><ul>
+<li>这里我们就不造轮子自己写布隆过滤器了，直接用redisson提供的接口</li>
+</ul>
+</li>
+</ol>
+<div class="code-container" data-rel="Xml"><figure class="iseeu highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.redisson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>redisson-spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></div>
+
+<ol start="2">
+<li><strong>配置Redis参数</strong></li>
+</ol>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">data:</span></span><br><span class="line">  <span class="attr">redis:</span></span><br><span class="line">        <span class="attr">host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">6379</span></span><br><span class="line">        <span class="attr">password:</span> <span class="number">123456</span></span><br></pre></td></tr></table></figure></div>
+
+
+<ol start="3">
+<li><strong>创建布隆过滤器配置</strong><ul>
+<li>新建一个config包，下面新建一个<code>RBloomFilterConfiguration</code>类</li>
+<li><strong>我们来尝试解读这段代码</strong>：</li>
+<li>首先先用<code>redissonclient</code>创建一个布隆过滤器，过滤器的名字是<code>cachePenetrationBloomFilter</code>。</li>
+<li><strong>过滤器的tryInit有两个参数</strong>:<ul>
+<li>第一个参数是<code>expectedInsertions</code>，预估布隆过滤器存储的元素长度。</li>
+<li>第二个参数是<code>falseProbability</code>，运行的误判率</li>
+<li>错误率越低，位数组越长，布隆过滤器的内存占用越大。</li>
+<li>错误率越低，散列 Hash 函数越多，计算耗时较长。</li>
+<li><strong>这里推荐一个布隆过滤器计算网站</strong>： <a class="link"   target="_blank" rel="noopener" href="https://krisives.github.io/bloom-calculator" >https://krisives.github.io/bloom-calculator<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></li>
+<li>这里我们尝试一亿个用户名，0.1%的错误率，发现才只有100多M的占用</li>
+<li>这是个非常优秀的性能。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 布隆过滤器配置</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RBloomFilterConfiguration</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 防止用户注册查询数据库的布隆过滤器</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> RBloomFilter&lt;String&gt; <span class="title function_">userRegisterCachePenetrationBloomFilter</span><span class="params">(RedissonClient redissonClient)</span> &#123;</span><br><span class="line">        RBloomFilter&lt;String&gt; cachePenetrationBloomFilter = redissonClient.getBloomFilter(<span class="string">&quot;cachePenetrationBloomFilter&quot;</span>);</span><br><span class="line">        cachePenetrationBloomFilter.tryInit(<span class="number">100000000</span>, <span class="number">0.001</span>);</span><br><span class="line">        <span class="keyword">return</span> cachePenetrationBloomFilter;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<ol start="4">
+<li><strong>使用布隆过滤器</strong><ul>
+<li>通过<strong>构造器注入</strong>我们的用户注册布隆过滤器</li>
+<li>然后在查询占用功能中直接返回布隆过滤器是否包含username</li>
+</ul>
+</li>
+</ol>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line">.</span><br><span class="line">..</span><br><span class="line">...</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> RBloomFilter&lt;String&gt; userRegisterCachePenetrationBloomFilter;</span><br><span class="line">.</span><br><span class="line">..</span><br><span class="line">...</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Boolean <span class="title function_">isUsernameOccupied</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> userRegisterCachePenetrationBloomFilter.contains(username);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li><strong>这里使用布隆过滤器有两种场景</strong>：<ol>
+<li><strong>初始使用</strong>：注册用户时就向容器中新增数据，以后就不需要调用数据库了。</li>
+<li><strong>中途引用布隆过滤器</strong>：读取数据源的时候要将数据库中数据刷到布隆过滤器中。</li>
+</ol>
+<ul>
+<li>这里我们刚开始就用来布隆过滤器，所以以后查询用户名不需要调用数据库。</li>
+</ul>
+</li>
+</ul>
 
 		</div>
 
@@ -1456,7 +1510,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-07 15:19:09
+                    :</strong> 2025-12-07 17:18:28
             </li>
         
         <li>
@@ -1551,7 +1605,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">SaaS短链接</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E7%94%A8%E6%88%B7%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2 用户表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E5%8A%9F%E8%83%BD"><span class="nav-text">4.3 查询用户信息功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E5%BC%95%E5%85%A5%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6%E5%92%8C%E6%8C%81%E4%B9%85%E5%B1%82%E9%85%8D%E7%BD%AE"><span class="nav-text">4.3.1 引入持久层框架和持久层配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E7%BC%96%E5%86%99entity%E7%B1%BB"><span class="nav-text">4.3.2 编写entity类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E5%9C%A8%E5%90%AF%E5%8A%A8%E7%B1%BB%E4%B8%8A%E5%8A%A0%E4%B8%8A%E6%8C%81%E4%B9%85%E5%B1%82%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">4.3.3 在启动类上加上持久层接口扫描器注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E5%86%99%E5%87%BA%E6%98%A0%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3.4 写出映射接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E5%AE%9E%E7%8E%B0Service%E5%B1%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">4.3.5 实现Service层的接口和实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-%E5%86%99%E5%87%BA%E7%94%A8%E6%88%B7%E5%93%8D%E5%BA%94%E7%9A%84DTO"><span class="nav-text">4.3.6 写出用户响应的DTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-7-%E7%BC%96%E5%86%99Impl%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.7 编写Impl实现方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-8-%E5%9C%A8Controller%E5%B1%82%E7%BC%96%E5%86%99%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.8 在Controller层编写请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-9-%E5%8A%9F%E8%83%BD%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">4.3.9 功能相关的代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E7%BB%9F%E4%B8%80%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="nav-text">4.4 统一响应对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E7%A0%81%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.5 全局异常码设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-text">4.6 全局异常拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%84%B1%E6%95%8F"><span class="nav-text">4.7 用户敏感信息脱敏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%8A%9F%E8%83%BD"><span class="nav-text">4.8 查询用户名是否存在功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.8 缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-1-%E5%8A%A0%E8%BD%BD%E7%BC%93%E5%AD%98"><span class="nav-text">4.8.1 加载缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-2-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-text">4.8.2 布隆过滤器</span></a></li></ol></li></ol></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AFSaaS%E7%9F%AD%E9%93%BE%E6%8E%A5"><span class="nav-text">1. 什么是SaaS短链接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="nav-text">2. 技术架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3"><span class="nav-text">3. 接口文档</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="nav-text">4. 用户模块</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%8A%9F%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">4.1 功能分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E7%94%A8%E6%88%B7%E8%A1%A8%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.2 用户表设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF%E5%8A%9F%E8%83%BD"><span class="nav-text">4.3 查询用户信息功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-1-%E5%BC%95%E5%85%A5%E6%8C%81%E4%B9%85%E5%B1%82%E6%A1%86%E6%9E%B6%E5%92%8C%E6%8C%81%E4%B9%85%E5%B1%82%E9%85%8D%E7%BD%AE"><span class="nav-text">4.3.1 引入持久层框架和持久层配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-2-%E7%BC%96%E5%86%99entity%E7%B1%BB"><span class="nav-text">4.3.2 编写entity类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-3-%E5%9C%A8%E5%90%AF%E5%8A%A8%E7%B1%BB%E4%B8%8A%E5%8A%A0%E4%B8%8A%E6%8C%81%E4%B9%85%E5%B1%82%E6%8E%A5%E5%8F%A3%E6%89%AB%E6%8F%8F%E5%99%A8%E6%B3%A8%E8%A7%A3"><span class="nav-text">4.3.3 在启动类上加上持久层接口扫描器注解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-4-%E5%86%99%E5%87%BA%E6%98%A0%E5%B0%84%E6%8E%A5%E5%8F%A3"><span class="nav-text">4.3.4 写出映射接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-5-%E5%AE%9E%E7%8E%B0Service%E5%B1%82%E7%9A%84%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%AE%9E%E7%8E%B0%E7%B1%BB"><span class="nav-text">4.3.5 实现Service层的接口和实现类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-6-%E5%86%99%E5%87%BA%E7%94%A8%E6%88%B7%E5%93%8D%E5%BA%94%E7%9A%84DTO"><span class="nav-text">4.3.6 写出用户响应的DTO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-7-%E7%BC%96%E5%86%99Impl%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.7 编写Impl实现方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-8-%E5%9C%A8Controller%E5%B1%82%E7%BC%96%E5%86%99%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-text">4.3.8 在Controller层编写请求方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-9-%E5%8A%9F%E8%83%BD%E7%9B%B8%E5%85%B3%E7%9A%84%E4%BB%A3%E7%A0%81"><span class="nav-text">4.3.9 功能相关的代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E7%BB%9F%E4%B8%80%E5%93%8D%E5%BA%94%E5%AF%B9%E8%B1%A1"><span class="nav-text">4.4 统一响应对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E7%A0%81%E8%AE%BE%E8%AE%A1"><span class="nav-text">4.5 全局异常码设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-%E5%85%A8%E5%B1%80%E5%BC%82%E5%B8%B8%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-text">4.6 全局异常拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-%E7%94%A8%E6%88%B7%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E8%84%B1%E6%95%8F"><span class="nav-text">4.7 用户敏感信息脱敏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E6%9F%A5%E8%AF%A2%E7%94%A8%E6%88%B7%E5%90%8D%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E5%8A%9F%E8%83%BD"><span class="nav-text">4.8 查询用户名是否存在功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-8-%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5"><span class="nav-text">4.8 缓存策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-1-%E5%8A%A0%E8%BD%BD%E7%BC%93%E5%AD%98"><span class="nav-text">4.8.1 加载缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-2-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-text">4.8.2 布隆过滤器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-9-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E5%AE%9E%E6%88%98"><span class="nav-text">4.9 布隆过滤器实战</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1584,7 +1638,7 @@
                     </span>
                     
                         <span>
-                            共 92.7k 字
+                            共 93.3k 字
                         </span>
                     
                 </p>
