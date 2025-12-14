@@ -157,7 +157,7 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E5%9E%82%E7%9B%B4%E5%88%86%E8%A1%A8.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E6%B0%B4%E5%B9%B3%E5%88%86%E8%A1%A8.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2025-12-14T07:20:12.404Z">
+<meta property="article:modified_time" content="2025-12-14T08:59:59.055Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -694,8 +694,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-14 15:20:12</span>
-            <span class="mobile">2025-12-14 15:20:12</span>
+            <span class="desktop">2025-12-14 16:59:59</span>
+            <span class="mobile">2025-12-14 16:59:59</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -749,12 +749,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>12.9k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>13.2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>55 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>56 分钟</span>
         </span>
     
     
@@ -1867,7 +1867,18 @@
 
 
 
-<h2 id="5-4-查询分组功能"><a href="#5-4-查询分组功能" class="headerlink" title="5.4 查询分组功能"></a>5.4 查询分组功能</h2>
+<h2 id="5-4-查询分组功能"><a href="#5-4-查询分组功能" class="headerlink" title="5.4 查询分组功能"></a>5.4 查询分组功能</h2><ul>
+<li>这里是查找用户的所有短链接分组功能<ul>
+<li>但是如果用户有几千个分组，那查起来是不是太多了</li>
+<li>这里我们使用MybatisPlus的page功能来对数据进行简单分页<ul>
+<li>建个分页拦截器，然后在page里传两个参数，一个是查询的页数，另外一个是一页的最大数量</li>
+</ul>
+</li>
+<li>这里我们还没写用户上下文，对于用户面先用isNull判断</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="tab-页面内不重复的id"><ul class="nav-tabs"><li class="tab active"><a class="#页面内不重复的id-1">GroupService</a></li><li class="tab"><a class="#页面内不重复的id-2">GroupServiceImpl</a></li><li class="tab"><a class="#页面内不重复的id-3">GroupController</a></li><li class="tab"><a class="#页面内不重复的id-4">GroupRespDTO</a></li><li class="tab"><a class="#页面内不重复的id-5">MybatisPlusConfig</a></li></ul><div class="tab-content"><div class="tab-pane active" id="页面内不重复的id-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 查询用户短链接分组集合</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 短链接分组集合</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">List&lt;GroupRespDTO&gt; <span class="title function_">listGroup</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">public</span> List&lt;GroupRespDTO&gt; <span class="title function_">listGroup</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">// todo 获取用户名</span></span><br><span class="line">    <span class="comment">//这里我们没做上下文 先获取所有 也就是isnull(username)就可以</span></span><br><span class="line">    Page&lt;GroupDO&gt; page = query()</span><br><span class="line">            .isNull(<span class="string">&quot;username&quot;</span>)</span><br><span class="line">            .eq(<span class="string">&quot;del_flag&quot;</span>, <span class="number">0</span>)</span><br><span class="line">            .orderByAsc(<span class="string">&quot;sort_order&quot;</span>)</span><br><span class="line">            .page(<span class="keyword">new</span> <span class="title class_">Page</span>&lt;&gt;(<span class="number">1</span>, <span class="number">10</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> BeanUtil.copyToList(page.getRecords(), GroupRespDTO.class);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/group&quot;)</span></span><br><span class="line"><span class="keyword">public</span> Result&lt;List&lt;GroupRespDTO&gt;&gt; <span class="title function_">listGroup</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Results.success(groupService.listGroup());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-4"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GroupRespDTO</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分组标识</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String gid;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分组名称</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建分组用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分组排序</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Integer sortOrder;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-5"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MybatisPlusConfig</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MybatisPlusInterceptor <span class="title function_">mybatisPlusInterceptor</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">MybatisPlusInterceptor</span> <span class="variable">interceptor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MybatisPlusInterceptor</span>();</span><br><span class="line">        interceptor.addInnerInterceptor(<span class="keyword">new</span> <span class="title class_">PaginationInnerInterceptor</span>(DbType.MYSQL));</span><br><span class="line">        <span class="keyword">return</span> interceptor;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
 		</div>
 
 		
@@ -1881,7 +1892,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-14 15:20:12
+                    :</strong> 2025-12-14 16:59:59
             </li>
         
         <li>
@@ -2009,7 +2020,7 @@
                     </span>
                     
                         <span>
-                            共 98.7k 字
+                            共 99k 字
                         </span>
                     
                 </p>
