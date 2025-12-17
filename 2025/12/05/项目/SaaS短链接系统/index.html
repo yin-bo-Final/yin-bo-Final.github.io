@@ -157,8 +157,9 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E5%9E%82%E7%9B%B4%E5%88%86%E8%A1%A8.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E6%B0%B4%E5%B9%B3%E5%88%86%E8%A1%A8.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E8%B7%B3%E8%BD%AC%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%BB%93%E6%9E%84.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2025-12-16T13:04:08.624Z">
+<meta property="article:modified_time" content="2025-12-17T06:30:50.501Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -695,8 +696,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2025-12-16 21:04:08</span>
-            <span class="mobile">2025-12-16 21:04:08</span>
+            <span class="desktop">2025-12-17 14:30:50</span>
+            <span class="mobile">2025-12-17 14:30:50</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -750,12 +751,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>15.2k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>15.5k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>66 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>67 分钟</span>
         </span>
     
     
@@ -1975,10 +1976,44 @@
 </ul>
 </li>
 </ul>
-<h2 id="6-3-短链接表DB"><a href="#6-3-短链接表DB" class="headerlink" title="6.3 短链接表DB"></a>6.3 短链接表DB</h2><p>uri表示只有连接，而url表示带有域名的连接</p>
+<h2 id="6-3-短链接表DB"><a href="#6-3-短链接表DB" class="headerlink" title="6.3 短链接表DB"></a>6.3 短链接表DB</h2><ul>
+<li><p><strong>URI (统一资源标识符)</strong>：最宽泛的概念，用来唯一标识一个资源。URL 和 URN 都是 URI 的子集。</p>
+</li>
+<li><p><strong>URL (统一资源定位符)</strong>：它不仅标识资源，还指明了如何定位（找到）这个资源，即提供了访问机制（协议+位置）。</p>
+</li>
+</ul>
 <div class="code-container" data-rel="Sql"><figure class="iseeu highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> `t_link` (</span><br><span class="line">  `id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;ID&#x27;</span>,</span><br><span class="line">  `domain` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;域名&#x27;</span>,</span><br><span class="line">  `short_uri` <span class="type">varchar</span>(<span class="number">8</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;短链接&#x27;</span>,</span><br><span class="line">  `full_short_url` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;完整短链接&#x27;</span>,</span><br><span class="line">  `origin_url` <span class="type">varchar</span>(<span class="number">1024</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;原始链接&#x27;</span>,</span><br><span class="line">  `click_num` <span class="type">int</span>(<span class="number">11</span>) <span class="keyword">DEFAULT</span> <span class="number">0</span> COMMENT <span class="string">&#x27;点击量&#x27;</span>,</span><br><span class="line">  `gid` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;分组标识&#x27;</span>,</span><br><span class="line">  `enable_status` tinyint(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;启用标识 0：已启用 1：未启用&#x27;</span>,</span><br><span class="line">  `created_type` tinyint(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建类型 0：接口 1：控制台&#x27;</span>,</span><br><span class="line">  `valid_date_type` tinyint(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;有效期类型 0：永久有效 1：用户自定义&#x27;</span>,</span><br><span class="line">  `valid_date` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;有效期&#x27;</span>,</span><br><span class="line">  `<span class="keyword">describe</span>` <span class="type">varchar</span>(<span class="number">1024</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;描述&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;修改时间&#x27;</span>,</span><br><span class="line">  `del_flag` tinyint(<span class="number">1</span>) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;删除标识 0：未删除 1：已删除&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY KEY</span> (`id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `idx_unique_full_short_url` (`full_short_url`) <span class="keyword">USING</span> BTREE</span><br><span class="line">) ENGINE</span><br></pre></td></tr></table></figure></div>
 
-<h2 id="6-4-新增短链接"><a href="#6-4-新增短链接" class="headerlink" title="6.4 新增短链接"></a>6.4 新增短链接</h2>
+<h2 id="6-4-新增短链接"><a href="#6-4-新增短链接" class="headerlink" title="6.4 新增短链接"></a>6.4 新增短链接</h2><ul>
+<li><p><strong>短链接的结构</strong>:<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%BB%93%E6%9E%84.jpg"
+                      alt="alt 短链接结构"
+                ><figcaption>alt 短链接结构</figcaption></figure><br>由<strong>协议</strong>+<strong>短链接域名</strong>+<strong>短链接</strong>组成</p>
+</li>
+<li><p>这里生成最后的短链接数字实现最为重要</p>
+<ul>
+<li>这里我们使用<strong>Base62编码短ID生成算法</strong>来生成短链接</li>
+</ul>
+</li>
+<li><p><strong>Base62编码短ID生成算法</strong>是什么</p>
+<ul>
+<li>假如给一个短链接使用<strong>10进制</strong>数来编号<ul>
+<li>然后将这个<strong>10进制数</strong>通过<strong>Base62编码</strong>来转换成<strong>62进制数字</strong>(62代表大小写英文字母+数字的数量)</li>
+<li>这样就可以对短链接进行<strong>数据压缩</strong>,假如我这个10进制数为100亿，如果直接使用他会让连接变得很长，我们将其转化为62进制数字就可以很短</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>这里我们如果设置短链接<strong>最多只有六位</strong>，那么对于短链接可以表示的最大组合数量为：</p>
+<ul>
+<li>N &#x3D; 6，组合数为 <code>62 ^ 6 = 56_800_235_584</code>，<strong>568 亿左右</strong></li>
+</ul>
+</li>
+<li></li>
+</ul>
+
 		</div>
 
 		
@@ -1992,7 +2027,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2025-12-16 21:04:08
+                    :</strong> 2025-12-17 14:30:50
             </li>
         
         <li>
@@ -2120,7 +2155,7 @@
                     </span>
                     
                         <span>
-                            共 100.9k 字
+                            共 101.2k 字
                         </span>
                     
                 </p>
