@@ -144,12 +144,16 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/Dubbo/DubboDemo.jpg">
+<meta property="og:image" content="http://example.com/%5Cimages%5CDubbo%5CDubbo%E4%B8%8EOpenFeign%E5%B7%AE%E5%BC%82.png">
+<meta property="og:image" content="http://example.com/%5Cimages%5CDubbo%5C%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E6%9C%BA%E5%88%B6%E5%9B%BE.png">
 <meta property="article:published_time" content="2026-01-18T13:31:50.012Z">
-<meta property="article:modified_time" content="2026-01-18T13:53:55.781Z">
+<meta property="article:modified_time" content="2026-02-23T18:53:33.688Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="RPC框架">
 <meta property="article:tag" content="分布式">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/Dubbo/DubboDemo.jpg">
     
     
     <!--- Icon Part-->
@@ -674,8 +678,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-01-18 21:53:55</span>
-            <span class="mobile">2026-01-18 21:53:55</span>
+            <span class="desktop">2026-02-24 02:53:33</span>
+            <span class="mobile">2026-02-24 02:53:33</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -701,12 +705,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>188 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.7k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
         </span>
     
     
@@ -725,9 +729,11 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="1-分布式系统相关概念"><a href="#1-分布式系统相关概念" class="headerlink" title="1. 分布式系统相关概念"></a>1. 分布式系统相关概念</h1><ol>
-<li>项目架构目标<ul>
-<li><strong>衡量网站的性能指标</strong><ul>
+			<h1 id="1-分布式系统相关概念"><a href="#1-分布式系统相关概念" class="headerlink" title="1. 分布式系统相关概念"></a>1. 分布式系统相关概念</h1><ul>
+<li><p>项目架构目标</p>
+</li>
+<li><p><strong>衡量网站的性能指标</strong></p>
+<ul>
 <li><strong>响应时间</strong>：指执行一个请求从开始到最后收到响应数据所花费的总体时间</li>
 <li><strong>并发数</strong>：指系统<strong>同时能处理</strong>的请求数量<ul>
 <li><strong>并发连接数</strong>：指的是客户端向服务器发起请求，并建立了<code>TCP</code>连接，<strong>每秒钟服务器连接的总<code>TCP</code>数量</strong>。</li>
@@ -744,9 +750,205 @@
 </li>
 </ul>
 </li>
+<li><p>分布式架构是指在垂直架构的基础上，将公共业务模块抽取出来，作为独立的服务，供其他调用者消费，以实现服务的共享和重用。</p>
+</li>
+<li><p>RPC(Romote Procedure Call)：既<strong>远程过程调用</strong>，是一种<strong>通信规范思想</strong>。</p>
+<ul>
+<li>核心思想：<strong>像调用本地方法一样，去调用远程服务器上的方法</strong>。</li>
+<li>RPC框架基于通讯协议去实现RPC远程调用，如gRPC是基于HTTP&#x2F;2，而HTTP&#x2F;2基于TCP。</li>
 </ul>
 </li>
+<li><p>通讯协议，通讯规范，编程接口的区别：</p>
+<ol>
+<li>像TCP&#x2F;UDP,HTTP都是通讯协议，是<strong>通话规则</strong></li>
+<li>Socket是编程接口，类比于<strong>电话机</strong>，程序都是通过Socket使用通讯协议来进行通信的</li>
+<li>RPC是一种通讯规范思想，Dubbo，gRPC都是遵循这个规范的框架。</li>
 </ol>
+</li>
+</ul>
+<h2 id="2-Dubbo概述"><a href="#2-Dubbo概述" class="headerlink" title="2. Dubbo概述"></a>2. Dubbo概述</h2><ul>
+<li><p>Dubbo是开源的一个<strong>高性能，轻量级</strong><code>Java RPC</code>框架，除此之外他的定位也是一个<strong>微服务开发框架</strong>，类似于<code>SpringCloud</code>，也有服务发现，负载均衡，动态配置等功能。</p>
+<ul>
+<li>相对的<code>gRPC</code>是一个<strong>跨语言RPC框架</strong>，核心目标是定义RPC<strong>通讯规范和标准实现</strong>。</li>
+</ul>
+</li>
+<li><p><code>SpringCloud</code>与<code>Dubbo</code>的区别</p>
+<ul>
+<li>他们都有微服务的功能，而<code>Dubbo</code>则更侧重于RPC通信</li>
+<li><code>SpringCloud</code>通常的远程调用组件使用<code>OpenFeign</code>等，都是基于<code>HTTP</code>通讯协议，使用的一般是JSON序列化。</li>
+<li>而Dubbo默认基于TCP，使用二进制序列化，支持<strong>长连接</strong>，<strong>连接复用</strong>等，性能通常比SpringCloud更高。</li>
+</ul>
+</li>
+<li><p>在RPC方面，不同于gRPC只能基于HTTP&#x2F;2协议，Dubbo服务间可通过多种RPC通讯协议并支持灵活切换。</p>
+<ul>
+<li>因此，Dubbo开发中也支持gRPC通信，在Dubbo3中完全兼容gRPC。</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-简述Zookeeper"><a href="#3-简述Zookeeper" class="headerlink" title="3. 简述Zookeeper"></a>3. 简述Zookeeper</h1><ul>
+<li><p>之后会系统性的学习Zookeeper，这里只是用于辅助学习Dubbo</p>
+</li>
+<li><p>Zookeeper可以用来注册&#x2F;配置中心以及服务发现，就像SpringCloud中的Nacos组件，还可以像Redisson一样有分布式锁的功能。</p>
+</li>
+<li><p>这里引用Zookeeper主要是用来当作注册&#x2F;配置中心。</p>
+</li>
+<li><p>这里我使用docker来安装zookeeper</p>
+</li>
+</ul>
+<div class="code-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name zk -p 2181:2181 zookeeper:3.8</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>另外可以安装一下Zookeeper的可视化界面<code>ZooNavigator</code><ul>
+<li>这里直接用docker-compose来部署</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">zookeeper:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">bitnami/zookeeper:3.9</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ALLOW_ANONYMOUS_LOGIN=yes</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;2181:2181&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">dubbo-admin:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">apache/dubbo-admin</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">zookeeper</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">ADMIN_REGISTRY_ADDRESS=zookeeper://zookeeper:2181</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;38080:38080&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">provider:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">apache/dubbo-demo-provider</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">zookeeper</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DUBBO_REGISTRY_ADDRESS=zookeeper://zookeeper:2181</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">consumer:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">apache/dubbo-demo-consumer</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">unless-stopped</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">zookeeper</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">provider</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DUBBO_REGISTRY_ADDRESS=zookeeper://zookeeper:2181</span></span><br></pre></td></tr></table></figure></div>
+
+
+
+<h1 id="4-Dubbo入门"><a href="#4-Dubbo入门" class="headerlink" title="4. Dubbo入门"></a>4. Dubbo入门</h1><ul>
+<li><p>先使用一个demo来快速了解Dubbo<br>快速创建Dubbo demo网站：<a class="link"   target="_blank" rel="noopener" href="https://start.dubbo.apache.org/bootstrap.html" >https://start.dubbo.apache.org/bootstrap.html<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a></p>
+</li>
+<li><p><strong>这里我们选择需要的组件</strong>：</p>
+<ul>
+<li>Dubbo组件：<ol>
+<li>Java Interface</li>
+<li>注册中心：Zookeeper</li>
+<li>网络协议: TCP</li>
+</ol>
+</li>
+<li>常用微服务组件：<ol>
+<li>SpringWeb</li>
+<li>Mybatis</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/images/Dubbo/DubboDemo.jpg"
+                      alt="alt DubboDemo"
+                ><figcaption>alt DubboDemo</figcaption></figure></p>
+<ul>
+<li>基于以上选项，生成的项目将以<code>Zookeeper</code>为注册中心，以高性能Dubbo2 <code>TCP协议</code>为RPC通讯协议，并增加了<code>Web</code>，<code>Mybatis</code>等组件依赖和示例。</li>
+</ul>
+<h1 id="5-Dubbo功能"><a href="#5-Dubbo功能" class="headerlink" title="5. Dubbo功能"></a>5. Dubbo功能</h1><ul>
+<li>Dubbo有以下的功能<ul>
+<li>远程调用</li>
+<li>服务发现</li>
+<li><strong>负载均衡</strong></li>
+<li>流量管控等功能。</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-1-远程调用"><a href="#5-1-远程调用" class="headerlink" title="5.1 远程调用"></a>5.1 远程调用</h2><ul>
+<li><p>这里我们Dubbo远程调用使用的是<strong>TCP协议</strong>，走RPC，<strong>配置的注册中心是Zookeeper</strong>。</p>
+<ul>
+<li>下面是<code>Dubbo远程调用</code>与<code>OpenFeign</code>的差别<br><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/%5Cimages%5CDubbo%5CDubbo%E4%B8%8EOpenFeign%E5%B7%AE%E5%BC%82.png"
+                      alt="alt DubboDemo"
+                ><figcaption>alt DubboDemo</figcaption></figure></li>
+</ul>
+</li>
+<li><p>微服务架构中，采用结构与实现分离模式。</p>
+</li>
+</ul>
+<div class="code-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">project</span><br><span class="line"> ├── demo-api       （只存接口）</span><br><span class="line"> ├── demo-provider  （实现层）</span><br><span class="line"> └── demo-consumer  （调用方）</span><br></pre></td></tr></table></figure></div>
+
+
+
+<ul>
+<li>完整调用流程如下<ol>
+<li>Provider 启动</li>
+<li>Provider 注册服务到 ZooKeeper</li>
+<li>Consumer 启动</li>
+<li>Consumer 订阅服务</li>
+<li>Dubbo 创建远程代理对象</li>
+<li>调用方法</li>
+<li>通过 TCP 长连接发送请求</li>
+<li>Provider 执行方法并返回结果</li>
+</ol>
+</li>
+</ul>
+<h3 id="5-1-1-定义服务"><a href="#5-1-1-定义服务" class="headerlink" title="5.1.1 定义服务"></a>5.1.1 定义服务</h3><ul>
+<li><p>Provider定义服务，<strong>并实现业务逻辑</strong></p>
+<ul>
+<li>实现业务逻辑包括<strong>服务层</strong>和<strong>实现层</strong>。</li>
+<li>将服务接口存入api模块，将实现层存入service模块</li>
+</ul>
+</li>
+<li><p><code>@DubboService</code>注解</p>
+<ul>
+<li>注意，如果要将服务暴露为Dubbo服务 需要加<code>@DubboService</code>注解</li>
+<li>启动时将该服务注册到注册中心<code>Zookeeper</code></li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="tab-dubbo微服务开发"><ul class="nav-tabs"><li class="tab active"><a class="#dubbo微服务开发-1">ProviderService接口 定义服务</a></li><li class="tab"><a class="#dubbo微服务开发-2">ProviderServiceImpl 业务逻辑</a></li></ul><div class="tab-content"><div class="tab-pane active" id="dubbo微服务开发-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">DemoService</span> &#123;</span><br><span class="line"></span><br><span class="line">    String <span class="title function_">sayHello</span><span class="params">(String name)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="dubbo微服务开发-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@DubboService</span>  <span class="comment">//这里加入DubboService注解 将服务推入Dubbo</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DemoServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">DemoService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">sayHello</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Hello &quot;</span> + name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+<h3 id="5-1-2-发现服务"><a href="#5-1-2-发现服务" class="headerlink" title="5.1.2 发现服务"></a>5.1.2 发现服务</h3><ul>
+<li><p>为了使<code>Comsumer</code>调用服务，一般我们要将<code>Provider</code>打jar包并引入。</p>
+<ul>
+<li>这里因为我们这里是Demo，所以直接<code>import</code>我们的<strong>服务定义模块</strong>即可</li>
+</ul>
+</li>
+<li><p><code>@DubboReference</code>注解</p>
+<ul>
+<li>Consumer会通过该注解从注册中心查找服务</li>
+<li>通过RPC调用Provider</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Consumer</span> &#123;</span><br><span class="line">    <span class="meta">@DubboReference</span></span><br><span class="line">    <span class="keyword">private</span> DemoService demoService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+
+
+
+
+<h2 id="5-2-服务发现"><a href="#5-2-服务发现" class="headerlink" title="5.2 服务发现"></a>5.2 服务发现</h2><ul>
+<li><p>Dubbo提供的是一种<code>Client-Based</code>的服务发现机制，依赖第三方注册中心组件来<strong>协调服务发现</strong>，比如<code>Zookeeper</code>,<code>Nacos</code>等等。</p>
+</li>
+<li><p><code>Client-Based</code>服务发现机制</p>
+<ul>
+<li>由客户端自己负责从注册中心获取服务地址，并自己做负载均衡。(都是由客户端Client完成的)。</li>
+<li>过程中没有<strong>中间代理服务器</strong>，符合RPC高性能</li>
+</ul>
+</li>
+<li><p>相对的就是<code>Server-Based</code>服务发现机制，比如<code>nginx</code>，<code>k8s</code>，中间由<code>负载均衡服务器</code>进行调用</p>
+</li>
+<li><p>如下图，服务发现包括Provider,Consumer,注册中心三个角色参与。</p>
+<ul>
+<li><p>Provider会<strong>将服务URL地址注册到注册中心</strong>。</p>
+</li>
+<li><p>注册中心将数据进行聚合</p>
+</li>
+<li><p>Consumer会从注册中心<strong>读取地址列表并订阅变更</strong></p>
+<ul>
+<li>每当地址发生改变，注册中心将最新的列表通知到订阅的Consumer。</li>
+</ul>
+</li>
+<li><p>也就是说Dubbo是<strong>半拉半推模型</strong></p>
+<ul>
+<li>Consumer启动时，会从注册中心拉取完整服务列表，并注册监听器监听订阅服务是否变更</li>
+<li>如果服务变更，则注册中心会主动通知Consumer变更地址列表</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><figure class="image-caption"><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/%5Cimages%5CDubbo%5C%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E6%9C%BA%E5%88%B6%E5%9B%BE.png"
+                      alt="alt 服务发现机制图"
+                ><figcaption>alt 服务发现机制图</figcaption></figure></p>
 
 		</div>
 
@@ -761,7 +963,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-01-18 21:53:55
+                    :</strong> 2026-02-24 02:53:33
             </li>
         
         <li>
@@ -828,7 +1030,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Dubbo</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="nav-text">1. 分布式系统相关概念</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="nav-text">1. 分布式系统相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Dubbo%E6%A6%82%E8%BF%B0"><span class="nav-text">2. Dubbo概述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%AE%80%E8%BF%B0Zookeeper"><span class="nav-text">3. 简述Zookeeper</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Dubbo%E5%85%A5%E9%97%A8"><span class="nav-text">4. Dubbo入门</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Dubbo%E5%8A%9F%E8%83%BD"><span class="nav-text">5. Dubbo功能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="nav-text">5.1 远程调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-1-%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.1.1 定义服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-2-%E5%8F%91%E7%8E%B0%E6%9C%8D%E5%8A%A1"><span class="nav-text">5.1.2 发现服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-text">5.2 服务发现</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -861,7 +1063,7 @@
                     </span>
                     
                         <span>
-                            共 105.9k 字
+                            共 107.4k 字
                         </span>
                     
                 </p>
