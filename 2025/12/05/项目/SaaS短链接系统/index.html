@@ -159,7 +159,7 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E8%B7%B3%E8%BD%AC%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%BB%93%E6%9E%84.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2026-03-04T13:28:14.345Z">
+<meta property="article:modified_time" content="2026-03-04T13:48:39.128Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -696,8 +696,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-04 21:28:14</span>
-            <span class="mobile">2026-03-04 21:28:14</span>
+            <span class="desktop">2026-03-04 21:48:39</span>
+            <span class="mobile">2026-03-04 21:48:39</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -751,12 +751,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>22.5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>22.9k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>100 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>102 分钟</span>
         </span>
     
     
@@ -2393,11 +2393,37 @@
 <div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 yinbo.xyz</span><br></pre></td></tr></table></figure></div>
 
 <ul>
-<li>现在我们访问  <a class="link"   target="_blank" rel="noopener" href="http://yinbo.xyz:8001/%E7%9F%AD%E9%93%BE%E6%8E%A5" >http://yinbo.xyz:8001/短链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  就可以跳转到我们想跳转的网页<ul>
+<li><p>现在我们访问  <a class="link"   target="_blank" rel="noopener" href="http://yinbo.xyz:8001/%E7%9F%AD%E9%93%BE%E6%8E%A5" >http://yinbo.xyz:8001/短链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  就可以跳转到我们想跳转的网页</p>
+<ul>
 <li>注意：这里原始连接必须带<code>http://</code> 或 <code>https://</code></li>
 <li>以后我们部署nginx代理就不需要加端口了</li>
 </ul>
 </li>
+<li><p>现在我们使用后管调用中台的短链接跳转服务</p>
+<ul>
+<li>我们需要重新重新写一个http客户端方法，用来远程调用get方法</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">relayRedirect</span><span class="params">(String url, HttpServletRequest incomingRequest, HttpServletResponse outgoingResponse)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">HttpRequest</span> <span class="variable">request</span> <span class="operator">=</span> HttpRequest.get(url)</span><br><span class="line">                .timeout(<span class="number">5000</span>)</span><br><span class="line">                .setFollowRedirects(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (incomingRequest != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">host</span> <span class="operator">=</span> incomingRequest.getHeader(<span class="string">&quot;Host&quot;</span>);</span><br><span class="line">            <span class="keyword">if</span> (host != <span class="literal">null</span>) &#123;</span><br><span class="line">                request.header(<span class="string">&quot;Host&quot;</span>, host);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">HttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> request.execute();</span><br><span class="line">        outgoingResponse.setStatus(response.getStatus());</span><br><span class="line"></span><br><span class="line">        <span class="type">String</span> <span class="variable">location</span> <span class="operator">=</span> response.header(<span class="string">&quot;Location&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (location != <span class="literal">null</span>) &#123;</span><br><span class="line">            outgoingResponse.setHeader(<span class="string">&quot;Location&quot;</span>, location);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RemoteException</span>(<span class="string">&quot;调用中台接口失败: &quot;</span> + url, ex, BaseErrorCode.REMOTE_ERROR);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<ul>
+<li>然后写一下后管的控制器和远程服务</li>
+</ul>
+<div class="tabs" id="tab-页面内不重复的id"><ul class="nav-tabs"><li class="tab active"><a class="#页面内不重复的id-1">RedirectController</a></li><li class="tab"><a class="#页面内不重复的id-2">ShortLinkRemoteService</a></li><li class="tab"><a class="#页面内不重复的id-3">RedirectController</a></li></ul><div class="tab-content"><div class="tab-pane active" id="页面内不重复的id-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedirectController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ShortLinkRemoteService shortLinkRemoteService;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 短链接跳转</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> shortUri 短链接后缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> request  HTTP 请求</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> response HTTP 响应</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;shortUri&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(<span class="meta">@PathVariable</span> String shortUri, HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        shortLinkRemoteService.restoreUrl(shortUri, request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(String shortUri, HttpServletRequest request, HttpServletResponse response)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">redirectBaseUrl</span> <span class="operator">=</span> projectBaseUrl.replace(<span class="string">&quot;/api/shortlink/v1/project&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">    <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> redirectBaseUrl + <span class="string">&quot;/&quot;</span> + shortUri;</span><br><span class="line">    httpClient.relayRedirect(url, request, response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedirectController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ShortLinkRemoteService shortLinkRemoteService;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 短链接跳转</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> shortUri 短链接后缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> request  HTTP 请求</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> response HTTP 响应</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;shortUri&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(<span class="meta">@PathVariable</span> String shortUri, HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        shortLinkRemoteService.restoreUrl(shortUri, request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+<ul>
+<li>我们需要对访问短链接放行，因为所有人都可以通过访问短链接重定向网站<ul>
+<li>在filter中队<code>/短链</code>进行放行</li>
+</ul>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 放行短链接跳转入口（例如 /22zbXb）</span></span><br><span class="line"><span class="keyword">if</span> (requestPath.matches(<span class="string">&quot;^/[^/]+$&quot;</span>)) &#123;</span><br><span class="line">    filterChain.doFilter(request, response);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>现在访问<a class="link"   target="_blank" rel="noopener" href="http://yinbo.xyz:8002/%E7%9F%AD%E9%93%BE" >http://yinbo.xyz:8002/短链<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a> 就可以访问定向网站了</li>
 </ul>
 
 		</div>
@@ -2413,7 +2439,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-04 21:28:14
+                    :</strong> 2026-03-04 21:48:39
             </li>
         
         <li>
@@ -2553,7 +2579,7 @@
                     </span>
                     
                         <span>
-                            共 112.6k 字
+                            共 113k 字
                         </span>
                     
                 </p>
