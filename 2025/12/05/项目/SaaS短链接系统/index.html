@@ -159,7 +159,7 @@
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E8%B7%B3%E8%BD%AC%E5%8E%9F%E7%90%86%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/images/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5/%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%BB%93%E6%9E%84.jpg">
 <meta property="article:published_time" content="2025-12-05T04:07:20.236Z">
-<meta property="article:modified_time" content="2026-03-01T14:48:24.433Z">
+<meta property="article:modified_time" content="2026-03-04T13:28:14.345Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Java">
@@ -696,8 +696,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-01 22:48:24</span>
-            <span class="mobile">2026-03-01 22:48:24</span>
+            <span class="desktop">2026-03-04 21:28:14</span>
+            <span class="mobile">2026-03-04 21:28:14</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -751,12 +751,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>21.8k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>22.5k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>96 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>100 分钟</span>
         </span>
     
     
@@ -2341,9 +2341,9 @@
 <li>那么问题来了，我们短链接的分片键是gid，然后我们查询短链接需要gid和完整url两个参数，我们应该如何获取gid呢？</li>
 </ol>
 </li>
-<li><p>我们就需要创建一个<strong>路由表</strong><code>link_route</code></p>
+<li><p>我们就需要创建一个<strong>路由表</strong><code>link_goto</code></p>
 <ul>
-<li>只存<code>full_short_url</code>   <code>gid</code>   <code>enable_status</code>   <code>del_flag</code></li>
+<li>只存<code>full_short_url</code>   <code>gid</code> </li>
 <li>用<code>full_short_url</code>查路由表拿<code>gid</code></li>
 <li>再用<code>gid</code> + <code>full_short_url</code> 查 <code>t_link</code></li>
 </ul>
@@ -2354,6 +2354,49 @@
 <li>缓存miss -&gt; 查路由表拿gid</li>
 <li>再查t_link拿origin_url</li>
 </ol>
+</li>
+<li><p>下面是创建路由表SQL脚本</p>
+</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LinkTableShardingTest</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span>  <span class="type">String</span> <span class="variable">SQL</span> <span class="operator">=</span> <span class="string">&quot;CREATE TABLE `t_link_goto_%d`(\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;      `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT &#x27;ID&#x27;,\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;      `gid` varchar(32) DEFAULT &#x27;default&#x27; COMMENT  &#x27;分组标识&#x27;,\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;      `full_short_url` varchar(128) DEFAULT NULL COMMENT &#x27;完整短链接&#x27;,\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;      PRIMARY KEY (`id`))\n&quot;</span> +</span><br><span class="line">            <span class="string">&quot;      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">16</span>; i++) &#123;</span><br><span class="line">            System.out.printf((SQL) + <span class="string">&quot;%n&quot;</span>,i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+
+
+<ul>
+<li>创建短链接路由表DAO层</li>
+</ul>
+<div class="tabs" id="tab-页面内不重复的id"><ul class="nav-tabs"><li class="tab active"><a class="#页面内不重复的id-1">ShortLinkGotoDO</a></li><li class="tab"><a class="#页面内不重复的id-2">ShortLinkGotoMapper</a></li></ul><div class="tab-content"><div class="tab-pane active" id="页面内不重复的id-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 短链接跳转实体</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@TableName(&quot;t_link_goto&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShortLinkGotoDO</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * id</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 完整短链接</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String fullShortUrl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 分组标识</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> String gid;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 短链接跳转持久层</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ShortLinkGotoMapper</span> <span class="keyword">extends</span> <span class="title class_">BaseMapper</span>&lt;ShortLinkGotoDO&gt; &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+
+
+<ul>
+<li>创建短链接时存入路由表</li>
+</ul>
+<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将数据存入路由表</span></span><br><span class="line"><span class="type">ShortLinkGotoDO</span> <span class="variable">shortLinkGotoDO</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShortLinkGotoDO</span>();</span><br><span class="line">shortLinkGotoDO.setGid(shortLinkDO.getGid());</span><br><span class="line">shortLinkGotoDO.setFullShortUrl(shortLinkDO.getFullShortUrl());</span><br><span class="line">shortLinkGotoMapper.insert(shortLinkGotoDO);</span><br></pre></td></tr></table></figure></div>
+
+
+<ul>
+<li>设置路由表分片规则</li>
+</ul>
+<div class="code-container" data-rel="Yaml"><figure class="iseeu highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">      <span class="attr">t_link_goto:</span></span><br><span class="line">        <span class="comment"># 真实数据节点，比如数据库源以及数据库在数据库中真实存在的</span></span><br><span class="line">        <span class="attr">actualDataNodes:</span> <span class="string">ds_0.t_link_goto_$&#123;0..15&#125;</span></span><br><span class="line">        <span class="comment"># 分表策略</span></span><br><span class="line">        <span class="attr">tableStrategy:</span></span><br><span class="line">          <span class="comment"># 用于单分片键的标准分片场景</span></span><br><span class="line">          <span class="attr">standard:</span></span><br><span class="line">            <span class="comment"># 分片键</span></span><br><span class="line">            <span class="attr">shardingColumn:</span> <span class="string">full_short_url</span></span><br><span class="line">            <span class="comment"># 分片算法，对应 rules[0].shardingAlgorithms</span></span><br><span class="line">            <span class="attr">shardingAlgorithmName:</span> <span class="string">link_goto_table_hash_mod</span></span><br><span class="line"></span><br><span class="line"><span class="string">...</span></span><br><span class="line">      <span class="attr">link_goto_table_hash_mod:</span></span><br><span class="line">        <span class="comment"># 根据分片键 Hash 分片短链接表</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">HASH_MOD</span></span><br><span class="line">        <span class="comment"># 分片数量</span></span><br><span class="line">        <span class="attr">props:</span></span><br><span class="line">          <span class="attr">sharding-count:</span> <span class="number">16</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>下面是短链接跳转业务代码<ul>
+<li>因为短链接跳转后面直接跟短链接，所以重新创建个控制器RedirectController</li>
+</ul>
+</li>
+</ul>
+<div class="tabs" id="tab-页面内不重复的id"><ul class="nav-tabs"><li class="tab active"><a class="#页面内不重复的id-1">RedirectController</a></li><li class="tab"><a class="#页面内不重复的id-2">ShortLinkService</a></li><li class="tab"><a class="#页面内不重复的id-3">ShortLinkServiceImpl</a></li></ul><div class="tab-content"><div class="tab-pane active" id="页面内不重复的id-1"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequiredArgsConstructor</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedirectController</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> ShortLinkService shortLinkService;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 短链接跳转</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> shortUri 短链接后缀</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> request  HTTP 请求</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> response HTTP 响应</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@GetMapping(&quot;/&#123;shortUri&#125;&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(<span class="meta">@PathVariable</span> String shortUri, ServletRequest request, ServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        shortLinkService.restoreUrl(shortUri, request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-2"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 短链接跳转</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> shortUri 短链接后缀</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> request  HTTP 请求</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> response HTTP 响应</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(String shortUri, ServletRequest request, ServletResponse response)</span> <span class="keyword">throws</span> IOException;</span><br></pre></td></tr></table></figure></div></div><div class="tab-pane" id="页面内不重复的id-3"><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreUrl</span><span class="params">(String shortUri, ServletRequest request, ServletResponse response)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">serverName</span> <span class="operator">=</span> request.getServerName();</span><br><span class="line">    String fullShortUrl= serverName + <span class="string">&quot;/&quot;</span> + shortUri;</span><br><span class="line">    LambdaQueryWrapper&lt;ShortLinkGotoDO&gt; gotoWrapper = Wrappers</span><br><span class="line">            .lambdaQuery(ShortLinkGotoDO.class)</span><br><span class="line">            .eq(ShortLinkGotoDO::getFullShortUrl, fullShortUrl);</span><br><span class="line">    <span class="type">ShortLinkGotoDO</span> <span class="variable">shortLinkGotoDO</span> <span class="operator">=</span> shortLinkGotoMapper.selectOne(gotoWrapper);</span><br><span class="line">    <span class="keyword">if</span> (shortLinkGotoDO == <span class="literal">null</span>)&#123;</span><br><span class="line">        <span class="comment">//严谨来说此处需要封控</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    LambdaQueryWrapper&lt;ShortLinkDO&gt; queryWrapper = Wrappers.lambdaQuery(ShortLinkDO.class)</span><br><span class="line">            .eq(ShortLinkDO::getFullShortUrl, fullShortUrl)</span><br><span class="line">            .eq(ShortLinkDO::getGid, shortLinkGotoDO.getGid())</span><br><span class="line">            .eq(ShortLinkDO::getDelFlag, <span class="number">0</span>)</span><br><span class="line">            .eq(ShortLinkDO::getEnableStatus, <span class="number">0</span>);</span><br><span class="line">    <span class="type">ShortLinkDO</span> <span class="variable">shortLinkDO</span> <span class="operator">=</span> baseMapper.selectOne(queryWrapper);</span><br><span class="line"></span><br><span class="line">    <span class="type">HttpServletResponse</span> <span class="variable">httpResponse</span> <span class="operator">=</span> (HttpServletResponse) response;</span><br><span class="line">    <span class="keyword">if</span> (shortLinkDO != <span class="literal">null</span>)&#123;</span><br><span class="line">        httpResponse.sendRedirect(shortLinkDO.getOriginUrl());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></div></div></div></div>
+
+<ul>
+<li>因为我们的短链接的路径是<code>yinbo.xyz</code>，现在没有部署到服务器上，所以我们修改hosts</li>
+</ul>
+<div class="code-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 yinbo.xyz</span><br></pre></td></tr></table></figure></div>
+
+<ul>
+<li>现在我们访问  <a class="link"   target="_blank" rel="noopener" href="http://yinbo.xyz:8001/%E7%9F%AD%E9%93%BE%E6%8E%A5" >http://yinbo.xyz:8001/短链接<i class="fa-solid fa-arrow-up-right ml-[0.2em] font-light align-text-top text-[0.7em] link-icon"></i></a>  就可以跳转到我们想跳转的网页<ul>
+<li>注意：这里原始连接必须带<code>http://</code> 或 <code>https://</code></li>
+<li>以后我们部署nginx代理就不需要加端口了</li>
+</ul>
 </li>
 </ul>
 
@@ -2370,7 +2413,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-01 22:48:24
+                    :</strong> 2026-03-04 21:28:14
             </li>
         
         <li>
@@ -2510,7 +2553,7 @@
                     </span>
                     
                         <span>
-                            共 112k 字
+                            共 112.6k 字
                         </span>
                     
                 </p>
