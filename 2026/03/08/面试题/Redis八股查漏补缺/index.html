@@ -145,7 +145,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-08T06:14:16.916Z">
-<meta property="article:modified_time" content="2026-03-08T07:35:42.395Z">
+<meta property="article:modified_time" content="2026-03-10T14:26:27.786Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="八股">
 <meta name="twitter:card" content="summary">
@@ -673,8 +673,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-08 15:35:42</span>
-            <span class="mobile">2026-03-08 15:35:42</span>
+            <span class="desktop">2026-03-10 22:26:27</span>
+            <span class="mobile">2026-03-10 22:26:27</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -696,12 +696,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.2k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
         </span>
     
     
@@ -819,6 +819,96 @@
     </div>
   </div>
 
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>Redis持久化：RDB</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p><strong>RDB快照 : 通过创建一个</strong>二进制的快照<strong>RDB对数据进行持久化。</strong></p>
+<blockquote>
+<p>Redis是单线程的，RDB创建快照时会阻塞吗</p>
+</blockquote>
+<ul>
+<li>答案是不会的，因为Redis只是单线程的执行命令，而它可以创建出子进程。<ul>
+<li><code>save</code> 在主线程创建快照。 会造成主线程阻塞</li>
+<li><code>bgsave</code> fork出一个子进程，子进程创建快照。 不会阻塞</li>
+</ul>
+</li>
+<li>即使是子进程去创建RDB快照，也是非常耗时的 所以可以延长备份时间</li>
+</ul>
+<blockquote>
+<p>COW(Copy on Write)写入式复制思想是什么：</p>
+</blockquote>
+<ul>
+<li><p>子进程要读数据保存到RDB文件时，主线程要修改这块数据</p>
+</li>
+<li><p>那么就会把这个数据复制一份，主线程修改备份，子线程去保存快照</p>
+</li>
+<li><p>RDB优点 ： 使用的二进制，恢复速度快</p>
+</li>
+<li><p>RDB缺点 ： Redis宕机或重启后会丢失创建最近RDB之后的数据，</p>
+</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>Redis持久化：AOF</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p><strong>AOF ： 每执行一条命令，redis将其写入AOF缓存区，再写入AOF文件中，最后根据持久化方式的配置决定<code>何时</code>刷入磁盘。</strong></p>
+<blockquote>
+<p>AOF 工作流程是怎么样的</p>
+</blockquote>
+<ul>
+<li>首先是命令追加(append)，所有的写命令都会追加到AOF缓存区中</li>
+<li>然后文件写入(write)，将缓存区的数据写入AOF文件，这一步需要调用<code>write</code>函数，此时还没刷入磁盘</li>
+<li>文件同步(fsync)，也就是持久化的核心，根据conf文件中的配置策略，Redis会在不同时机调用<code>fsync</code>函数，使数据刷入磁盘，<code>fsync</code>会<strong>阻塞</strong>直到写入磁盘后返回</li>
+<li>文件重写(rewrite)，如果AOF文件过大，但是存入了一大堆无效命令(比如创建又删除)，Redis会单独开一个子线程对其AOF文件进行重写压缩。</li>
+<li>重启加载(load)，Redis重启后，可加载AOF文件进行数据恢复。</li>
+</ul>
+<blockquote>
+<p>AOF  持久化方式有哪些</p>
+</blockquote>
+<ul>
+<li>Redis的conf文件中存在三种不同的AOF持久化方式(fsync策略)</li>
+</ul>
+<ol>
+<li><p><code>appendfsync always</code> : 数据写入AOF文件之后，会立刻执行<code>fsync</code>函数将AOF文件里的数据刷入磁盘，<strong>主线程会阻塞</strong>，直到完全刷入磁盘才会返回。</p>
+<ul>
+<li>理论上最安全的持久化方式，不会存在任何数据丢失，但是每个写操作都会阻塞主线程，性能极差。</li>
+</ul>
+</li>
+<li><p><code>appendfsync no</code> : 数据写入AOF文件之后，让操作系统决定何时同步，Linux一般是30s一次，将AOF文件里的数据刷入磁盘</p>
+<ul>
+<li>理论性能最好，但是会丢失大量数据</li>
+</ul>
+</li>
+<li><p><code>appendfsync everysec</code> ： 数据写入AOF文件之后，后台线程(aof_fsync线程)每秒调用<code>fsync</code>函数将AOF文件里的数据刷入磁盘。</p>
+<ul>
+<li>性能基本不受影响，不过通常Redis宕机会丢失1秒内数据</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>AOF为什么执行命令后记录日志</p>
+</blockquote>
+<ul>
+<li>MySQL等关系型数据库都是记录redo log，然后执行命令，这是因为数据库要保证事务的ACID</li>
+<li>而Redis里存储的是缓存，最先要求的是他的性能和速度，所以Redis选择先执行命令，然后记录日志，不会对命令进行语法检查。</li>
+</ul>
+
+    </div>
+  </div>
+
 		</div>
 
 		
@@ -832,7 +922,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-08 15:35:42
+                    :</strong> 2026-03-10 22:26:27
             </li>
         
         <li>
@@ -940,7 +1030,7 @@
                     </span>
                     
                         <span>
-                            共 119.2k 字
+                            共 120k 字
                         </span>
                     
                 </p>
