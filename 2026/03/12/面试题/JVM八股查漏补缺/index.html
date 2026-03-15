@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-12T14:33:20.120Z">
-<meta property="article:modified_time" content="2026-03-13T17:45:04.411Z">
+<meta property="article:modified_time" content="2026-03-15T14:52:22.960Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="JVM">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-14 01:45:04</span>
-            <span class="mobile">2026-03-14 01:45:04</span>
+            <span class="desktop">2026-03-15 22:52:22</span>
+            <span class="mobile">2026-03-15 22:52:22</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>722 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>2 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>10 分钟</span>
         </span>
     
     
@@ -726,6 +726,31 @@
 			
   <div class="note-large blue">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>Java为什么一次编译，处处运行</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li>JVM就是java的运行环境，代码会被编译成.class文件，把.class文件给JVM，JVM就能帮你运行</li>
+<li>至于java为什么能跨平台，是因为不同的操作系统有不同的JVM，这些JVM都能把.class文件解释执行。</li>
+<li>但是docker出现后，Java这种跨平台的优势就被大大削弱了</li>
+</ul>
+<blockquote>
+<p>JVM,JRE,JDK有什么关系</p>
+</blockquote>
+<ul>
+<li>JVM就是运行.class文件的虚拟机</li>
+<li>JRE就是<code>JVM</code>加上<strong>一些基本类库</strong></li>
+<li>JDK就是<code>JRE</code>加上<strong>能把java代码编译成.class文件的开发工具</strong></li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
       <p>介绍一下Java内存区域的线程私有的组成</p>
 
     </div>
@@ -740,21 +765,23 @@
 <li>简称<strong>栈</strong>，生命周期也与线程相同，除了一些native方法通过本地方法栈来调用，其他所有的java方法都是通过栈来实现的</li>
 <li>每个方法的调用都有一个对应的<strong>栈帧</strong>被压入栈内，调用结束后栈帧弹出。</li>
 <li>栈可能出现的错误<ol>
-<li><code>StackOverFlowErroe</code>：如果栈的内存大小不能动态拓展，那么当线程请求栈的深度超过虚拟机栈的最大深度时，会抛出栈溢出异常。</li>
+<li><code>StackOverFlowError</code>：如果栈的内存大小不能动态拓展，那么当线程请求栈的深度超过虚拟机栈的最大深度时，会抛出栈溢出异常。</li>
 <li><code>OutOfMemoryError</code>：如果栈的内存可以动态拓展，那么当虚拟机在动态拓展栈中无法申请足够内存空间，那么会抛出该异常。</li>
 </ol>
 </li>
 </ul>
 </li>
 <li>本地方法栈<ul>
-<li>虚拟机栈执行Java方法，而本地方法栈为虚拟机使用的native方法服务。</li>
-<li>和虚拟机栈的作用类似，也会有振颤，也会出现这两种报错。</li>
+<li>虚拟机栈执行Java方法，底层会调用很多C或者C++写的Native方法，这里就需要通过本地方法接口(JNI)进行调用，这些Native方法就会放到本地方法栈。</li>
+<li>和虚拟机栈的作用类似，也会有栈帧，也会出现这两种报错。</li>
 </ul>
 </li>
 </ol>
 
     </div>
   </div>
+
+
 
 
   <div class="note-large blue">
@@ -766,10 +793,12 @@
       <ol>
 <li>堆<ul>
 <li>JVM所管理内存中最大的一块，堆是所有线程共享的一块内存区域，在虚拟机启动时创建</li>
-<li>此内存区域的<strong>唯一目的是存放对象实例，几乎所有的对象实例以及数组都在这分配内存</strong></li>
+<li>此内存区域的<strong>唯一目的是存放对象实例，几乎所有的new出来的对象实例以及数组都在这分配内存</strong></li>
+<li><strong>对象放在堆里，而基本类型会被放到栈帧里，因为基本类型比较小，方便分配和销毁</strong></li>
 <li>当堆中没有内存空间可分配给实例，也无法拓展时，也会抛出OutOfMemoryError异常。</li>
 <li>堆是垃圾收集器管理的主要区域，也被称为GC堆(Garbage Collected Heap)，从垃圾回收的角度，由于现在收集器都采用分代垃圾收集算法，所以堆可以细分为新生代和老年代，年轻代又分为<code>Eden区</code>，两个大小严格相同的<code>Survivor区</code></li>
 <li>一个对象会先到Eden区，如果垃圾回收之后还存活，就会被移动到Survivor区，再经过几次垃圾回收，仍然存活于Survivor区的对象会被移动到老年代区，也就是生命周期比较长 </li>
+<li>jdk1.8之后<strong>方法区&#x2F;永久代</strong>就放到本地内存了，不在堆中存储。因为永久代会为GC带来不必要的复杂度，并且回收效率偏低</li>
 <li>造成栈溢出<code>java heap space</code>的原因是堆中没有足够的连续空间，经过垃圾回收，也无法腾出足够空间</li>
 <li>造成栈溢出的两种情况<ol>
 <li>内存泄漏：对象用完了但没释放</li>
@@ -778,9 +807,38 @@
 </li>
 </ul>
 </li>
-<li>方法区</li>
+<li>方法区<ul>
+<li>方法区是 JVM 规范中的一块内存区域，存放类的元数据信息，JDK8 之后使用元空间（Metaspace）来实现方法区。</li>
+<li>在元空间中，存储以下核心数据<ol>
+<li>类的基本信息<code>Class Metadata</code><ul>
+<li>包括类的完整结构，如类名，父类，实现的接口，类加载器等</li>
+</ul>
+</li>
+<li>方法的字节码<code>Method Bytecode</code><ul>
+<li>每个方法的原始指令序列</li>
+</ul>
+</li>
+<li>运行常量池<ul>
+<li>类的符号引用，方法引用，常量等。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>需要注意的是，<strong>字符串常量池</strong>并不在元空间中，而是在堆中。<ul>
+<li>字符串对象数量非常大，因此JVM专门开辟了一块区域存字符串(String类)，主要目的是为了<strong>避免字符串重复创建</strong></li>
+<li>比如将一个字符串赋值给a，字符串常量池会创建该字符串，如果将同样的字符串赋值给b，那么不会重新创建相同字符串，而是在常量池中找。</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>直接内存<ul>
-<li>…</li>
+<li>不属于JVM中的内存结构，不受JVM管理，是虚拟机的系统内存，也就是操作系统中的内存，常见于NIO操作，用于数据缓存区，他分配回收成本比较高，但是读写性强。</li>
+<li>NIO也就是NEW I&#x2F;O ，基于通道（Channel）与缓存区（Buffer）的 I&#x2F;O 方式，它可以直接使用 Native 函数库直接分配堆外内存，避免了在 Java 堆和 Native 堆之间来回复制数据。</li>
+<li>比如Java代码完成文件拷贝，可以通过常规IO和NIO<ul>
+<li>常规IO：Java调用本地Native 函数，存入系统内存，再转到Java堆内存</li>
+<li>NIO：直接使用Native函数分配堆外内存</li>
+</ul>
+</li>
 </ul>
 </li>
 </ol>
@@ -788,6 +846,220 @@
     </div>
   </div>
 
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>HotSpot 虚拟机在Java堆中对象分配、布局和访问的全过程</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>对象如何创建的</p>
+</blockquote>
+<ol>
+<li><strong>类加载检查</strong></li>
+</ol>
+<ul>
+<li>虚拟机遇到<strong>一条new指令</strong>时，首先检查该类是否被加载，解析，初始化过，被加载过则<strong>跳过类加载</strong>，如果没有，触发类加载过程<ul>
+<li>类加载过程： 加载➡验证➡准备➡解析➡初始化</li>
+</ul>
+</li>
+</ul>
+<ol start="2">
+<li><strong>分配内存</strong><ul>
+<li>对象实例存在堆中，JVM会在堆中为对象分配一块内存，分配方式如下<ol>
+<li><strong>指针碰撞</strong><ul>
+<li><strong>适用场合</strong>：堆内存规整</li>
+<li>使用该分配方式的 GC 收集器：<code>Serial</code>, <code>ParNew</code></li>
+<li>用过的内存整合到一边，没用过的内存放在另一边，中间有一个分解指针，分配对象后指针向空间内存移动对象大小，效率非常高。</li>
+</ul>
+</li>
+<li><strong>空闲列表</strong><ul>
+<li>适用场合：堆内存不规整的情况下。</li>
+<li>使用该分配方式的 GC 收集器：<code>CMS</code></li>
+<li>虚拟机会维护一个列表，该列表会记录那些内存块是可用的，在分配的时候，找到一块足够大的内存块划分给对象实例，更新空闲列表，</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>初始化零值</strong><ul>
+<li>将分配的内存空间都初始化为零值，保证对象实例不赋值就可以直接使用，比如int n; 访问n为0</li>
+</ul>
+</li>
+<li><strong>设置对象头</strong><ul>
+<li>每个对象都要设置对象头，对象头包含以下数据<ul>
+<li>该实例存于哪个类</li>
+<li>该如何找到类的元数据信息</li>
+<li>哈希码</li>
+<li>GC分代年龄</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>执行构造方法(init初始化方法)<ul>
+<li>上面的工作完成之后，对于虚拟机，一个对象生成了，但从Java程序的视角看，还没有执行init 方法，所有的字段还都为0，所以需要执行构造方法，将对象进行初始化</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>对象的内存布局</p>
+</blockquote>
+<ul>
+<li>在HotSpot虚拟机中，对象在内存中的布局分为三个区域<ol>
+<li>对象头<code>Header</code><ul>
+<li>包含两部分信息</li>
+</ul>
+<ol>
+<li>标记字段(Mark Word)：用于存储对象的运行时数据，如哈希码，GC分代年龄等</li>
+<li>类型指针(Klass pointer)：对象指向他的类元数据指针，虚拟机可以通过该指针确定这个对象是哪个类的实例</li>
+</ol>
+</li>
+<li>实例数据<code>Instance Data</code>: 对象真正存储的有效信息</li>
+<li>对齐填充<code>Padding</code>： 不是必然存在的，仅仅占位作用。比如系统要求对象起始地址必须8字节的整数倍，就需要补齐。</li>
+</ol>
+</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>类加载过程</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>类的生命周期</p>
+</blockquote>
+<ul>
+<li>类从加载到虚拟机内存 到 卸载出内存位置，生命周期分为七个阶段<ol>
+<li>加载(Loading)</li>
+<li>验证（Verification）</li>
+<li>准备（Preparation）</li>
+<li>解析（Resolution）</li>
+<li>初始化（Initialization）</li>
+<li>使用（Using）</li>
+<li>卸载（Unloading）。</li>
+</ol>
+</li>
+<li>其中验证，准备，解析三个为**连接(linking)**阶段</li>
+<li>所以加载类文件主要三步：加载➡连接(验证，准备，解析)➡初始化</li>
+</ul>
+<ol>
+<li><p>加载</p>
+<ul>
+<li>主要完成三件事<ol>
+<li>通过全类名，获取类的<strong>二进制数据流</strong></li>
+<li>协议类的二进制数据流为方法区的数据结构(把类信息存入方法区)</li>
+<li>创建java.lang.Class类的实例，表示该类型，作为方法区这个类的各种数据的访问入口</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>验证</p>
+<ul>
+<li>验证类是否符合JVM规范，会进行以下验证<ul>
+<li>文件格式验证</li>
+<li>元数据验证</li>
+<li>字节码验证</li>
+<li>符号引用验证</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>准备</p>
+<ul>
+<li>正式为类变量<strong>分配内存</strong>并<strong>设置类变量初始值</strong></li>
+</ul>
+</li>
+<li><p>解析</p>
+<ul>
+<li>虚拟机将常量池内的符号引用更替为直接引用</li>
+</ul>
+</li>
+<li><p>初始化</p>
+<ul>
+<li>执行初始化方法<code>&lt;clinit&gt;()</code>方法，是类加载的最后一步，这一步JVM才开始执行类中定义的Java代码</li>
+<li><code>&lt;clinit&gt;()</code>方法是编译之后自动生成的。</li>
+</ul>
+</li>
+<li><p>类卸载</p>
+<ul>
+<li>使该类的Class对象被GC</li>
+<li>在 JVM 生命周期内，由 jvm 自带的类加载器加载的类是不会被卸载的。但是由我们自定义的类加载器加载的类是可能被卸载的。</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>类加载器</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>什么是类加载器</p>
+</blockquote>
+<ul>
+<li><p>类加载器是一个负责加载类的<strong>对象</strong>，用于实现类加载过程中的<strong>加载</strong>这一步。<br> 每个 Java 类都有一个引用指向加载它的 ClassLoader。<br> 数组类不是通过 ClassLoader 创建的（数组类没有对应的二进制字节流），是由 JVM 直接生成的。</p>
+</li>
+<li><p>简单来说，类加载器的主要作用就是<strong>动态加载Java类的字节码(.class文件)到JVM中生成一个代表该类的Class对象</strong><br> 字节码是<code>.java文件</code>经过<code>javac</code>编译得来的</p>
+</li>
+</ul>
+<blockquote>
+<p>类加载器加载规则</p>
+</blockquote>
+<ul>
+<li>JVM启动的时候，并不会一次性加载所有的类，而是根据需要去动态加载</li>
+<li>对于已经加载的类会放在<code>ClassLoader</code>中<br> 在类加载的时候，系统会首先判断当前类是否被加载过，已经被加载的类会直接返回，否则才会尝试加载，相同二进制名的类之后加载一次<br>JVM中内置三个重要的类加载器<ol>
+<li>BootstrapClassLoader(启动类加载器)<ul>
+<li>最顶层的加载类，由C++实现，通常加载JDK内部的核心类库</li>
+</ul>
+</li>
+<li>ExtensionClassLoader(拓展类加载器)<ul>
+<li>负责加载ext目录下的jar包和类</li>
+</ul>
+</li>
+<li>AppClassLoader(应用程序类加载器)<ul>
+<li>面向用户的加载器，负责加载当前应用下classpath的所有jar包和类</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>双亲委派模型</p>
+</blockquote>
+<ul>
+<li><p>双亲委派就是类加载顺序的规则<br> 类加载器有多种，加载一个类需要通过双亲委派模型来决定由哪个类加载器加载</p>
+</li>
+<li><p>也就是在类要被加载的时候，这个类加载器会委派他的上一级类加载器也就是爸爸类加载器去加载，上一级类加载器委派再上一级<br> 一直委托到最上级，如果不能加载，就让下一级加载<br> 所以其实应该叫单亲委派模型的<code>(</code>，但是国内就是叫双亲委派模型</p>
+</li>
+<li><p>这样的好处是避免类加载重复，不会两个类加载器都加载了同一个类</p>
+</li>
+<li><p>双亲委派模型并不是强制的，我们可以通过重写loadClass()方法</p>
+<ul>
+<li>在里面决定优先加载哪里的类去自定义一个classLoader</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
 		</div>
 
 		
@@ -801,7 +1073,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-14 01:45:04
+                    :</strong> 2026-03-15 22:52:22
             </li>
         
         <li>
@@ -901,7 +1173,7 @@
                     </span>
                     
                         <span>
-                            共 121.3k 字
+                            共 123.6k 字
                         </span>
                     
                 </p>
