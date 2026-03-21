@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-12T14:33:20.120Z">
-<meta property="article:modified_time" content="2026-03-17T14:23:22.252Z">
+<meta property="article:modified_time" content="2026-03-21T15:53:26.767Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="JVM">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-17 22:23:22</span>
-            <span class="mobile">2026-03-17 22:23:22</span>
+            <span class="desktop">2026-03-21 23:53:26</span>
+            <span class="mobile">2026-03-21 23:53:26</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.9k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>6.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>17 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>23 分钟</span>
         </span>
     
     
@@ -961,6 +961,9 @@
 <li>协议类的二进制数据流为方法区的数据结构(把类信息存入方法区)</li>
 <li>创建java.lang.Class类的实例，表示该类型，作为方法区这个类的各种数据的访问入口</li>
 </ol>
+<ul>
+<li>简单来说，就是<strong>动态加载Java类的字节码(.class文件)到JVM中并生成一个代表该类的Class对象</strong></li>
+</ul>
 </li>
 </ul>
 </li>
@@ -1222,6 +1225,24 @@
 
 
 
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>如何判断一个常量是废弃常量？</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <p>运行时常量池是可以被GC回收的。<br>判断一个常量是否为废弃常量，主要看是否还有引用指向它。<br>如果没有任何对象引用该常量，那么该常量就可以被视为废弃常量，在GC时会被回收。<br><strong>假如字符串”abc”没有被引用，但是存在常量池中，就会被GC回收。</strong></p>
+<p>对于字符串常量池（位于堆中），其回收机制与普通对象类似，只要没有引用即可回收。</p>
+<p>而对于运行时常量池（位于方法区），只有在类被卸载时，对应的常量才有可能被回收。</p>
+
+    </div>
+  </div>
+
+
+
+
+
   <div class="note-large blue">
     <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
       <p>如何判断一个类是无用的类</p>
@@ -1255,6 +1276,147 @@
 
     </div>
   </div>
+
+
+
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>垃圾回收算法</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>标记-清除算法</p>
+</blockquote>
+<ul>
+<li>标记-清除(Mark-and-Sweep) 算法分为标记和清除两个阶段<br> 首先<strong>标记出所有应存活对象</strong><br> 在标记完成后<strong>回收没有被标记的所有对象</strong>。</li>
+<li>这是最基础的收集算法，<strong>后续的算法是对其不足进行改进得到的</strong>，会带来两个明显的问题<ol>
+<li>效率：标记清除两个过程效率都太低</li>
+<li>空间：清除后<strong>会产生大量不连续的内存碎片</strong></li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>复制算法</p>
+</blockquote>
+<ul>
+<li>可以将内存分为两个大小相同的内存块<br>每次使用其中一块，当这一块的内存用完之后，将存活的对象复制到另一块，然后把使用的空间清理掉。<br><strong>这样就能使每次的内存回收都是对内存区间的一半进行回收。</strong></li>
+<li>改进了标记清除算法会产生大量不连续内存碎片的问题，<strong>但是还有以下问题</strong><ol>
+<li>可用内存变为原来的一半</li>
+<li>不适合老年代，如果存活对象过多，复制会降低很多性能</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>标记-整理算法</p>
+</blockquote>
+<ul>
+<li>根据老年代的特点提出的标记算法<br> 标记过程和标记清除算法一样，但后续步骤是让所有存活的对象往一端移动，然后清理掉端边界以外的内存</li>
+<li>整理的效率不高，<strong>适合老年代这种GC频率不高的场景</strong></li>
+</ul>
+<blockquote>
+<p>分代收集算法</p>
+</blockquote>
+<ul>
+<li><strong>当前JVM使用的就是分代收集算法</strong><br> 就是根据对象存活周期的不同将内存分为几块<br> 一般Java堆分为新生代和老年代，这样<strong>我们可以在不同的年代选择适合的GC算法</strong></li>
+<li>新生代里每次GC都会死大量对象，因此存活的对象很少，复制成本很低，可以用复制算法</li>
+<li>老年代里对象存活几率较高，可以用标记整理或者标记清除算法</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>垃圾收集器</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <ul>
+<li>垃圾收集器是内存回收的具体实现</li>
+<li>JDK<strong>默认垃圾收集器</strong>:<br> <code>JDK8</code> : Parallel Scavenage(新生代) + Parallel Old(老年代)<br> <code>JDK9 - JDK22</code> : G1收集器</li>
+</ul>
+<blockquote>
+<p>Serial 收集器</p>
+</blockquote>
+<ul>
+<li>Serial(串行)收集器是最基本的收集器<br> 也就是单线程区完成垃圾收集工作，在这期间必须暂停所有工作线程(Stop-The-World)<br> Serial 本身只管新生代</li>
+</ul>
+<blockquote>
+<p>ParNew 收集器</p>
+</blockquote>
+<ul>
+<li>就是串行收集器的多线程版本<br> 可以多线程进行垃圾回收，其他与串行收集器相同</li>
+<li><strong>可以与CMS收集器(真正意义上的并发收集器)配合工作</strong>。<br> ParNew 只负责新生代（复制算法），老年代可以使用CMS</li>
+</ul>
+<blockquote>
+<p>Parallel Scavenge + Parallel Old</p>
+</blockquote>
+<ul>
+<li>与ParNew 收集器同样是并行收集器，但是不能配合CMS收集器</li>
+<li>更专注于并行(多线程，提高吞吐量)而不是并发(用户线程和垃圾收集线程同时执行，追求低停顿)</li>
+</ul>
+<blockquote>
+<p>CMS 收集器</p>
+</blockquote>
+<ul>
+<li><p><code>Concurrent Mark Sweep</code>收集器更专注用户体验和减少停顿时间<br> 是HotSopt 虚拟机上第一款并发收集器，实现了GC线程与用户线程基本上同时工作。</p>
+</li>
+<li><p>CMS也是基于标记清除(MS)实现的，整个过程分为四步</p>
+<ol>
+<li><strong>初始标记</strong>：短暂停顿(Stop-The-World)，标记从 GC Roots 可直接引用的对象。</li>
+<li><strong>并发标记</strong>：同时开启GC和用户线程，用可达性分析去记录可达对象<br> 可达性分析不能保证包含所有可达对象，因为用户线程可能会不断更新引用<br> 所以GC线程无法保证可达对象实时标记</li>
+<li><strong>重新标记</strong>：对并发标记的补充，标记没标记到的可达对象，比并发标记时间短</li>
+<li><strong>并发清除</strong>：开启用户线程，同时GC对未标记区域清除</li>
+</ol>
+</li>
+<li><p><strong>主要优点</strong>：并发收集，低停顿</p>
+</li>
+<li><p><strong>主要缺点</strong>：</p>
+<ol>
+<li>GC线程和用户线程抢CPU</li>
+<li>无法处理浮动垃圾(并发标记&#x2F;清除期间新产生的垃圾)</li>
+<li>MS算法会产生大量空间碎片</li>
+<li>内存不够时，会退化为 Serial Old Full GC，导致长时间停顿</li>
+</ol>
+</li>
+<li><p>CMS 垃圾回收器在高版本JDK(java 14)已经被弃用</p>
+</li>
+</ul>
+<blockquote>
+<p>G1 收集器</p>
+</blockquote>
+<ul>
+<li><p>G1(Garbage-First) 是一款面向服务器的垃圾收集器，主要针对大型服务器<br> 高并发的同时，也注意高并行，所以响应时间快，也具备高吞吐量</p>
+</li>
+<li><p>G1收集器的运行分为以下四步</p>
+<ol>
+<li><strong>初始标记</strong>：短暂停顿(Stop-The-World)，标记从 GC Roots 可直接引用的对象。</li>
+<li><strong>并发标记</strong>：同时开启GC和用户线程，用可达性分析去记录可达对象</li>
+<li><strong>最终标记</strong>：短暂停顿（STW），处理并发标记阶段结束后残留的少量未处理的引用变更。</li>
+<li><strong>筛选回收</strong>：根据标记结果，选择回收价值高的区域，复制存活对象到新区域，回收旧区域内存。这一阶段包含一个或多个停顿（STW），具体取决于回收的复杂度。</li>
+</ol>
+</li>
+<li><p>G1 收集器在后台维护了一个优先列表<br> <strong>每次根据允许的收集时间，优先选择回收价值最大的 Region(这也就是它的名字 Garbage-First 的由来)</strong><br> 这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的收集效率（把内存化整为零）。</p>
+</li>
+</ul>
+<blockquote>
+<p>ZGC 收集器</p>
+</blockquote>
+<ul>
+<li>与GC相似，也采用复制算法，不过ZGC对该算法做了重大改进<br> ZGC 可以将暂停时间控制在几毫秒以内，且暂停时间不受堆内存大小的影响，出现 Stop The World 的情况会更少，但代价是牺牲了一些吞吐量。ZGC 最大支持 16TB 的堆内存。</li>
+</ul>
+
+    </div>
+  </div>
+
 		</div>
 
 		
@@ -1268,7 +1430,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-17 22:23:22
+                    :</strong> 2026-03-21 23:53:26
             </li>
         
         <li>
@@ -1368,7 +1530,7 @@
                     </span>
                     
                         <span>
-                            共 125.5k 字
+                            共 127.2k 字
                         </span>
                     
                 </p>
