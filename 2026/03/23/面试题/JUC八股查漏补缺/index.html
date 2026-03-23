@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-23T11:53:43.252Z">
-<meta property="article:modified_time" content="2026-03-23T13:06:19.309Z">
+<meta property="article:modified_time" content="2026-03-23T14:12:20.935Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="JUC">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-23 21:06:19</span>
-            <span class="mobile">2026-03-23 21:06:19</span>
+            <span class="desktop">2026-03-23 22:12:20</span>
+            <span class="mobile">2026-03-23 22:12:20</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.3k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.9k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
         </span>
     
     
@@ -910,6 +910,104 @@
   </div>
 
 
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>多线程</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>并行与并发的区别</p>
+</blockquote>
+<ul>
+<li><strong>并发</strong>：多个任务“交替执行”，只有一个CPU核心去执行多线程任务</li>
+<li><strong>并行</strong>：多个任务“同时执行”，多个cpu核心，每个核心去执行一个任务</li>
+</ul>
+<blockquote>
+<p>同步和异步的区别</p>
+</blockquote>
+<ul>
+<li><strong>同步</strong>：做完一件事，才能做下一件（阻塞）</li>
+<li><strong>异步</strong>：发出任务后，不等结果，继续做别的（非阻塞）</li>
+</ul>
+<blockquote>
+<p>使用多线程可能带来什么问题?</p>
+</blockquote>
+<ul>
+<li>并发编程的目的就是为了能提高程序的执行效率进而提高程序的运行速度<br>  但是并发编程并不总是能提高程序运行速度的，而且并发编程可能会遇到很多问题，比如：内存泄漏、死锁、线程不安全等等。</li>
+</ul>
+<blockquote>
+<p>如何理解线程安全和不安全？</p>
+</blockquote>
+<ul>
+<li>线程安全和不安全是在多线程环境下对于同一份数据的访问是否能够保证其正确性和一致性的描述。<br>  线程安全指的是在多线程环境下，对于同一份数据，不管有多少个线程同时访问，都能保证这份数据的正确性和一致性。<br>  线程不安全则表示在多线程环境下，对于同一份数据，多个线程同时访问时可能会导致数据混乱、错误或者丢失</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>死锁</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>什么是线程死锁</p>
+</blockquote>
+<ul>
+<li><p>多个线程互相持有对方需要的资源，并且互相等待，导致程序永远无法继续执行的情况。</p>
+<ul>
+<li><strong>比如两个线程抢两把锁</strong></li>
+<li>线程1拿到A锁，并等待B锁，同时线程2拿到B锁，等待A锁<br>由于两个线程都阻塞了，所以永远不会释放A锁和B锁，就卡死产生了死锁</li>
+</ul>
+</li>
+<li><p><strong>死锁产生的四个必要条件</strong></p>
+<ol>
+<li><strong>互斥</strong>：资源一次只能被一个线程占用</li>
+<li><strong>请求与保持</strong>：已持有资源，还要申请新的资源</li>
+<li><strong>不可剥夺</strong>：线程没结束，资源不能被抢走</li>
+<li><strong>循环等待</strong>：线程之间形成环形等待</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>如何解决死锁</p>
+</blockquote>
+<ol>
+<li><p>统一加锁顺序</p>
+<ul>
+<li>所有程序按照同样顺序加锁，不会形成循环等待</li>
+</ul>
+</li>
+<li><p>尝试锁(tryLock)</p>
+<ul>
+<li>使用<code>ReentrantLock</code></li>
+<li>获取不到就放弃，不死等</li>
+</ul>
+</li>
+<li><p>设置TTL</p>
+<ul>
+<li>避免永久等待</li>
+</ul>
+</li>
+<li><p>一次性申请所有资源</p>
+<ul>
+<li>破坏请求与保持</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+  </div>
+
+
 		</div>
 
 		
@@ -923,7 +1021,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-23 21:06:19
+                    :</strong> 2026-03-23 22:12:20
             </li>
         
         <li>
@@ -1023,7 +1121,7 @@
                     </span>
                     
                         <span>
-                            共 128.4k 字
+                            共 129k 字
                         </span>
                     
                 </p>
