@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-24T13:26:38.343Z">
-<meta property="article:modified_time" content="2026-03-24T13:27:39.932Z">
+<meta property="article:modified_time" content="2026-03-24T14:24:30.698Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="八股">
 <meta property="article:tag" content="操作系统">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-24 21:27:39</span>
-            <span class="mobile">2026-03-24 21:27:39</span>
+            <span class="desktop">2026-03-24 22:24:30</span>
+            <span class="mobile">2026-03-24 22:24:30</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -698,9 +698,13 @@
 
     
     
+        <span class="article-wordcount article-meta-item">
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>956 字</span>
+        </span>
+    
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 分钟</span>
         </span>
     
     
@@ -720,6 +724,74 @@
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
 			
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>操作系统基础</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>什么是操作系统？</p>
+</blockquote>
+<ul>
+<li><p>通过以下三点可以概括操作系统</p>
+<ol>
+<li>操作系统(Operating System，简称OS)本质上是运行在计算机上的软件程序，主要管理计算机软硬件资源</li>
+<li>操作系统存在屏蔽了硬件层的复杂性</li>
+<li>操作系统的内核(Kernel)是操作系统的核心部分<br>  他负责系统的内存，硬件设备，文件系统，应用程序的管理。<br>  <strong>内核是连接应用程序和硬件的桥梁，决定着系统的性能和稳定性</strong></li>
+</ol>
+</li>
+<li><p>操作系统内核(Kernel) 和 中央处理器(CPU) 的区别</p>
+<ul>
+<li>CPU主要提供运算，处理各种命令的能力。</li>
+<li>内核(Kernel) 主要负责系统管理，比如内存管理，他屏蔽了对硬件的操作</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+  </div>
+
+
+  <div class="note-large blue">
+    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
+      <p>用户态和内核态</p>
+
+    </div>
+    <div class="notel-content markdown-body">
+      <blockquote>
+<p>什么是用户态和内核态</p>
+</blockquote>
+<ul>
+<li>根据进程访问资源的特点，我们可以把进程在系统上的运行分为两个级别<ul>
+<li><p><strong>用户态(User Mode)</strong>：用户态的进程可以直接读取用户程序的数据，有较低的权限<br>当应用程序需要执行某些特殊操作，比如读写磁盘，网络通讯，就需要向OS发起系统调用请求，进入内核态</p>
+</li>
+<li><p><strong>内核态(Kernel Mode)</strong>：内核态的进程拥有非常高的权限，可以访问任何资源，内存空间，设备，驱动程序等。<br>OS接受进程的系统调用请求后，<strong>线程就会从用户态切换到内核态</strong>，执行相应的系统调用，并将结果返回给进程，最后从内核态切换到用户态。</p>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>只有内核态不行吗</p>
+</blockquote>
+<ul>
+<li>两个状态的设计为了安全与稳定<ul>
+<li>CPU会有一些比较危险的指令，比如内存分配，IO处理，我们需要限制这些危险指令只能内核态运行。这些只能由操作系统内核态执行的指令也被叫做 特权指令 。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>用户态和内核态如何切换的</p>
+</blockquote>
+<ul>
+<li>用户态切换到内核态的 3 种方式：系统调用（Trap）：这是最主要的方式，是应用程序主动发起的。比如，当我们的程序需要读取一个文件或者发送网络数据时，它无法直接操作磁盘或网卡，就必须调用操作系统提供的接口（如 read(),send()), 这会触发一次从用户态到内核态的切换。中断（Interrupt）：这是被动的，由外部硬件设备触发。比如，当硬盘完成了数据读取，会向 CPU 发送一个中断信号，CPU 会暂停当前用户态的程序，切换到内核态去处理这个中断。异常（Exception）：这也是被动的，由程序自身错误引起。比如，我们的代码执行了一个除以零的操作，或者访问了一个非法的内存地址（缺页异常），CPU 会捕获这个异常，并切换到内核态去处理它。在系统的处理上，中断和异常类似，都是通过中断向量表来找到相应的处理程序进行处理。区别在于，中断来自处理器外部，不是由任何一条专门的指令造成，而异常是执行当前指令的结果。最后，需要强调的是，这种状态切换是有性能开销的。因为它涉及到保存用户态的上下文（寄存器等）、切换到内核态执行、再恢复用户态的上下文。因此，在高性能编程中，我们常常需要考虑如何减少这种切换次数，比如通过缓冲 I&#x2F;O 来批量读写文件，就是一个典型的例子。</li>
+</ul>
+
+    </div>
+  </div>
+
+
+
 		</div>
 
 		
@@ -733,7 +805,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-24 21:27:39
+                    :</strong> 2026-03-24 22:24:30
             </li>
         
         <li>
@@ -833,7 +905,7 @@
                     </span>
                     
                         <span>
-                            共 129k 字
+                            共 130k 字
                         </span>
                     
                 </p>
