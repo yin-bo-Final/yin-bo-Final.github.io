@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-06T17:07:37.788Z">
-<meta property="article:modified_time" content="2026-03-26T09:57:48.000Z">
+<meta property="article:modified_time" content="2026-03-26T15:02:05.969Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-26 17:57:48</span>
-            <span class="mobile">2026-03-26 17:57:48</span>
+            <span class="desktop">2026-03-26 23:02:05</span>
+            <span class="mobile">2026-03-26 23:02:05</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.6k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>12 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 分钟</span>
         </span>
     
     
@@ -852,8 +852,55 @@
 </li>
 </ul>
 <h1 id="3-页-Page"><a href="#3-页-Page" class="headerlink" title="3. 页(Page)"></a>3. 页(Page)</h1><ul>
-<li>MySQL最小存储单位是 16KB ， 也就是说一页是 16 KB，相当于B+树的一个节点的大小</li>
+<li>MySQL 中的页（Page）是 InnoDB 存储引擎管理数据的最小物理单位，默认大小为 16KB。<br>  每一个页就是B+树上的一个节点，页之间通过指针连接</li>
 </ul>
+<blockquote>
+<p>为什么需要页？</p>
+</blockquote>
+<ul>
+<li><p>数据在磁盘上并不是一条一条存储的，而是<code>磁盘 -&gt; 页 -&gt; 行</code><br>因为磁盘的IO很慢，一次IO成本很高，所以需要<strong>批量读取</strong></p>
+</li>
+<li><p>行数据是<strong>单向链表</strong>结构存入页中的</p>
+<ul>
+<li>每一行都有一个指针，指向下一行</li>
+<li>行结构：<code>record1 → record2 → record3 → ...</code></li>
+</ul>
+</li>
+<li><p><strong>页目录</strong><br>页目录下存储的是<strong>该节点内的索引和指向下一节点的指针</strong></p>
+<blockquote>
+<p>如何快速查到行数据链表里的数据</p>
+</blockquote>
+<ul>
+<li>如果我们遍历的话 时间复杂度是On</li>
+<li>所以我们<strong>二分查找</strong>页目录，找到指向部分记录<br>然后<strong>再遍历链表找到行数据</strong>，时间复杂度是O(logn)</li>
+</ul>
+</li>
+<li><p><strong>页分裂</strong><br>当一页满，再插入新数据就会发生<strong>页分裂</strong></p>
+<ul>
+<li>页分裂的过程：<ol>
+<li>创建新页</li>
+<li>将满的页一般数据迁移过去</li>
+<li>更新b+树结构<blockquote>
+<p>页分裂为什么影响性能</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>页分裂分为三个过程：<code>读旧页 写新页 更新索引页</code> 导致IO变多</li>
+<li>数据不再连续，分裂之后：<code>页1 -&gt; 页100 -&gt; 页3</code><br> 本来磁盘是顺序读数据，页不连续之后<strong>变为随机读</strong></li>
+<li>可能会触发连锁页分裂，可能会导致树高增加</li>
+</ol>
+<blockquote>
+<p>还有什么场景会导致随机读？</p>
+</blockquote>
+<ol>
+<li>页分裂，导致页不连续</li>
+<li>主键使用UUID，导致行数据随机插入，页分裂，可能会随机读</li>
+</ol>
 <h1 id="4-说一下当前读和快照读"><a href="#4-说一下当前读和快照读" class="headerlink" title="4. 说一下当前读和快照读"></a>4. 说一下当前读和快照读</h1><ul>
 <li><p>当前读(Current Read)读取的是DB的最新数据，而且会加锁<br>常见的当前读：</p>
 <ol>
@@ -905,7 +952,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-26 17:57:48
+                    :</strong> 2026-03-26 23:02:05
             </li>
         
         <li>
@@ -1017,7 +1064,7 @@
                     </span>
                     
                         <span>
-                            共 131.5k 字
+                            共 131.9k 字
                         </span>
                     
                 </p>
