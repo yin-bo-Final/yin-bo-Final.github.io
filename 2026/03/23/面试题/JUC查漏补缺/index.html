@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-23T11:53:43.252Z">
-<meta property="article:modified_time" content="2026-03-24T13:27:48.013Z">
+<meta property="article:modified_time" content="2026-03-27T14:49:50.837Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="JUC">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-24 21:27:48</span>
-            <span class="mobile">2026-03-24 21:27:48</span>
+            <span class="desktop">2026-03-27 22:49:50</span>
+            <span class="mobile">2026-03-27 22:49:50</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.9k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>6 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>5 分钟</span>
         </span>
     
     
@@ -723,14 +723,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			
-  <div class="note-large blue">
-    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>线程与进程</p>
-
-    </div>
-    <div class="notel-content markdown-body">
-      <blockquote>
+			<h1 id="1-线程与进程"><a href="#1-线程与进程" class="headerlink" title="1. 线程与进程"></a>1. 线程与进程</h1><blockquote>
 <p>线程和进程？</p>
 </blockquote>
 <ul>
@@ -756,10 +749,7 @@
 <li><p>现在很多语言也会用用户线程 + 内核线程混合模型，比如Go的<code>Goroutine</code>就是<strong>M:N模型</strong>，而Java目前仍然是<strong>1:1模型</strong></p>
 </li>
 </ul>
-<blockquote>
-<p>如何创建线程</p>
-</blockquote>
-<ol>
+<h1 id="2-如何创建线程"><a href="#2-如何创建线程" class="headerlink" title="2. 如何创建线程"></a>2. 如何创建线程</h1><ol>
 <li><p>继承 <code>Thread</code></p>
 <ul>
 <li>最简单的创建线程方法</li>
@@ -813,10 +803,7 @@
 </ol>
 </li>
 </ol>
-<blockquote>
-<p>线程的生命周期</p>
-</blockquote>
-<ul>
+<h1 id="3-线程的生命周期"><a href="#3-线程的生命周期" class="headerlink" title="3. 线程的生命周期"></a>3. 线程的生命周期</h1><ul>
 <li>共六个状态，如下</li>
 </ul>
 <div class="code-container" data-rel="Markdown"><figure class="iseeu highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">NEW（新建）</span><br><span class="line">   ↓ start()</span><br><span class="line">RUNNABLE（就绪/运行）</span><br><span class="line">   ↓</span><br><span class="line">   ├── BLOCKED（锁阻塞）</span><br><span class="line">   ├── WAITING（无限等待）</span><br><span class="line">   ├── TIMED<span class="emphasis">_WAITING（限时等待）</span></span><br><span class="line"><span class="emphasis">   ↓</span></span><br><span class="line"><span class="emphasis">TERMINATED（结束）</span></span><br></pre></td></tr></table></figure></div>
@@ -878,10 +865,7 @@
 </ul>
 </li>
 </ul>
-<blockquote>
-<p><code>Thread.sleep()</code>方法和<code>Object.wait()</code>方法对比</p>
-</blockquote>
-<ul>
+<h1 id="4-Thread-sleep-方法和Object-wait-方法对比"><a href="#4-Thread-sleep-方法和Object-wait-方法对比" class="headerlink" title="4. Thread.sleep()方法和Object.wait()方法对比"></a>4. <code>Thread.sleep()</code>方法和<code>Object.wait()</code>方法对比</h1><ul>
 <li><p>共同点：两者都可以暂停线程</p>
 </li>
 <li><p>区别：</p>
@@ -905,20 +889,7 @@
 <li>调用<code>start()</code>方法才会由 JVM 创建新的线程，并交由操作系统调度执行 run 方法。</li>
 <li>如果直接执行run()方法，只是普通方法调用，并不会创建新线程，仍然在当前线程中执行。</li>
 </ul>
-
-    </div>
-  </div>
-
-
-
-
-  <div class="note-large blue">
-    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>多线程</p>
-
-    </div>
-    <div class="notel-content markdown-body">
-      <blockquote>
+<h1 id="5-多线程"><a href="#5-多线程" class="headerlink" title="5. 多线程"></a>5. 多线程</h1><blockquote>
 <p>并行与并发的区别</p>
 </blockquote>
 <ul>
@@ -945,69 +916,6 @@
 <li>线程安全和不安全是在多线程环境下对于同一份数据的访问是否能够保证其正确性和一致性的描述。<br>  线程安全指的是在多线程环境下，对于同一份数据，不管有多少个线程同时访问，都能保证这份数据的正确性和一致性。<br>  线程不安全则表示在多线程环境下，对于同一份数据，多个线程同时访问时可能会导致数据混乱、错误或者丢失</li>
 </ul>
 
-    </div>
-  </div>
-
-
-
-
-
-  <div class="note-large blue">
-    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>死锁</p>
-
-    </div>
-    <div class="notel-content markdown-body">
-      <blockquote>
-<p>什么是线程死锁</p>
-</blockquote>
-<ul>
-<li><p>多个线程互相持有对方需要的资源，并且互相等待，导致程序永远无法继续执行的情况。</p>
-<ul>
-<li><strong>比如两个线程抢两把锁</strong></li>
-<li>线程1拿到A锁，并等待B锁，同时线程2拿到B锁，等待A锁<br>由于两个线程都阻塞了，所以永远不会释放A锁和B锁，就卡死产生了死锁</li>
-</ul>
-</li>
-<li><p><strong>死锁产生的四个必要条件</strong></p>
-<ol>
-<li><strong>互斥</strong>：资源一次只能被一个线程占用</li>
-<li><strong>请求与保持</strong>：已持有资源，还要申请新的资源</li>
-<li><strong>不可剥夺</strong>：线程没结束，资源不能被抢走</li>
-<li><strong>循环等待</strong>：线程之间形成环形等待</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<p>如何解决死锁</p>
-</blockquote>
-<ol>
-<li><p>统一加锁顺序</p>
-<ul>
-<li>所有程序按照同样顺序加锁，不会形成循环等待</li>
-</ul>
-</li>
-<li><p>尝试锁(tryLock)</p>
-<ul>
-<li>使用<code>ReentrantLock</code></li>
-<li>获取不到就放弃，不死等</li>
-</ul>
-</li>
-<li><p>设置TTL</p>
-<ul>
-<li>避免永久等待</li>
-</ul>
-</li>
-<li><p>一次性申请所有资源</p>
-<ul>
-<li>破坏请求与保持</li>
-</ul>
-</li>
-</ol>
-
-    </div>
-  </div>
-
-
 		</div>
 
 		
@@ -1021,7 +929,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-24 21:27:48
+                    :</strong> 2026-03-27 22:49:50
             </li>
         
         <li>
@@ -1100,7 +1008,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">JUC查漏补缺</div>
-		
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="nav-text">1. 线程与进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="nav-text">2. 如何创建线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">3. 线程的生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Thread-sleep-%E6%96%B9%E6%B3%95%E5%92%8CObject-wait-%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-text">4. Thread.sleep()方法和Object.wait()方法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-text">5. 多线程</span></a></li></ol>
 
 	</div>
 </div>
@@ -1133,7 +1041,7 @@
                     </span>
                     
                         <span>
-                            共 132.4k 字
+                            共 132.6k 字
                         </span>
                     
                 </p>
