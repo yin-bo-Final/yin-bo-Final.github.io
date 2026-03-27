@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-24T13:26:38.343Z">
-<meta property="article:modified_time" content="2026-03-24T14:24:30.698Z">
+<meta property="article:modified_time" content="2026-03-27T14:25:30.580Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="八股">
 <meta property="article:tag" content="操作系统">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-24 22:24:30</span>
-            <span class="mobile">2026-03-24 22:24:30</span>
+            <span class="desktop">2026-03-27 22:25:30</span>
+            <span class="mobile">2026-03-27 22:25:30</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>956 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.2k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>4 分钟</span>
         </span>
     
     
@@ -723,14 +723,7 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			
-  <div class="note-large blue">
-    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>操作系统基础</p>
-
-    </div>
-    <div class="notel-content markdown-body">
-      <blockquote>
+			<h1 id="1-操作系统基础"><a href="#1-操作系统基础" class="headerlink" title="1. 操作系统基础"></a>1. 操作系统基础</h1><blockquote>
 <p>什么是操作系统？</p>
 </blockquote>
 <ul>
@@ -748,18 +741,7 @@
 </ul>
 </li>
 </ul>
-
-    </div>
-  </div>
-
-
-  <div class="note-large blue">
-    <div class="notel-title rounded-t-lg p-3 font-bold text-lg flex flex-row gap-2 items-center">
-      <p>用户态和内核态</p>
-
-    </div>
-    <div class="notel-content markdown-body">
-      <blockquote>
+<h1 id="2-用户态，内核态"><a href="#2-用户态，内核态" class="headerlink" title="2. 用户态，内核态"></a>2. 用户态，内核态</h1><blockquote>
 <p>什么是用户态和内核态</p>
 </blockquote>
 <ul>
@@ -781,16 +763,48 @@
 </li>
 </ul>
 <blockquote>
-<p>用户态和内核态如何切换的</p>
+<p>用户态切换到内核态的三种方式</p>
 </blockquote>
-<ul>
-<li>用户态切换到内核态的 3 种方式：系统调用（Trap）：这是最主要的方式，是应用程序主动发起的。比如，当我们的程序需要读取一个文件或者发送网络数据时，它无法直接操作磁盘或网卡，就必须调用操作系统提供的接口（如 read(),send()), 这会触发一次从用户态到内核态的切换。中断（Interrupt）：这是被动的，由外部硬件设备触发。比如，当硬盘完成了数据读取，会向 CPU 发送一个中断信号，CPU 会暂停当前用户态的程序，切换到内核态去处理这个中断。异常（Exception）：这也是被动的，由程序自身错误引起。比如，我们的代码执行了一个除以零的操作，或者访问了一个非法的内存地址（缺页异常），CPU 会捕获这个异常，并切换到内核态去处理它。在系统的处理上，中断和异常类似，都是通过中断向量表来找到相应的处理程序进行处理。区别在于，中断来自处理器外部，不是由任何一条专门的指令造成，而异常是执行当前指令的结果。最后，需要强调的是，这种状态切换是有性能开销的。因为它涉及到保存用户态的上下文（寄存器等）、切换到内核态执行、再恢复用户态的上下文。因此，在高性能编程中，我们常常需要考虑如何减少这种切换次数，比如通过缓冲 I&#x2F;O 来批量读写文件，就是一个典型的例子。</li>
+<ol>
+<li><p><strong>系统调用(Trap)</strong>：最主要的方式，是应用程序<strong>主动</strong>发起的<br>  举个例子：<br> 我们的程序需要<strong>读取一个文件</strong>或<strong>发送网络数据</strong><br> 但是无法直接操作磁盘或网卡<br> 所以调用了OS提供的接口(如<code>read()</code>,<code>send()</code>)，这样会将用户态转化为内核态</p>
+</li>
+<li><p><strong>中断(Interrupt)</strong>：是<strong>被动</strong>的，由硬件触发<br>  举个例子：<br> 硬盘完成数据读取会给CPU发送一个<strong>中断信号</strong><br> CPU会暂停当前用户态程序，切换到内核态去处理这个中断</p>
+</li>
+<li><p><strong>异常(Exception)</strong>：也是<strong>被动</strong>的，由<strong>程序自身错误引起</strong><br>  举个例子<br> 我们的代码执行了一个除以0的操作<br> CPU捕获了这个异常<br> 用户态会切换到内核态去处理</p>
+</li>
+</ol>
+<h1 id="3-进程，线程"><a href="#3-进程，线程" class="headerlink" title="3. 进程，线程"></a>3. 进程，线程</h1><ul>
+<li><strong>进程</strong>：程序的一次执行过程，是资源分配的基本单位，拥有<strong>独立的地址空间</strong></li>
+<li><strong>线程</strong>：CPU调度的基本单位，是<strong>进程内的一个执行流</strong>，共享进程的公共资源</li>
+<li><strong>区别</strong>：进程资源独立，创建切换开销大<br>   线程资源共享，开销小</li>
 </ul>
-
-    </div>
-  </div>
-
-
+<h1 id="4-进程有哪些状态？它们之间是如何转换的"><a href="#4-进程有哪些状态？它们之间是如何转换的" class="headerlink" title="4. 进程有哪些状态？它们之间是如何转换的"></a>4. 进程有哪些状态？它们之间是如何转换的</h1><p>基本状态：<strong>就绪（已具备运行条件，等待CPU）</strong>、<strong>运行（占用CPU执行）</strong>、<strong>阻塞（等待某事件，如I&#x2F;O）</strong>。</p>
+<p>转换关系：</p>
+<ul>
+<li>就绪 → 运行：调度程序分配CPU。</li>
+<li>运行 → 就绪：时间片用完或被抢占。</li>
+<li>运行 → 阻塞：等待事件（I&#x2F;O请求）。</li>
+<li>阻塞 → 就绪：事件完成（I&#x2F;O结束）。</li>
+</ul>
+<h1 id="5-什么是死锁？产生死锁的四个必要条件是什么"><a href="#5-什么是死锁？产生死锁的四个必要条件是什么" class="headerlink" title="5. 什么是死锁？产生死锁的四个必要条件是什么"></a>5. 什么是死锁？产生死锁的四个必要条件是什么</h1><p>死锁：<strong>多个进程因竞争资源而互相等待，无法继续推进</strong>。</p>
+<ul>
+<li><p>必要条件：</p>
+<ol>
+<li>互斥：资源一次只能被一个进程占用。</li>
+<li>保持并等待：进程持有资源并等待其他资源。</li>
+<li>不剥夺：已分配的资源不能被强制剥夺。</li>
+<li>循环等待：存在进程资源的循环等待链。</li>
+</ol>
+</li>
+</ul>
+<h1 id="6-如何避免死锁？请介绍几种常见的死锁预防策略"><a href="#6-如何避免死锁？请介绍几种常见的死锁预防策略" class="headerlink" title="6. 如何避免死锁？请介绍几种常见的死锁预防策略"></a>6. 如何避免死锁？请介绍几种常见的死锁预防策略</h1><p>避免死锁：通过算法（如<strong>银行家算法</strong>）分配资源，确保系统处于安全状态。</p>
+<p>预防策略：</p>
+<ol>
+<li>破坏“保持并等待”：进程<strong>一次性申请所有所需资源</strong>。</li>
+<li>破坏“不剥夺”：允许<strong>剥夺资源（如CPU可抢占）</strong>。</li>
+<li>破坏“循环等待”：对资源类型<strong>进行线性排序，按序申请</strong>。</li>
+<li>破坏“互斥”通常难以实现，因为有些资源天然互斥。</li>
+</ol>
 
 		</div>
 
@@ -805,7 +819,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-24 22:24:30
+                    :</strong> 2026-03-27 22:25:30
             </li>
         
         <li>
@@ -872,7 +886,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">操作系统查漏补缺</div>
-		
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%9F%BA%E7%A1%80"><span class="nav-text">1. 操作系统基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%94%A8%E6%88%B7%E6%80%81%EF%BC%8C%E5%86%85%E6%A0%B8%E6%80%81"><span class="nav-text">2. 用户态，内核态</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%BF%9B%E7%A8%8B%EF%BC%8C%E7%BA%BF%E7%A8%8B"><span class="nav-text">3. 进程，线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%BF%9B%E7%A8%8B%E6%9C%89%E5%93%AA%E4%BA%9B%E7%8A%B6%E6%80%81%EF%BC%9F%E5%AE%83%E4%BB%AC%E4%B9%8B%E9%97%B4%E6%98%AF%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2%E7%9A%84"><span class="nav-text">4. 进程有哪些状态？它们之间是如何转换的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E4%BB%80%E4%B9%88%E6%98%AF%E6%AD%BB%E9%94%81%EF%BC%9F%E4%BA%A7%E7%94%9F%E6%AD%BB%E9%94%81%E7%9A%84%E5%9B%9B%E4%B8%AA%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">5. 什么是死锁？产生死锁的四个必要条件是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E6%AD%BB%E9%94%81%EF%BC%9F%E8%AF%B7%E4%BB%8B%E7%BB%8D%E5%87%A0%E7%A7%8D%E5%B8%B8%E8%A7%81%E7%9A%84%E6%AD%BB%E9%94%81%E9%A2%84%E9%98%B2%E7%AD%96%E7%95%A5"><span class="nav-text">6. 如何避免死锁？请介绍几种常见的死锁预防策略</span></a></li></ol>
 
 	</div>
 </div>
@@ -905,7 +919,7 @@
                     </span>
                     
                         <span>
-                            共 132.2k 字
+                            共 132.4k 字
                         </span>
                     
                 </p>
