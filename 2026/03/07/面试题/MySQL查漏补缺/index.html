@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-06T17:07:37.788Z">
-<meta property="article:modified_time" content="2026-03-26T15:02:05.969Z">
+<meta property="article:modified_time" content="2026-03-27T14:05:16.026Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-26 23:02:05</span>
-            <span class="mobile">2026-03-26 23:02:05</span>
+            <span class="desktop">2026-03-27 22:05:16</span>
+            <span class="mobile">2026-03-27 22:05:16</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>15 分钟</span>
         </span>
     
     
@@ -772,7 +772,7 @@
 <blockquote>
 <p>什么是MVCC</p>
 </blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">MVCC是多版本事务控制 </span><br><span class="line">在MYSQL中存在很多隔离级别 他们是 读未提交 读已提交 可重复读 串行化 </span><br><span class="line">他会解决我们在数据库中每个事务的隔离性问题 </span><br><span class="line">M我们多事务并发运行的时候 假如我们第一个线程的事务正在修改数据 而第二个线程读取到了第一个线程修改的数据 结果想读跟读到的不一致 这样就形成了脏读 </span><br><span class="line">我们的读未提交就会引起脏读 因为会读到未提交的事务 </span><br><span class="line">而读已提交解决了这个问题 他让事务只会读到已经提交的事务的数据 </span><br><span class="line"></span><br><span class="line">但是假如说我们第一次查询读到了数据 而另外一个线程修改了这个数据并且提交了 那么我们第二次读取的数据和第一个就不一致 这就造成了不可重复读 </span><br><span class="line"></span><br><span class="line">而RR 可重复读就解决了这个问题 我们在第一个查询的时候生成了一个read view 而之后每次查询都复制第一次的read view 这样就保证了每次查询数据一致 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">但是可重复读还是会产生幻读的问题 </span><br><span class="line"></span><br><span class="line">而串行化可以解决这个问题 他给数据库加了行锁 除非解锁 要不然其他线程的事务是读取不到数据的 摒弃了并行 性能就大大降低了 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">至于MVCC怎么实现 是由undo log read view 隐藏字段组成的 </span><br><span class="line">我们的表中默认两个隐藏字段 一个是该行数据版本号  和上一个版本的内存地址 </span><br><span class="line">undo log 中存储了数据的所有版本 形成了一个版本链表 每一个版本都有上一个版本的内存地址 </span><br><span class="line">假如我们在RC的情况下 每次查询都会生成一个新的readview 他会根据条件来判断读取哪个版本的数据 而RR环境下只有一种read view 所以只会读取同一个版本的数据</span><br></pre></td></tr></table></figure></div>
+<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">MVCC是多版本事务控制</span><br><span class="line">在MYSQL中存在很多隔离级别 他们是 读未提交 读已提交 可重复读 串行化 </span><br><span class="line">他会解决我们在数据库中每个事务的隔离性问题 </span><br><span class="line">我们多事务并发运行的时候 假如我们第一个线程的事务正在修改数据 而第二个线程读取到了第一个线程修改的数据 结果想读跟读到的不一致 这样就形成了脏读 </span><br><span class="line">我们的读未提交就会引起脏读 因为会读到未提交的事务 </span><br><span class="line">而读已提交解决了这个问题 他让事务只会读到已经提交的事务的数据 </span><br><span class="line"></span><br><span class="line">但是假如说我们第一次查询读到了数据 而另外一个线程修改了这个数据并且提交了 那么我们第二次读取的数据和第一个就不一致 这就造成了不可重复读 </span><br><span class="line"></span><br><span class="line">而RR 可重复读就解决了这个问题 我们在第一个查询的时候生成了一个read view 而之后每次查询都复制第一次的read view 这样就保证了每次查询数据一致 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">但是可重复读还是会产生幻读的问题 </span><br><span class="line"></span><br><span class="line">而串行化可以解决这个问题 他给数据库加了行锁 除非解锁 要不然其他线程的事务是读取不到数据的 摒弃了并行 性能就大大降低了 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">至于MVCC怎么实现 是由undo log read view 隐藏字段组成的 </span><br><span class="line">我们的表中默认两个隐藏字段 一个是该行数据版本号  和上一个版本的内存地址 </span><br><span class="line">undo log 中存储了数据的所有版本 形成了一个版本链表 每一个版本都有上一个版本的内存地址 </span><br><span class="line">假如我们在RC的情况下 每次查询都会生成一个新的readview 他会根据条件来判断读取哪个版本的数据 而RR环境下只有一种read view 所以只会读取同一个版本的数据</span><br></pre></td></tr></table></figure></div>
 
 <blockquote>
 <p>一条 SQL 在 MySQL 中是如何执行的？</p>
@@ -921,7 +921,8 @@
 </ul>
 </li>
 </ul>
-<h1 id="5-哪些隔离级别解决了幻读"><a href="#5-哪些隔离级别解决了幻读" class="headerlink" title="5. 哪些隔离级别解决了幻读"></a>5. 哪些隔离级别解决了幻读</h1><ul>
+<h1 id="5-哪些隔离级别解决了幻读"><a href="#5-哪些隔离级别解决了幻读" class="headerlink" title="5. 哪些隔离级别解决了幻读"></a>5. 哪些隔离级别解决了幻读</h1><p>幻读：事务前后两次读到的<strong>数据条数</strong>不一致</p>
+<ul>
 <li><p>可重复读解决了大部分的幻读</p>
 <ul>
 <li>通过MVCC的Read Views 保证同一事物读取的快照一致，解决了快照读的幻读</li>
@@ -930,14 +931,22 @@
 </li>
 <li><p>而串行化解决了所有的幻读</p>
 <ul>
-<li>因为串行化普通读取默认是<code>lock in share mode</code> 默认加锁<blockquote>
+<li>因为串行化普通读取默认是<code>lock in share mode</code> 默认加锁</li>
+</ul>
+</li>
+</ul>
+<blockquote>
 <p>默认是RR 为什么阿里会选择RC级别？</p>
 </blockquote>
-</li>
+<ul>
 <li>幻读造成的影响不会太严重，RC的性能更高</li>
 </ul>
-</li>
+<h1 id="6-MVCC"><a href="#6-MVCC" class="headerlink" title="6. MVCC"></a>6. MVCC</h1><ul>
+<li>MVCC(多版本并发控制) <strong>就是让事务不加锁，非阻塞的读取到一个历史版本</strong><br>MVCC &#x3D; readview + 隐藏字段 + undolog版本链</li>
 </ul>
+<p><code>隐藏字段</code>:   行数据里除了我们设置的字段，还有两个隐藏字段：<strong>事务ID，上一个版本的指针</strong></p>
+<p><code>undolog版本链</code>： 我们要读取以前的版本，所以每次DML之后会创建一个跟其相反的语句存入undolog日志<br>  如果要退回之前的版本，使用这个语句即可<br>  需要通过数据的事务ID和上一个版本的指针进行退回，假如事务ID为3，上一个版本为2，再上一个版本为1，所以需要根据undolog日志查询版本为1的语句，执行可以退回到版本1</p>
+<p><code>readview</code>：当事务读取数据时，创建一个readview来决定读取哪个版本的数据<br>  在RC级别下，同一事务每次读取都会生成不同的readview<br>  在RR级别下。同一事务每次读取第一次生成的readview</p>
 
 		</div>
 
@@ -952,7 +961,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-26 23:02:05
+                    :</strong> 2026-03-27 22:05:16
             </li>
         
         <li>
@@ -1031,7 +1040,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">MySQL查漏补缺</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="nav-text">之前的回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">1. MySQL执行流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MySQL%E9%94%81%E4%BD%93%E7%B3%BB"><span class="nav-text">2. MySQL锁体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81"><span class="nav-text">行锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81"><span class="nav-text">表锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%A1%B5-Page"><span class="nav-text">3. 页(Page)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%BD%93%E5%89%8D%E8%AF%BB%E5%92%8C%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="nav-text">4. 说一下当前读和快照读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%93%AA%E4%BA%9B%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BA%86%E5%B9%BB%E8%AF%BB"><span class="nav-text">5. 哪些隔离级别解决了幻读</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="nav-text">之前的回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">1. MySQL执行流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MySQL%E9%94%81%E4%BD%93%E7%B3%BB"><span class="nav-text">2. MySQL锁体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81"><span class="nav-text">行锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81"><span class="nav-text">表锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%A1%B5-Page"><span class="nav-text">3. 页(Page)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%BD%93%E5%89%8D%E8%AF%BB%E5%92%8C%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="nav-text">4. 说一下当前读和快照读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%93%AA%E4%BA%9B%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BA%86%E5%B9%BB%E8%AF%BB"><span class="nav-text">5. 哪些隔离级别解决了幻读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-MVCC"><span class="nav-text">6. MVCC</span></a></li></ol>
 
 	</div>
 </div>
@@ -1064,7 +1073,7 @@
                     </span>
                     
                         <span>
-                            共 131.9k 字
+                            共 132.2k 字
                         </span>
                     
                 </p>
