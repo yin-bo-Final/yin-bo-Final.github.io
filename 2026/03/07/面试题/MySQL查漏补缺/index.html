@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-06T17:07:37.788Z">
-<meta property="article:modified_time" content="2026-03-27T14:05:16.026Z">
+<meta property="article:modified_time" content="2026-03-31T13:34:18.524Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-27 22:05:16</span>
-            <span class="mobile">2026-03-27 22:05:16</span>
+            <span class="desktop">2026-03-31 21:34:18</span>
+            <span class="mobile">2026-03-31 21:34:18</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.3k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>15 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>17 分钟</span>
         </span>
     
     
@@ -726,10 +726,51 @@
 			<blockquote>
 <p>本文章只是对本人在MySQL中八股的不足进行查漏补缺，搭建属于我的知识体系，使用的是适用于本人的语言逻辑，不建议作为八股学习🤫。</p>
 </blockquote>
-<h1 id="之前的回答"><a href="#之前的回答" class="headerlink" title="之前的回答"></a>之前的回答</h1><blockquote>
-<p>为什么现在提倡单表查询数据，业务层做耦合</p>
-</blockquote>
+<h1 id="之前的回答"><a href="#之前的回答" class="headerlink" title="之前的回答"></a>之前的回答</h1><h2 id="讲一下redo-log-和bin-log-undo-log"><a href="#讲一下redo-log-和bin-log-undo-log" class="headerlink" title="讲一下redo log 和bin log undo log"></a>讲一下redo log 和bin log undo log</h2><ul>
+<li><p><code>redo log</code> 用于崩溃恢复，保证了事务的持久性</p>
+</li>
+<li><p><code>bin log</code> 用于主从复制和数据备份，保证了事务的原子性</p>
+</li>
+<li><p><code>undo log</code> 用于事务的回滚和MVCC</p>
+</li>
+<li><p><strong><code>redo log</code> 是物理日志，记录的是数据页的修改</strong></p>
 <ul>
+<li>使用redo log更新数据的流程</li>
+</ul>
+<ol>
+<li>数据更新到Buffer pool  <strong>同时redo log 来记录修改 用于宕机后恢复数据</strong></li>
+<li>提交事务(此刻更新数据算是成功)</li>
+<li>之后慢慢将redo log里的数据刷盘到磁盘</li>
+</ol>
+<ul>
+<li>如果数据还没刷盘，宕机后可以使用redo log 进行重做，恢复数据，保证了持久性</li>
+</ul>
+</li>
+<li><p><strong><code>bin log</code> 是逻辑日志 记录的是SQL语句</strong>，主要用于<strong>主从复制和数据备份</strong>，但它不能像 redo log 一样用于崩溃恢复。</p>
+</li>
+<li><p>我们提交数据时使用<strong>两阶段提交，用于保证redo log 和 bin log 一致</strong></p>
+<ul>
+<li>先写 redo log 的prepare状态</li>
+<li>再写 bin log </li>
+<li>如果完成，则写redo log 的commit状态，如果没完成，则回滚</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么redo-log-不能代替bin-log-完成主从复制"><a href="#为什么redo-log-不能代替bin-log-完成主从复制" class="headerlink" title="为什么redo log 不能代替bin log 完成主从复制"></a>为什么redo log 不能代替bin log 完成主从复制</h2><p>redo log 是物理日志，记录的是数据页的修改<br>  <strong>跨机器的数据页可能不同，导致无法多节点复用</strong></p>
+<p>redo log 是<strong>循环</strong>写的，它<strong>具有固定大小</strong>，<strong>新的记录会覆盖旧的记录，无法做完整链路</strong></p>
+<h2 id="MySQL主从同步原理"><a href="#MySQL主从同步原理" class="headerlink" title="MySQL主从同步原理"></a>MySQL主从同步原理</h2><p>  Mysql主从同步是<strong>基于binlog的异步复制机制</strong><br>  主库记录<code>binlog</code>，从库通过IO线程拉取并写入<code>relay log(中继日志)</code>，再执行SQL实现数据同步</p>
+<ul>
+<li><p>主从同步核心流程</p>
+<ol>
+<li>主库写数据，同时<strong>记录SQL语句到binlog</strong></li>
+<li>从库通过<strong>IO线程</strong>拉binlog，将<strong>日志写入relay log</strong></li>
+<li>从库执行relay log的SQl语句，同步数据。</li>
+</ol>
+</li>
+<li><p>为什么是<strong>异步复制</strong><br>主库提交之后从库不会立刻同步<br>存在数据延迟<br>我们可以使用<strong>半同步复制模式</strong><br>  主库等从库<strong>ACK</strong>之后再返回客户端</p>
+</li>
+</ul>
+<h2 id="为什么现在提倡单表查询数据，业务层做耦合"><a href="#为什么现在提倡单表查询数据，业务层做耦合" class="headerlink" title="为什么现在提倡单表查询数据，业务层做耦合"></a>为什么现在提倡单表查询数据，业务层做耦合</h2><ul>
 <li>单表查询可以避免<strong>联表插查询JOIN的性能问题</strong><br>联表查询性能比较低,<strong>需要看这些表是否有索引</strong><br>举个例子<ul>
 <li>如果两张表使用JOIN，但是都没加索引</li>
 <li>假如表A 100行数据 表B 1000行数据</li>
@@ -737,49 +778,28 @@
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>请你说一下 MySQL 中 InnoDB 和 MyISAM 的区别</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">* InnoDB有拥有事务，可以保证ACID，而MyISAM没有，数据库崩溃会出现错误</span><br><span class="line">* InnoDB使用行锁，MyISAM使用表锁</span><br><span class="line">* InnoDB可以使用聚簇索引，而MyISAM不行</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>什么是MySQL的索引</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql的索引是一种数据结构 举个例子的话数据库就相当于一本书 而索引就是书内容的目录 我们查询一条数据的时候不能直接查询整个数据库 而是通过索引去定位我们想要的数据 </span><br><span class="line">mysql的索引采用的是b+树的数据结构，不同于二叉树，如果数据依次递增就会退化为链表 大大降低性能，而b树虽然在每个节点存储索引和数据，但是面对数据量过大的时候树高还是会很大 而b+树的非叶子节点只存储索引和指针，只在叶子节点存储数据，这样我们在遍历非叶子节点的时候就很快，而每个叶子节点都是双向链表，可以方便的进行范围索引查询 </span><br><span class="line">常见的索引有聚簇索引和非聚簇索引，我的理解是聚簇索引会根据一个唯一或者主键索引来遍历，叶子节点上存储的是指针和整行数据，非聚簇索引就是使用其他不太重要的属性进行便利，叶子节点存的是主键和指针。 当我们select * 时，条件如果用到了非聚簇索引，就会引发回表查询，再根据聚簇索引来查询整行元素 性能很差 所以我们一般使用联合索引进行查询，尽量不select * 需要我为你讲解联合索引的使用方法吗</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>InnoDB中行锁和表锁可以同时存在吗</p>
-</blockquote>
-<ul>
+<h2 id="请你说一下-MySQL-中-InnoDB-和-MyISAM-的区别"><a href="#请你说一下-MySQL-中-InnoDB-和-MyISAM-的区别" class="headerlink" title="请你说一下 MySQL 中 InnoDB 和 MyISAM 的区别"></a>请你说一下 MySQL 中 InnoDB 和 MyISAM 的区别</h2><ul>
+<li>InnoDB有拥有事务，可以保证ACID，而MyISAM没有，数据库崩溃会出现错误</li>
+<li>InnoDB使用行锁，MyISAM使用表锁</li>
+<li>InnoDB可以使用聚簇索引，而MyISAM不行</li>
+</ul>
+<h2 id="什么是MySQL的索引"><a href="#什么是MySQL的索引" class="headerlink" title="什么是MySQL的索引"></a>什么是MySQL的索引</h2><p>mysql的索引是一种数据结构 举个例子的话数据库就相当于一本书 而索引就是书内容的目录 我们查询一条数据的时候不能直接查询整个数据库 而是通过索引去定位我们想要的数据<br>mysql的索引采用的是b+树的数据结构，不同于二叉树，如果数据依次递增就会退化为链表 大大降低性能，而b树虽然在每个节点存储索引和数据，但是面对数据量过大的时候树高还是会很大 而b+树的非叶子节点只存储索引和指针，只在叶子节点存储数据，这样我们在遍历非叶子节点的时候就很快，而每个叶子节点都是双向链表，可以方便的进行范围索引查询<br>常见的索引有聚簇索引和非聚簇索引，我的理解是聚簇索引会根据一个唯一或者主键索引来遍历，叶子节点上存储的是指针和整行数据，非聚簇索引就是使用其他不太重要的属性进行便利，叶子节点存的是主键和指针。 当我们select * 时，条件如果用到了非聚簇索引，就会引发回表查询，再根据聚簇索引来查询整行元素 性能很差 所以我们一般使用联合索引进行查询，尽量不select * 需要我为你讲解联合索引的使用方法吗</p>
+<h2 id="InnoDB中行锁和表锁可以同时存在吗"><a href="#InnoDB中行锁和表锁可以同时存在吗" class="headerlink" title="InnoDB中行锁和表锁可以同时存在吗"></a>InnoDB中行锁和表锁可以同时存在吗</h2><ul>
 <li>行锁和表锁是可以同时存在的。<br>在 InnoDB 中，当事务对某一行加锁时，会先在表上加意向锁，再对具体行加行锁。<br>因此表级锁和行级锁是分层存在的。但如果涉及显式的表锁操作，例如 LOCK TABLE，就需要根据锁的兼容性判断是否冲突</li>
 </ul>
-<blockquote>
-<p>什么是最左前缀原则？</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">最左前缀原则适用于联合索引 我给您讲解一下联合索引的优势 </span><br><span class="line">假如我的联合索引时username age address 那么我查询这个索引的时候就可以获得id username age address这四个数据并且不需要回表 这就是覆盖索引 </span><br><span class="line">至于最左前缀原则 我们查询使用联合索引时需要依次需要这些条件 </span><br><span class="line">比如where a = 1 ， b = 2 , c = 3 我们的联合索引是a b c 那么就可以正确查询 </span><br><span class="line">如果是a = 1 b = 2 那么可以通过前两个进行查询 </span><br><span class="line">如果a = 1 c = 3 就只会使用a这一个条件 </span><br><span class="line">同样的 如果没有a 有b c 那么不会使用任何索引 </span><br><span class="line">至于条件的顺序不用非要一致 可以先b后a 之后数据库会自动排序 </span><br><span class="line">这就是最左前缀原则 如果不遵循最左前缀原则 就可能会发生回表查询 我们通常优化sql会注意sql语句是否准寻他 </span><br><span class="line">还需要我说出索引失效的情况吗</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>MySQL中的事务是什么</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">事物就是一个程序运行的最小单位 </span><br><span class="line">ACID是MySQL事物的四大特性 分别是原子性 持久性 隔离性 一致性 </span><br><span class="line">在InnoDB中 我们使用redo log 来保证持久性 假如我们的mysql在内存中读取到了数据，要将其存放到磁盘上 </span><br><span class="line">突然mysql崩溃了 没有将其存到磁盘上 这样就违背了持久性 也就是说我们的程序运行成功了 但是没有存在数据库中 </span><br><span class="line"></span><br><span class="line">mysql在内存里引用redo log 我们buffer pool里的数据会先存放到同在内存中的redo log </span><br><span class="line">假如mysql崩溃了 redo log会检测磁盘和自身数据是否一致，如果不一致就会将数据写入磁盘 而保证一致性和原子性</span><br><span class="line"></span><br><span class="line">我们使用undo log 简单的来说我们的事务如果执行了insert语句 还需要执行update语句 但是突然报错了 </span><br><span class="line">但是insert语句已经执行了 这时我们事物的原子性就被破坏了 而因为数据库中多了insert语句 而程序并没跑通 </span><br><span class="line">所以破坏了数据一致性 这时我们就需要使用到undo log了 undo log会存放事务中执行的DDL语句的相反语句 </span><br><span class="line">比如我们insert了 他就存放一个相反的delete 这样在我们程序报错的时候 他就会执行相反的语句rollback我们的数据库，保证数据一致性，这样我们的事务里操作数据库的行为也失效了，保证了原子性。 至于隔离性我们是通过MVCC进行保证的 需要我继续给你讲解MVCC吗</span><br></pre></td></tr></table></figure></div>
-
-
-<blockquote>
-<p>MySQL 为什么使用 B+Tree 作为索引，而不用 Hash 或 BTree？</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Hash结构是快 但是我们的内存地址不是连续的 做不到范围索引 </span><br><span class="line">而B+树的每个叶子节点都是双向链表，可以做到范围索引 </span><br><span class="line"></span><br><span class="line">至于b树 他虽然性能比平衡二叉树以及红黑树好，因为他的一个节点不只可以分出两个分支 比他俩的树长小很多 但是如果数据量很大 每个节点上都有数据 我们在查询下面的数据时还是性能很差 </span><br><span class="line">而B+树的非叶子节点存的都是索引和指针，遍历速度很快 再加上因为数据都在叶子节点 所以我们平均查询时间会因为树高的相同而比较平衡</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>什么是MVCC</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">MVCC是多版本事务控制</span><br><span class="line">在MYSQL中存在很多隔离级别 他们是 读未提交 读已提交 可重复读 串行化 </span><br><span class="line">他会解决我们在数据库中每个事务的隔离性问题 </span><br><span class="line">我们多事务并发运行的时候 假如我们第一个线程的事务正在修改数据 而第二个线程读取到了第一个线程修改的数据 结果想读跟读到的不一致 这样就形成了脏读 </span><br><span class="line">我们的读未提交就会引起脏读 因为会读到未提交的事务 </span><br><span class="line">而读已提交解决了这个问题 他让事务只会读到已经提交的事务的数据 </span><br><span class="line"></span><br><span class="line">但是假如说我们第一次查询读到了数据 而另外一个线程修改了这个数据并且提交了 那么我们第二次读取的数据和第一个就不一致 这就造成了不可重复读 </span><br><span class="line"></span><br><span class="line">而RR 可重复读就解决了这个问题 我们在第一个查询的时候生成了一个read view 而之后每次查询都复制第一次的read view 这样就保证了每次查询数据一致 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">但是可重复读还是会产生幻读的问题 </span><br><span class="line"></span><br><span class="line">而串行化可以解决这个问题 他给数据库加了行锁 除非解锁 要不然其他线程的事务是读取不到数据的 摒弃了并行 性能就大大降低了 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">至于MVCC怎么实现 是由undo log read view 隐藏字段组成的 </span><br><span class="line">我们的表中默认两个隐藏字段 一个是该行数据版本号  和上一个版本的内存地址 </span><br><span class="line">undo log 中存储了数据的所有版本 形成了一个版本链表 每一个版本都有上一个版本的内存地址 </span><br><span class="line">假如我们在RC的情况下 每次查询都会生成一个新的readview 他会根据条件来判断读取哪个版本的数据 而RR环境下只有一种read view 所以只会读取同一个版本的数据</span><br></pre></td></tr></table></figure></div>
-
-<blockquote>
-<p>一条 SQL 在 MySQL 中是如何执行的？</p>
-</blockquote>
-<div class="code-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先是客户端与mysql通过TCP三次握手建立连接</span><br><span class="line">mysql数据库检测用户的密码是否正确 从而确认用户是否有权限 </span><br><span class="line">然后就是解析器解析用户的SQL语句 把他们分解成token 逐token进行解析 </span><br><span class="line">解析完了mysql会对sql语句进行优化 让他可以符合执行的要求 </span><br><span class="line">再通过执行器去执行SQL语句到存储引擎</span><br><span class="line">这些都属于MySQL的Server层，这层里还有一个binlog，MySQL还包括引擎层，也就是InnoDB</span><br></pre></td></tr></table></figure></div>
-
-
+<h2 id="什么是最左前缀原则？"><a href="#什么是最左前缀原则？" class="headerlink" title="什么是最左前缀原则？"></a>什么是最左前缀原则？</h2><p>最左前缀原则适用于联合索引 我给您讲解一下联合索引的优势<br>假如我的联合索引时username age address 那么我查询这个索引的时候就可以获得id username age address这四个数据并且不需要回表 这就是覆盖索引<br>至于最左前缀原则 我们查询使用联合索引时需要依次需要这些条件<br>比如where a &#x3D; 1 ， b &#x3D; 2 , c &#x3D; 3 我们的联合索引是a b c 那么就可以正确查询<br>如果是a &#x3D; 1 b &#x3D; 2 那么可以通过前两个进行查询<br>如果a &#x3D; 1 c &#x3D; 3 就只会使用a这一个条件<br>同样的 如果没有a 有b c 那么不会使用任何索引<br>至于条件的顺序不用非要一致 可以先b后a 之后数据库会自动排序<br>这就是最左前缀原则 如果不遵循最左前缀原则 就可能会发生回表查询 我们通常优化sql会注意sql语句是否准寻他<br>还需要我说出索引失效的情况吗</p>
+<h2 id="MySQL中的事务是什么"><a href="#MySQL中的事务是什么" class="headerlink" title="MySQL中的事务是什么"></a>MySQL中的事务是什么</h2><p>事物就是一个程序运行的最小单位<br>ACID是MySQL事物的四大特性 分别是原子性 持久性 隔离性 一致性<br>在InnoDB中 我们使用redo log 来保证持久性 假如我们的mysql在内存中读取到了数据，要将其存放到磁盘上<br>突然mysql崩溃了 没有将其存到磁盘上 这样就违背了持久性 也就是说我们的程序运行成功了 但是没有存在数据库中 </p>
+<p>mysql在内存里引用redo log 我们buffer pool里的数据会先存放到同在内存中的redo log<br>假如mysql崩溃了 redo log会检测磁盘和自身数据是否一致，如果不一致就会将数据写入磁盘 而保证一致性和原子性</p>
+<p>我们使用undo log 简单的来说我们的事务如果执行了insert语句 还需要执行update语句 但是突然报错了<br>但是insert语句已经执行了 这时我们事物的原子性就被破坏了 而因为数据库中多了insert语句 而程序并没跑通<br>所以破坏了数据一致性 这时我们就需要使用到undo log了 undo log会存放事务中执行的DDL语句的相反语句<br>比如我们insert了 他就存放一个相反的delete 这样在我们程序报错的时候 他就会执行相反的语句rollback我们的数据库，保证数据一致性，这样我们的事务里操作数据库的行为也失效了，保证了原子性。 至于隔离性我们是通过MVCC进行保证的 需要我继续给你讲解MVCC吗</p>
+<h2 id="MySQL-为什么使用-B-Tree-作为索引，而不用-Hash-或-BTree？"><a href="#MySQL-为什么使用-B-Tree-作为索引，而不用-Hash-或-BTree？" class="headerlink" title="MySQL 为什么使用 B+Tree 作为索引，而不用 Hash 或 BTree？"></a>MySQL 为什么使用 B+Tree 作为索引，而不用 Hash 或 BTree？</h2><p>Hash结构是快 但是我们的内存地址不是连续的 做不到范围索引<br>而B+树的每个叶子节点都是双向链表，可以做到范围索引 </p>
+<p>至于b树 他虽然性能比平衡二叉树以及红黑树好，因为他的一个节点不只可以分出两个分支 比他俩的树长小很多 但是如果数据量很大 每个节点上都有数据 我们在查询下面的数据时还是性能很差<br>而B+树的非叶子节点存的都是索引和指针，遍历速度很快 再加上因为数据都在叶子节点 所以我们平均查询时间会因为树高的相同而比较平衡</p>
+<h2 id="什么是MVCC"><a href="#什么是MVCC" class="headerlink" title="什么是MVCC"></a>什么是MVCC</h2><p>MVCC是多版本事务控制<br>在MYSQL中存在很多隔离级别 他们是 读未提交 读已提交 可重复读 串行化<br>他会解决我们在数据库中每个事务的隔离性问题<br>我们多事务并发运行的时候 假如我们第一个线程的事务正在修改数据 而第二个线程读取到了第一个线程修改的数据 结果想读跟读到的不一致 这样就形成了脏读<br>我们的读未提交就会引起脏读 因为会读到未提交的事务<br>而读已提交解决了这个问题 他让事务只会读到已经提交的事务的数据 </p>
+<p>但是假如说我们第一次查询读到了数据 而另外一个线程修改了这个数据并且提交了 那么我们第二次读取的数据和第一个就不一致 这就造成了不可重复读 </p>
+<p>而RR 可重复读就解决了这个问题 我们在第一个查询的时候生成了一个read view 而之后每次查询都复制第一次的read view 这样就保证了每次查询数据一致 </p>
+<p>但是可重复读还是会产生幻读的问题 </p>
+<p>而串行化可以解决这个问题 他给数据库加了行锁 除非解锁 要不然其他线程的事务是读取不到数据的 摒弃了并行 性能就大大降低了 </p>
+<p>至于MVCC怎么实现 是由undo log read view 隐藏字段组成的<br>我们的表中默认两个隐藏字段 一个是该行数据版本号  和上一个版本的内存地址<br>undo log 中存储了数据的所有版本 形成了一个版本链表 每一个版本都有上一个版本的内存地址<br>假如我们在RC的情况下 每次查询都会生成一个新的readview 他会根据条件来判断读取哪个版本的数据 而RR环境下只有一种read view 所以只会读取同一个版本的数据</p>
+<h2 id="一条-SQL-在-MySQL-中是如何执行的？"><a href="#一条-SQL-在-MySQL-中是如何执行的？" class="headerlink" title="一条 SQL 在 MySQL 中是如何执行的？"></a>一条 SQL 在 MySQL 中是如何执行的？</h2><p>首先是客户端与mysql通过TCP三次握手建立连接<br>mysql数据库检测用户的密码是否正确 从而确认用户是否有权限<br>然后就是解析器解析用户的SQL语句 把他们分解成token 逐token进行解析<br>解析完了mysql会对sql语句进行优化 让他可以符合执行的要求<br>再通过执行器去执行SQL语句到存储引擎<br>这些都属于MySQL的Server层，这层里还有一个binlog，MySQL还包括引擎层，也就是InnoDB</p>
 <h1 id="1-MySQL执行流程"><a href="#1-MySQL执行流程" class="headerlink" title="1. MySQL执行流程"></a>1. MySQL执行流程</h1><div class="code-container" data-rel="Md"><figure class="iseeu highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Client</span><br><span class="line"> ↓</span><br><span class="line">连接器</span><br><span class="line"> ↓</span><br><span class="line">查询缓存(8.0已删除)</span><br><span class="line"> ↓</span><br><span class="line">解析器</span><br><span class="line"> ↓</span><br><span class="line">优化器</span><br><span class="line"> ↓</span><br><span class="line">执行器</span><br><span class="line"> ↓</span><br><span class="line">存储引擎</span><br><span class="line"> ↓</span><br><span class="line">磁盘</span><br></pre></td></tr></table></figure></div>
 
 <ol>
@@ -808,7 +828,18 @@
 </ul>
 </li>
 </ul>
-<h1 id="2-MySQL锁体系"><a href="#2-MySQL锁体系" class="headerlink" title="2. MySQL锁体系"></a>2. MySQL锁体系</h1><h2 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h2><ul>
+<h1 id="2-MySQL锁体系"><a href="#2-MySQL锁体系" class="headerlink" title="2. MySQL锁体系"></a>2. MySQL锁体系</h1><p>MySQL 的锁可以从多个维度分类：</p>
+<ol>
+<li><p>从粒度上可以分为<code>表锁</code>和<code>行锁</code>；</p>
+</li>
+<li><p><strong>行锁</strong>分为<code>记录锁</code>、<code>间隙锁</code>和<code>临键锁</code>；</p>
+</li>
+<li><p><strong>表锁</strong>分为<code>意向锁</code>、<code>自增锁</code>、和<code>元数据锁</code></p>
+</li>
+<li><p>从<strong>锁的属性</strong>上可以分为<code>共享锁（S锁）</code>和<code>排他锁（X锁</code>）；</p>
+</li>
+</ol>
+<ul>
 <li><p><code>共享锁(S锁)</code><br><code>SELECT ... LOCK IN SHARE MODE</code><br>多个事务可以同时读</p>
 </li>
 <li><p><code>排他锁(X锁)</code></p>
@@ -820,9 +851,13 @@
 <li><code>INSERT ...</code><br>该锁只能由一个事务持有</li>
 </ol>
 </li>
-<li><p><code>间隙锁(Gap Lock)</code><br>假如主键id有1，2，4 我们范围查询2到4之间的数据，数据库就会锁2，4<br>这时另一个事务插入了id &#x3D; 3的数据，那么我们就会查询2，3，4 产生<strong>幻读</strong><br>间隙锁就是锁住间隙之间所有数据(若新添加会被锁)，防止幻读</p>
+</ul>
+<h2 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h2><ul>
+<li><p><code>记录锁(Record Lock)</code><br> 锁一行数据</p>
 </li>
-<li><p><code>临键锁Next-Key Lock</code><br>行锁 + Gap Lock<br>假如间隙锁锁了间隙3   那么Next-Key Lock还锁住了2和4  也就是说这个范围内的都被锁住了。</p>
+<li><p><code>间隙锁(Gap Lock)</code><br>假如主键id有1，2，4 我们范围查询2到4之间的数据，数据库就会锁2，4<br>这时另一个事务插入了id &#x3D; 3的数据，那么我们就会查询2，3，4 产生<strong>幻读</strong><br>间隙锁就是<strong>锁住间隙之间所有数据</strong>(若新添加会被锁)，防止幻读</p>
+</li>
+<li><p><code>临键锁Next-Key Lock</code><br>记录锁+间隙锁<br>假如间隙锁锁了间隙3   那么Next-Key Lock还锁住了2和4  也就是说这个范围内的都被锁住了。</p>
 </li>
 </ul>
 <h2 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h2><ul>
@@ -921,6 +956,16 @@
 </ul>
 </li>
 </ul>
+<h1 id="6-不同隔离级别都用了什么锁"><a href="#6-不同隔离级别都用了什么锁" class="headerlink" title="6. 不同隔离级别都用了什么锁"></a>6. 不同隔离级别都用了什么锁</h1><ol>
+<li><p>读未提交<br>  <code>写操作</code><strong>加记录锁(X锁)</strong><br>  <code>读操作</code><strong>不加锁</strong></p>
+</li>
+<li><p><strong>读已提交</strong><br>  <code>写操作</code><strong>加记录锁(X锁)</strong><br>  <code>读操作</code><strong>不加锁</strong>，但是读的是MVCC里的read view，每次读都会重新生成一份read view</p>
+</li>
+<li><p><strong>可重复读</strong><br>  <code>写操作</code><strong>加临键锁</strong><br>  <code>读操作</code><strong>不加锁</strong>，读MVCC里的read view，每次都会读取第一次生成的read view</p>
+</li>
+<li><p><strong>串行化</strong><br>  <code>写操作</code><strong>加临键锁</strong><br>  <code>读操作</code>都<strong>加S锁</strong></p>
+</li>
+</ol>
 <h1 id="5-哪些隔离级别解决了幻读"><a href="#5-哪些隔离级别解决了幻读" class="headerlink" title="5. 哪些隔离级别解决了幻读"></a>5. 哪些隔离级别解决了幻读</h1><p>幻读：事务前后两次读到的<strong>数据条数</strong>不一致</p>
 <ul>
 <li><p>可重复读解决了大部分的幻读</p>
@@ -931,7 +976,7 @@
 </li>
 <li><p>而串行化解决了所有的幻读</p>
 <ul>
-<li>因为串行化普通读取默认是<code>lock in share mode</code> 默认加锁</li>
+<li>因为串行化<strong>读数据</strong>时默认加S锁<code>lock in share mode</code></li>
 </ul>
 </li>
 </ul>
@@ -961,7 +1006,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-27 22:05:16
+                    :</strong> 2026-03-31 21:34:18
             </li>
         
         <li>
@@ -1040,7 +1085,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">MySQL查漏补缺</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="nav-text">之前的回答</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">1. MySQL执行流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MySQL%E9%94%81%E4%BD%93%E7%B3%BB"><span class="nav-text">2. MySQL锁体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81"><span class="nav-text">行锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81"><span class="nav-text">表锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%A1%B5-Page"><span class="nav-text">3. 页(Page)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%BD%93%E5%89%8D%E8%AF%BB%E5%92%8C%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="nav-text">4. 说一下当前读和快照读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%93%AA%E4%BA%9B%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BA%86%E5%B9%BB%E8%AF%BB"><span class="nav-text">5. 哪些隔离级别解决了幻读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-MVCC"><span class="nav-text">6. MVCC</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E7%9A%84%E5%9B%9E%E7%AD%94"><span class="nav-text">之前的回答</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B2%E4%B8%80%E4%B8%8Bredo-log-%E5%92%8Cbin-log-undo-log"><span class="nav-text">讲一下redo log 和bin log undo log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88redo-log-%E4%B8%8D%E8%83%BD%E4%BB%A3%E6%9B%BFbin-log-%E5%AE%8C%E6%88%90%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-text">为什么redo log 不能代替bin log 完成主从复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E5%8E%9F%E7%90%86"><span class="nav-text">MySQL主从同步原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%8E%B0%E5%9C%A8%E6%8F%90%E5%80%A1%E5%8D%95%E8%A1%A8%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%EF%BC%8C%E4%B8%9A%E5%8A%A1%E5%B1%82%E5%81%9A%E8%80%A6%E5%90%88"><span class="nav-text">为什么现在提倡单表查询数据，业务层做耦合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%B7%E4%BD%A0%E8%AF%B4%E4%B8%80%E4%B8%8B-MySQL-%E4%B8%AD-InnoDB-%E5%92%8C-MyISAM-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-text">请你说一下 MySQL 中 InnoDB 和 MyISAM 的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFMySQL%E7%9A%84%E7%B4%A2%E5%BC%95"><span class="nav-text">什么是MySQL的索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB%E4%B8%AD%E8%A1%8C%E9%94%81%E5%92%8C%E8%A1%A8%E9%94%81%E5%8F%AF%E4%BB%A5%E5%90%8C%E6%97%B6%E5%AD%98%E5%9C%A8%E5%90%97"><span class="nav-text">InnoDB中行锁和表锁可以同时存在吗</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E5%8E%9F%E5%88%99%EF%BC%9F"><span class="nav-text">什么是最左前缀原则？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E4%B8%AD%E7%9A%84%E4%BA%8B%E5%8A%A1%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">MySQL中的事务是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8-B-Tree-%E4%BD%9C%E4%B8%BA%E7%B4%A2%E5%BC%95%EF%BC%8C%E8%80%8C%E4%B8%8D%E7%94%A8-Hash-%E6%88%96-BTree%EF%BC%9F"><span class="nav-text">MySQL 为什么使用 B+Tree 作为索引，而不用 Hash 或 BTree？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFMVCC"><span class="nav-text">什么是MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1-SQL-%E5%9C%A8-MySQL-%E4%B8%AD%E6%98%AF%E5%A6%82%E4%BD%95%E6%89%A7%E8%A1%8C%E7%9A%84%EF%BC%9F"><span class="nav-text">一条 SQL 在 MySQL 中是如何执行的？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-text">1. MySQL执行流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MySQL%E9%94%81%E4%BD%93%E7%B3%BB"><span class="nav-text">2. MySQL锁体系</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%8C%E9%94%81"><span class="nav-text">行锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E9%94%81"><span class="nav-text">表锁</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%A1%B5-Page"><span class="nav-text">3. 页(Page)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%AF%B4%E4%B8%80%E4%B8%8B%E5%BD%93%E5%89%8D%E8%AF%BB%E5%92%8C%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="nav-text">4. 说一下当前读和快照读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E4%B8%8D%E5%90%8C%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E9%83%BD%E7%94%A8%E4%BA%86%E4%BB%80%E4%B9%88%E9%94%81"><span class="nav-text">6. 不同隔离级别都用了什么锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%93%AA%E4%BA%9B%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E8%A7%A3%E5%86%B3%E4%BA%86%E5%B9%BB%E8%AF%BB"><span class="nav-text">5. 哪些隔离级别解决了幻读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-MVCC"><span class="nav-text">6. MVCC</span></a></li></ol>
 
 	</div>
 </div>
@@ -1073,7 +1118,7 @@
                     </span>
                     
                         <span>
-                            共 132.6k 字
+                            共 135.1k 字
                         </span>
                     
                 </p>
