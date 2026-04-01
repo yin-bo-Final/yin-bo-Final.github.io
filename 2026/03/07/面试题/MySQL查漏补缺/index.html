@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-06T17:07:37.788Z">
-<meta property="article:modified_time" content="2026-03-31T13:34:18.524Z">
+<meta property="article:modified_time" content="2026-04-01T13:16:58.042Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-31 21:34:18</span>
-            <span class="mobile">2026-03-31 21:34:18</span>
+            <span class="desktop">2026-04-01 21:16:58</span>
+            <span class="mobile">2026-04-01 21:16:58</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -685,11 +685,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        <a href="/tags/MySQL/">MySQL</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/MySQL/">MySQL</a>&nbsp;
+                        | <a href="/tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
                     </li>
                 
             </ul>
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.1k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>17 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>18 分钟</span>
         </span>
     
     
@@ -968,14 +968,13 @@
 </ol>
 <h1 id="5-哪些隔离级别解决了幻读"><a href="#5-哪些隔离级别解决了幻读" class="headerlink" title="5. 哪些隔离级别解决了幻读"></a>5. 哪些隔离级别解决了幻读</h1><p>幻读：事务前后两次读到的<strong>数据条数</strong>不一致</p>
 <ul>
-<li><p>可重复读解决了大部分的幻读</p>
-<ul>
+<li>可重复读解决了大部分的幻读<ul>
 <li>通过MVCC的Read Views 保证同一事物读取的快照一致，解决了快照读的幻读</li>
-<li>对于当前读(select for update&#x2F;update&#x2F;delete)，InnoDB 使用 Next-Key Lock(行锁+间隙锁)防止其他事务插入，从而解决了当前读的幻读</li>
+<li>对于当前读(select for update&#x2F;update&#x2F;delete)，InnoDB 使用 Next-Key Lock(行锁+间隙锁)防止其他事务插入，从而解决了当前读的幻读<br>对于RR ，当前读可能出现幻读<br>举个例子<br>事务A 执行<code>select * from user where id &gt; 2</code>，此时表内有id &#x3D; 3，因为读取的是最新数据，<strong>所以只读<code>id = 3</code>一条</strong><br>此时事务B update了一条id &#x3D; 4 的记录 然后commit了<br>事务A 又想<code>select for update</code>，又因为是<strong>当前读</strong>，读到了最新数据，也就是读到了id &#x3D; 3 , id &#x3D; </li>
+<li>避免这种情况可以每次都是用<code>select for update</code><strong>避免当前读和快照都混用</strong></li>
 </ul>
 </li>
-<li><p>而串行化解决了所有的幻读</p>
-<ul>
+<li>而串行化解决了所有的幻读<ul>
 <li>因为串行化<strong>读数据</strong>时默认加S锁<code>lock in share mode</code></li>
 </ul>
 </li>
@@ -1006,7 +1005,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-31 21:34:18
+                    :</strong> 2026-04-01 21:16:58
             </li>
         
         <li>
@@ -1032,11 +1031,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
+				<a href="/tags/MySQL/">#MySQL</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/MySQL/">#MySQL</a>&nbsp;
+				<a href="/tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
 			</li>
 			
 		</ul>
@@ -1118,7 +1117,7 @@
                     </span>
                     
                         <span>
-                            共 135.1k 字
+                            共 135.7k 字
                         </span>
                     
                 </p>

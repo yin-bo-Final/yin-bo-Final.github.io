@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-08T06:14:16.916Z">
-<meta property="article:modified_time" content="2026-03-28T09:07:34.999Z">
+<meta property="article:modified_time" content="2026-04-01T14:16:58.766Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="Redis">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-03-28 17:07:34</span>
-            <span class="mobile">2026-03-28 17:07:34</span>
+            <span class="desktop">2026-04-01 22:16:58</span>
+            <span class="mobile">2026-04-01 22:16:58</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -685,11 +685,11 @@
             <ul>
                 
                     <li>
-                        <a href="/tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
+                        <a href="/tags/Redis/">Redis</a>&nbsp;
                     </li>
                 
                     <li>
-                        | <a href="/tags/Redis/">Redis</a>&nbsp;
+                        | <a href="/tags/%E5%85%AB%E8%82%A1/">八股</a>&nbsp;
                     </li>
                 
             </ul>
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.1k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>3.6k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>11 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>13 分钟</span>
         </span>
     
     
@@ -893,31 +893,71 @@
 </ol>
 </li>
 </ul>
-<h2 id="集群扩容"><a href="#集群扩容" class="headerlink" title="集群扩容"></a>集群扩容</h2><ul>
+<h2 id="11-集群扩容"><a href="#11-集群扩容" class="headerlink" title="11. 集群扩容"></a>11. 集群扩容</h2><ul>
 <li>当数据太多，单机顶不住时<br>我们会扩容<code>Redis Cluster</code> ，具体就是<strong>新增节点</strong><br>然后给新的节点分配slot，<strong>注意Redis总共就有16384个slot</strong><br>把就旧节点的数据迁移到新节点</li>
 </ul>
-<h1 id="11-Redis的IO模型"><a href="#11-Redis的IO模型" class="headerlink" title="11. Redis的IO模型"></a>11. Redis的IO模型</h1><ul>
-<li>Redis采用单线程+IO多路复用解决网络请求的<br>其中IO多路复用就是<strong>用一个线程同时监听多个连接</strong><br>RedisIO模型在不同OS的底层不同，在Windows上是<code>select</code>，在Linux上是<code>epoll</code></li>
+<h1 id="12-Redis的IO模型"><a href="#12-Redis的IO模型" class="headerlink" title="12. Redis的IO模型"></a>12. Redis的IO模型</h1><ul>
+<li>Redis采用单线程+IO多路复用解决网络请求的<br>其中IO多路复用就是<strong>用一个线程同时监听多个连接</strong><br>Redis的IO多路复用策略使用的是<code>epoll</code></li>
 </ul>
 <blockquote>
-<p>什么是epoll</p>
+<p>IO多路复用策略<br>IO多路复用，本质就是<strong>让一个线程同时监听多个连接</strong><br>  这里的复用不是说一个IO被使用多次，而是<strong>复用线程去监听多个IO</strong></p>
 </blockquote>
 <ul>
-<li>epoll是Linux下一种IO多路复用机制<ul>
-<li><strong>可以让一个线程监听很多socket</strong></li>
-<li>当某些socket就绪时，通知线程去处理</li>
+<li>如果不用IO多路复用，<strong>每个连接都要使用一个线程</strong>，这样会造成性能降低</li>
+<li>使用了IO多路复用<br>应用线程不用遍历所有连接<br>由内核同一监听，<strong>有事件了再处理</strong></li>
 </ul>
-</li>
-</ul>
-<p>通俗来讲:<br>  有很多个客户端连接<br>  但是不能每个连接都开一个线程<br>  于是<strong>让内核帮我盯着这些连接</strong>，谁准备好了，内核告诉我<br>这就是epoll的核心思想</p>
-<p>select&#x2F;poll都是IO多路复用机制</p>
+<ol>
+<li><p><strong>select</strong><br>  <code>select</code>是最早的IO多路复用机制</p>
 <ul>
-<li>他们每次调用都要遍历所有的fd(连接索引)<br>而且select每次调用，都要把fd集合从用户态拷到内核态，调用结束，还要拷到用户态<ul>
-<li>效率很低，开销很大</li>
+<li><strong>select的工作方式</strong>：<br> 每次调用select，把所有<strong>连接</strong>传给内核<br> 然后内核会<strong>遍历</strong>我们<strong>所有的连接</strong>，检查连接有没有<strong>就绪</strong><br> <em>假如一万个连接只有几十个活跃的，照样会按个遍历这一万个，所以性能很差</em><br> 如果就绪就<strong>返回</strong>，如果没就绪则继续<strong>阻塞</strong></li>
+<li><strong>select的缺点</strong>：</li>
+</ul>
+<ol>
+<li>每次调用select都会把连接集合从<strong>用户态拷贝到内核态</strong></li>
+<li><strong>监听的fd(连接)有限，通常存到位图bitmap中，默认是1024</strong></li>
+</ol>
+</li>
+<li><p><strong>poll</strong><br>  <code>poll</code>可以算是select的改进版<br> <strong>poll的工作方式和select相同</strong>，都是遍历然后检查是否就绪</p>
+<ul>
+<li>区别于select,poll不再用bitmap存储fd<br> 而是用一个<strong>结构体数组</strong>，所以没有监听fd的数量限制</li>
+<li>缺点也是每次调用，都要将连接集合<strong>从用户态拷贝到内核态</strong></li>
 </ul>
 </li>
+<li><p><strong>epoll</strong><br>具体如下</p>
+</li>
+</ol>
+<h1 id="13-epoll"><a href="#13-epoll" class="headerlink" title="13. epoll"></a>13. epoll</h1><p><code>epoll</code>是linux最核心的多路复用机制，改进很大<br><strong>区别于select和poll</strong>：<br>    1. <strong>不用每次把fd(连接)传到内核</strong><br>    2. <strong>不需要遍历fd集合找就绪事件</strong></p>
+<ul>
+<li>把”重复注册”和”无脑遍历”给优化掉了</li>
 </ul>
-<p><strong>epoll的改进</strong>：<br>  <strong>思路</strong>：不要每次把所有fd传给内核，也不要每次做全量扫描<br>    把<strong>监听哪些fd</strong>和<strong>哪些fd就绪</strong>分开了</p>
+<p>epoll常用三个系统调用</p>
+<ol>
+<li><p><code>epoll_create</code><br>  创建一个epoll实例</p>
+</li>
+<li><p><code>epoll_ctl</code><br>  把某个fd(连接)<strong>注册&#x2F;修改&#x2F;删除</strong>到epoll实例里<br>  比如：<br> 在epoll里监听一个socket<br> 删除某个socket<br> 修改监听规则</p>
+<ul>
+<li>区别于select&#x2F;poll:<br> <strong>只在fd增删改的时候传内核<code>epoll_ctl</code>，而不是每次调用都传内核</strong></li>
+</ul>
+</li>
+<li><p><code>epoll_wait</code><br><strong>阻塞</strong>等待时间发生<br>一旦fd就绪，将fd存到<strong>就绪队列</strong>，内核会将<strong>就绪队列里的fd列表</strong>发给线程<br>这里就<strong>不需要全表扫描</strong>，而是 等到就绪的fd</p>
+</li>
+</ol>
+<p><strong>epoll的优点</strong>：</p>
+<ol>
+<li><strong>不需要拷贝所有fd到内核态</strong><br> fd注册&#x2F;修改&#x2F;删除会操作内核<br> 然后就只需要<code>epoll_wait</code>等待结果</li>
+<li>不再全表扫描遍历fd<br>内核维护一个<strong>就绪队列</strong><br>fd就绪，内核会将其存入就绪队列<br><strong>调用epoll_wait时，直接拿到就绪的fd</strong></li>
+</ol>
+<p><strong>epoll底层</strong>：</p>
+<ol>
+<li><strong>红黑树</strong><ul>
+<li>用于<strong>存储所有被监听的fd</strong><br>使用红黑树，这样增删改的时候效率比较高</li>
+</ul>
+</li>
+<li><strong>就绪队列(ready list)</strong><ul>
+<li>用来<strong>存放就绪的fd</strong><br>当fd就绪，内核将其挂到就绪队列里<br>调用epoll_wait时，直接拿到就绪的fd</li>
+</ul>
+</li>
+</ol>
 
 		</div>
 
@@ -932,7 +972,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-03-28 17:07:34
+                    :</strong> 2026-04-01 22:16:58
             </li>
         
         <li>
@@ -958,11 +998,11 @@
 		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
+				<a href="/tags/Redis/">#Redis</a>&nbsp;
 			</li>
 			
 			<li class="tag-item mx-0.5">
-				<a href="/tags/Redis/">#Redis</a>&nbsp;
+				<a href="/tags/%E5%85%AB%E8%82%A1/">#八股</a>&nbsp;
 			</li>
 			
 		</ul>
@@ -1011,7 +1051,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">Redis查漏补缺</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Redis%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="nav-text">1. Redis为什么这么快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">2. Redis数据类型的底层结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Redis%E8%BF%87%E6%9C%9FKey%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="nav-text">3. Redis过期Key删除策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Redis%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4. Redis内存淘汰策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Redis%E5%9C%A8%E4%BD%A0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-text">5. Redis在你项目中的用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-text">6. 布隆过滤器怎么实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84"><span class="nav-text">7. 你的项目如何保证双写一致性的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">8. Redis持久化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB"><span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF"><span class="nav-text">AOF</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis-%E9%9B%86%E7%BE%A4"><span class="nav-text">9. Redis 集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-Redis-%E6%89%A9%E5%AE%B9"><span class="nav-text">10. Redis 扩容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%89%A9%E5%AE%B9"><span class="nav-text">数据结构扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%86%E7%BE%A4%E6%89%A9%E5%AE%B9"><span class="nav-text">集群扩容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#11-Redis%E7%9A%84IO%E6%A8%A1%E5%9E%8B"><span class="nav-text">11. Redis的IO模型</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Redis%E4%B8%BA%E4%BB%80%E4%B9%88%E8%BF%99%E4%B9%88%E5%BF%AB"><span class="nav-text">1. Redis为什么这么快</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Redis%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%BA%95%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-text">2. Redis数据类型的底层结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#String"><span class="nav-text">String</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Redis%E8%BF%87%E6%9C%9FKey%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5"><span class="nav-text">3. Redis过期Key删除策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Redis%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-text">4. Redis内存淘汰策略</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Redis%E5%9C%A8%E4%BD%A0%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E7%94%A8%E9%80%94"><span class="nav-text">5. Redis在你项目中的用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8%E6%80%8E%E4%B9%88%E5%AE%9E%E7%8E%B0%E7%9A%84"><span class="nav-text">6. 布隆过滤器怎么实现的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E4%BD%A0%E7%9A%84%E9%A1%B9%E7%9B%AE%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E5%8F%8C%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84"><span class="nav-text">7. 你的项目如何保证双写一致性的</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E7%AD%96%E7%95%A5"><span class="nav-text">8. Redis持久化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB"><span class="nav-text">RDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF"><span class="nav-text">AOF</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Redis-%E9%9B%86%E7%BE%A4"><span class="nav-text">9. Redis 集群</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-Redis-%E6%89%A9%E5%AE%B9"><span class="nav-text">10. Redis 扩容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%89%A9%E5%AE%B9"><span class="nav-text">数据结构扩容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11-%E9%9B%86%E7%BE%A4%E6%89%A9%E5%AE%B9"><span class="nav-text">11. 集群扩容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-Redis%E7%9A%84IO%E6%A8%A1%E5%9E%8B"><span class="nav-text">12. Redis的IO模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#13-epoll"><span class="nav-text">13. epoll</span></a></li></ol>
 
 	</div>
 </div>
@@ -1044,7 +1084,7 @@
                     </span>
                     
                         <span>
-                            共 135.1k 字
+                            共 135.7k 字
                         </span>
                     
                 </p>
