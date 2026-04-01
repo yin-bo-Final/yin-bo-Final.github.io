@@ -127,7 +127,7 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/2026/01/04/期末复习/数据结构与算法/"/>
+    <link rel="canonical" href="http://example.com/2026/04/01/面试题/java查漏补缺/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
@@ -137,15 +137,14 @@
         
         <meta name="description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="数据结构期末复习">
-<meta property="og:url" content="http://example.com/2026/01/04/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2026/04/01/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-01-04T08:41:46.829Z">
-<meta property="article:modified_time" content="2026-01-11T07:44:00.106Z">
+<meta property="article:published_time" content="2026-04-01T14:26:38.932Z">
+<meta property="article:modified_time" content="2026-04-01T14:48:35.629Z">
 <meta property="article:author" content="John Doe">
-<meta property="article:tag" content="期末复习">
 <meta name="twitter:card" content="summary">
     
     
@@ -158,7 +157,7 @@
     
     <title>
         
-            数据结构期末复习 | yin_bo_&#39;s BLOG
+            yin_bo_&#39;s BLOG - Coding Journey Records
         
     </title>
 
@@ -643,7 +642,7 @@
 		<div class="article-title relative w-full">
 			
 			<div class="w-full flex items-center pt-6 justify-start">
-				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">数据结构期末复习</h1>
+				<h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3"></h1>
 			</div>
 			
 		</div>
@@ -664,42 +663,31 @@
 					<div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2026-01-04 16:41:46</span>
-        <span class="mobile">2026-01-04 16:41:46</span>
+        <span class="desktop">2026-04-01 22:26:38</span>
+        <span class="mobile">2026-04-01 22:26:38</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-01-11 15:44</span>
-            <span class="mobile">2026-01-11 15:44</span>
+            <span class="desktop">2026-04-01 22:48:35</span>
+            <span class="mobile">2026-04-01 22:48:35</span>
             <span class="hover-info">更新</span>
         </span>
     
 
     
     
-        <span class="article-tags article-meta-item">
-            <i class="fa-regular fa-tags"></i>&nbsp;
-            <ul>
-                
-                    <li>
-                        <a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">期末复习</a>&nbsp;
-                    </li>
-                
-            </ul>
-        </span>
-    
 
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>1.2k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>327 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>3 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>1 分钟</span>
         </span>
     
     
@@ -718,176 +706,39 @@
 
 
 		<div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-			<h1 id="1-基本术语"><a href="#1-基本术语" class="headerlink" title="1. 基本术语"></a>1. 基本术语</h1><ol>
-<li><p>数据结构分为逻辑结构与存储结构</p>
+			<h1 id="魔法类Unsafe"><a href="#魔法类Unsafe" class="headerlink" title="魔法类Unsafe"></a>魔法类Unsafe</h1><ul>
+<li><p><code>Unsafe</code>是<code>sun.misc</code>包下的一个类<br>  它可以<strong>绕过JVM安全机制，直接操作内存</strong><br>  <em>Unsafe &#x3D; Java里的C语言指针</em></p>
+</li>
+<li><p>为什么叫<code>Unsafe</code><br>  <strong>因为他做的事绕过了JVM,很危险</strong></p>
 <ul>
-<li>逻辑结构：关注元素之间的逻辑关系，决定数据如何组织和关联</li>
-<li>存储结构：决定数据之间在计算机内存中的<strong>物理存放方式</strong></li>
+<li>可以像C语言的指针一样，直接操作<strong>堆外内存</strong>,手动分配和释放</li>
+<li>可以跳过<strong>访问控制</strong>(private也能改)</li>
 </ul>
 </li>
-<li><p>逻辑结构分类</p>
-<ul>
-<li>集合：元素同属一个集合，无其他关系</li>
-<li>线性结构：一个对一个，比如线性表，栈，队列。</li>
-<li>树形结构：一个对多个。</li>
-<li>图形结构：多个对多个</li>
-</ul>
-</li>
-<li><p>存储结构分类</p>
-<ul>
-<li>顺序存储结构：数据元素在物理位置上是连续的</li>
-<li>链式存储结构：数据元素在物理位置上不一定连续，但是数据元素除了要存信息，还要存储一个或多个指向其他元素的指针(也就是存下一个或多个元素的物理位置)。</li>
-</ul>
-</li>
-</ol>
-<h1 id="2-算法"><a href="#2-算法" class="headerlink" title="2. 算法"></a>2. 算法</h1><ol>
-<li><p>算法的五个基本特征</p>
+<li><p><strong>Unsafe功能使用</strong></p>
 <ol>
-<li>输入</li>
-<li>输出</li>
-<li>确定性</li>
-<li>有穷性</li>
-<li>可行性</li>
-</ol>
+<li><p>直接<strong>操作堆外内存</strong>(核心功能)<br>  操作的内存不受GC管理</p>
 </li>
-<li><p>时间复杂度</p>
-<ul>
-<li>语块被执行的次数</li>
-<li>一次计算，无论n的大小如何，计算和返回结构所需时间都是O(1)</li>
-</ul>
+<li><p><strong>CAS(无锁并发)</strong><br>  unsafe类里有CAS(CompareAndSwap)方法，可以实现无锁并发，<br>  是<code>AtomicInterger</code>，<code>ConcurrentHashMap</code>的底层实现<br>  本质就是<strong>CPU指令级别原子操作</strong></p>
 </li>
-<li><p>空间复杂度</p>
-<ul>
-<li>占用多少空间的指标</li>
-</ul>
+<li><p><strong>线程调度(park&#x2F;unpark)</strong><br>  <strong>方法<code>park</code>&#x2F;<code>unpark</code>可以实现线程的阻塞和恢复</strong><br>  可以实现<code>ReentrantLock</code>和<code>AQS</code></p>
+</li>
+<li><p><strong>修改对象字段(可以绕过private控制)</strong><br>  <code>unsafe.putInt(obj,offset,0)</code><br>  可以修改private字段，<strong>不走setter和安全检查</strong></p>
+</li>
+<li><p><strong>跳过构造方法实现类加载</strong><br>  <code>User u= (User)unsafe.allocateInstance(User.class)</code><br>  不会执行构造方法，也可以类加载创建实例</p>
 </li>
 </ol>
-<h1 id="3-线性表"><a href="#3-线性表" class="headerlink" title="3. 线性表"></a>3. 线性表</h1><ol>
-<li><p>定义：</p>
-<ul>
-<li>数据元素存在一对一线性关系，即每个元素(除了第一个和最后一个)都有一个前驱和一个后继</li>
-</ul>
 </li>
-<li><p>特点:</p>
-<ul>
-<li>有序性：线性表中的元素是有序的，每个元素都有一个位置，我们可以通过位置来访问元素。</li>
-<li>元素唯一性：每个元素在线性表中的位置是唯一的。</li>
-<li>动态性：线性表的大小是动态变化的</li>
-</ul>
-</li>
-<li><p>常见操作：</p>
+<li><p>Unsafe在哪里用到了</p>
 <ol>
-<li>插入</li>
-<li>删除</li>
-<li>访问</li>
-<li>搜索</li>
-<li>排序</li>
-</ol>
+<li><p><strong>JUC并发包</strong><br>  <code>AtomicInterger</code> -&gt; CAS<br>  <code>park/unpark</code> -&gt; AQS<br>  CAS + 直接内存操作 实现了<code>ConcurrentHashMap</code>   </p>
 </li>
-<li><p>线性表顺序表示和实现</p>
-<ul>
-<li><p>顺序表：把线性表顺序存储起来是顺序表。</p>
-</li>
-<li><p>顺序存储定义：</p>
-<ul>
-<li>把<strong>逻辑上相邻</strong>的数据元素存储在<strong>物理上相邻</strong>的存储单元中的存储结构</li>
-</ul>
-</li>
-<li><p>例：</p>
-<ul>
-<li>顺序表中第一个元素存储地址是102，每个元素的长度是2，那么第四个元素的地址是108</li>
-</ul>
-</li>
-</ul>
+<li><p><strong>Netty</strong><br>  使用堆外内存提高IO性能</p>
 </li>
 </ol>
-<ul>
-<li><p>顺序表优点：</p>
-<ul>
-<li>时间：可以随机存取表中任一元素</li>
-<li>空间：存储密度大</li>
-</ul>
 </li>
-<li><p>顺序表的缺点</p>
-<ul>
-<li>时间：在插入 删除某一元素时，需要移动大量元素</li>
-<li>空间：浪费存储空间，属于<strong>静态存储形式</strong>，元素个数不能自由扩充</li>
-</ul>
+<li><p>由于它不安全且不是标准 API，JDK9 之后推荐使用 VarHandle 等方式替代。</p>
 </li>
-<li><p>为了克服顺序表的缺点 我们需要用链表</p>
-</li>
-<li><p>链表</p>
-<ul>
-<li>线性表的链式表示</li>
-<li>在逻辑上相邻的元素在<strong>物理上不一定相邻</strong></li>
-</ul>
-</li>
-<li><p>节点：</p>
-<ul>
-<li>在链式存储结构中，火车的每一届车厢就像链式存储结构中的一个节点</li>
-<li>节点是构成线性表的基本单元，每个节点包括两部分：<ul>
-<li>数据：车厢里装的货物，对应节点中存储的数据。</li>
-<li>指针：车厢之间的钩子，对应节点中用来指向下一节点的指针。</li>
-</ul>
-</li>
-<li>头节点：火车的第一节车厢，对应链表存储的头节点<ul>
-<li>头节点通常包含一个指向第一个实际数据节点的指针。</li>
-</ul>
-</li>
-<li>尾节点：火车的最后一节车厢，对应链表存储的尾节点<ul>
-<li>没有指针，只包括数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>循环链表：</p>
-<ul>
-<li>尾节点的指针指向头节点，叫做循环链表</li>
-</ul>
-</li>
-</ul>
-<h1 id="4-栈"><a href="#4-栈" class="headerlink" title="4. 栈"></a>4. 栈</h1><ul>
-<li><p>定义：只能在表的一端(栈顶)进行插入和删除运算的线性表</p>
-<ul>
-<li>入栈出栈都通过栈顶</li>
-</ul>
-</li>
-<li><p>特点：先进后出，后进先出</p>
-</li>
-<li><p>顺序栈</p>
-</li>
-</ul>
-<div class="code-container" data-rel="C"><figure class="iseeu highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义顺序栈的结构体</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> *data; <span class="comment">//存储栈元素的数组</span></span><br><span class="line">  <span class="type">int</span> top; <span class="comment">//栈顶指针</span></span><br><span class="line">  <span class="type">int</span> base; <span class="comment">//栈底指针</span></span><br><span class="line">  <span class="type">int</span> maxSize; <span class="comment">//栈的最大容量</span></span><br><span class="line">&#125;SeqStack</span><br></pre></td></tr></table></figure></div>
-
-<ul>
-<li>链栈<ul>
-<li>运算首先的单链表，只能在链表头部进行操作，栈顶指针就是链表的头指针。</li>
-</ul>
-</li>
-</ul>
-<h1 id="5-队列"><a href="#5-队列" class="headerlink" title="5. 队列"></a>5. 队列</h1><p>队列是一种先进先出的线性表，在表一段插入，在另一端删除</p>
-<h1 id="6-串"><a href="#6-串" class="headerlink" title="6. 串"></a>6. 串</h1><p>定义：由零个或多个字符组成的有限序列</p>
-<p>串的匹配：KMP算法</p>
-<ul>
-<li>利用已经匹配成功的部分信息</li>
-</ul>
-<h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p>结构特点：一对多</p>
-<p> 子树：树中任意一个节点及其所有后代节点</p>
-<p> 二叉树</p>
-<ul>
-<li>性质：二叉树的第i层上至多有2的i-1次方个结点<ul>
-<li>深度为k的二叉树至多有2的k-1次方个结点</li>
-</ul>
-</li>
-</ul>
-<p>满二叉树</p>
-<ul>
-<li>每层都两个节点的二叉树</li>
-</ul>
-<p>完全二叉树</p>
-<ul>
-<li>只有最后一层叶子不满，且全部集中到左边</li>
-<li>具有n个节点的完全二叉树深度必为log下标二 n + 1</li>
 </ul>
 
 		</div>
@@ -896,18 +747,18 @@
 		<div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
 			<div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> 数据结构期末复习</li>
+        <li><strong>标题:</strong> </li>
         <li><strong>作者:</strong> yin_bo_</li>
         <li><strong>创建于
-                :</strong> 2026-01-04 16:41:46</li>
+                :</strong> 2026-04-01 22:26:38</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-01-11 15:44:00
+                    :</strong> 2026-04-01 22:48:35
             </li>
         
         <li>
-            <strong>链接:</strong> https://www.blog.yinbo.xyz/2026/01/04/期末复习/数据结构与算法/
+            <strong>链接:</strong> https://www.blog.yinbo.xyz/2026/04/01/面试题/Java查漏补缺/
         </li>
         <li>
             <strong>
@@ -926,37 +777,17 @@
 		
 
 		
-		<ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
-			
-			<li class="tag-item mx-0.5">
-				<a href="/tags/%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/">#期末复习</a>&nbsp;
-			</li>
-			
-		</ul>
-		
 
 		
 
 		
 		<div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
 			
-			<div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="prev" rel="prev" href="/2026/01/18/%E5%88%86%E5%B8%83%E5%BC%8F/Dubbo/">
-					<span class="left arrow-icon flex justify-center items-center">
-						<i class="fa-solid fa-chevron-left"></i>
-					</span>
-					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">Dubbo</span>
-						<span class="post-nav-item">上一篇</span>
-					</span>
-				</a>
-			</div>
-			
 			
 			<div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-				<a class="next" rel="next" href="/2025/12/05/%E9%A1%B9%E7%9B%AE/SaaS%E7%9F%AD%E9%93%BE%E6%8E%A5%E7%B3%BB%E7%BB%9F/">
+				<a class="next" rel="next" href="/2026/03/24/%E9%9D%A2%E8%AF%95%E9%A2%98/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%9F%A5%E6%BC%8F%E8%A1%A5%E7%BC%BA/">
 					<span class="title flex justify-center items-center">
-						<span class="post-nav-title-item truncate max-w-48">SaaS短链接</span>
+						<span class="post-nav-title-item truncate max-w-48">操作系统查漏补缺</span>
 						<span class="post-nav-item">下一篇</span>
 					</span>
 					<span class="right arrow-icon flex justify-center items-center">
@@ -977,8 +808,8 @@
 		<div class="post-toc-wrap">
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
-		<div class="page-title">数据结构期末复习</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%9C%AF%E8%AF%AD"><span class="nav-text">1. 基本术语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%AE%97%E6%B3%95"><span class="nav-text">2. 算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%BA%BF%E6%80%A7%E8%A1%A8"><span class="nav-text">3. 线性表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%A0%88"><span class="nav-text">4. 栈</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E9%98%9F%E5%88%97"><span class="nav-text">5. 队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E4%B8%B2"><span class="nav-text">6. 串</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91"><span class="nav-text">树</span></a></li></ol>
+		<div class="page-title"></div>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%AD%94%E6%B3%95%E7%B1%BBUnsafe"><span class="nav-text">魔法类Unsafe</span></a></li></ol>
 
 	</div>
 </div>
