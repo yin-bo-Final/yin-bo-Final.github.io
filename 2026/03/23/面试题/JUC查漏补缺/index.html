@@ -143,7 +143,7 @@
 <meta property="og:description" content="Hexo Theme Redefine, Redefine Your Hexo Journey.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-23T11:53:43.252Z">
-<meta property="article:modified_time" content="2026-04-02T15:06:17.729Z">
+<meta property="article:modified_time" content="2026-04-06T12:01:01.403Z">
 <meta property="article:author" content="John Doe">
 <meta property="article:tag" content="JUC">
 <meta property="article:tag" content="八股">
@@ -672,8 +672,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2026-04-02 23:06:17</span>
-            <span class="mobile">2026-04-02 23:06:17</span>
+            <span class="desktop">2026-04-06 20:01:01</span>
+            <span class="mobile">2026-04-06 20:01:01</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -699,12 +699,12 @@
     
     
         <span class="article-wordcount article-meta-item">
-            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>4.1k 字</span>
+            <i class="fa-regular fa-typewriter"></i>&nbsp;<span>5.3k 字</span>
         </span>
     
     
         <span class="article-min2read article-meta-item">
-            <i class="fa-regular fa-clock"></i>&nbsp;<span>14 分钟</span>
+            <i class="fa-regular fa-clock"></i>&nbsp;<span>19 分钟</span>
         </span>
     
     
@@ -1027,14 +1027,14 @@
 <li>Java中，最基础的锁是Synchronized<br>  ReentrantLock相比于Synchronized有四个增强点</li>
 </ul>
 <ol>
-<li><p>可手动加锁&#x2F;解锁</p>
+<li><p><strong>可手动加锁&#x2F;解锁</strong></p>
 <ul>
 <li>Synchronized在进入临界区自动加锁，离开临界区自动释放锁<br> 而ReentrantLock是<strong>显式</strong>的</li>
 </ul>
  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span>()&#123;</span><br><span class="line">  <span class="comment">//临界区</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <p> 可以更灵活的控制加锁解锁时机</p>
 </li>
-<li><p>可中断获取锁过程</p>
+<li><p><strong>可中断获取锁过程</strong></p>
 <ul>
 <li><p>Synchronized在等待锁时，不能被中断<br> 而ReentrantLock可以使用<code>lock.lockInterruptibly</code>在等待期间被中断，停止等待</p>
 </li>
@@ -1042,14 +1042,14 @@
 </li>
 </ul>
 </li>
-<li><p>支持超时获取锁</p>
+<li><p><strong>支持超时获取锁</strong></p>
 <ul>
 <li>可以设置TTL，<strong>在TTL结束之前尝试获取锁</strong>，超时返回<code>false</code></li>
 </ul>
  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (lock.trylock(<span class="number">3</span>,TimeUnit.SECONDS))&#123;</span><br><span class="line">  <span class="keyword">try</span>&#123;</span><br><span class="line">    <span class="comment">//获取锁成功</span></span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    lock.unlock();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">//获取锁失败</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <p> 可以<strong>避免线程一直阻塞</strong>，也可以<strong>避免死锁</strong></p>
 </li>
-<li><p>支持公平锁</p>
+<li><p><strong>支持公平锁</strong></p>
 <ul>
 <li><p>Synchronized本质上不公平<br> 而ReentrantLock可以指定锁是否公平<br> <code>Lock lock = new ReentrantLock(true);</code>  &#x2F;&#x2F;公平锁</p>
 </li>
@@ -1062,7 +1062,7 @@
 <p>ReentrantLock用法</p>
 </blockquote>
 <ul>
-<li>标准写法<div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="comment">//临界区</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<li><strong>标准写法</strong><div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">  <span class="comment">//临界区</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
 <ul>
 <li>一定要在finally里解锁<br>如果解锁不放在finally，一旦临界区抛异常<br>后面的unlock()执行不到，会产生死锁</li>
 </ul>
@@ -1113,14 +1113,119 @@
 </li>
 </ul>
 <blockquote>
-<p>ReentrantLock 和 Synchronized 的区别</p>
+<p>ReentrantLock 和 Synchronized 的异同</p>
 </blockquote>
+<ul>
+<li><p><strong>相同点</strong>:</p>
+<ol>
+<li>都是可重入锁</li>
+<li>都能保证临界区线程安全</li>
+<li>都是独占锁</li>
+</ol>
+</li>
+<li><p><strong>不同点</strong>:</p>
+<ol>
+<li><strong>使用方式不同</strong><br>  <code>Synchronized</code>是<strong>关键字</strong>，JVM层面的锁<br>  <code>ReentrantLock</code>是<strong>类</strong>，API层面的锁</li>
+<li><strong>ReentrantLock更灵活，他支持</strong><br> tryLock<br> 可中断获取锁<br> 超时获取锁<br> 公平锁<br> 多个Condition<br> 这些都是Synchronized不具备的</li>
+<li><strong>底层实现不同</strong><br> <code>Synchronized</code><strong>基于JVM的monitor机制</strong><br> <code>ReentrantLcok</code><strong>依赖AQS实现</strong></li>
+</ol>
+</li>
+</ul>
 <blockquote>
 <p>ReentrantLock 底层原理</p>
 </blockquote>
+<ul>
+<li><p>ReentratLock本质上就是<strong>基于AQS实现的独占锁</strong>,AQS是JUC里很多同步器的底层框架<br>AQS里有个核心变量<code>state</code><br><code>volatile int state</code><br>这个state对于ReentrantLock来说<br><code>state = 0</code>代表无锁<br><code>state &gt; 0</code>代表被占用  一个线程重入几次，state就加几次</p>
+</li>
+<li><p><strong>大致流程</strong>：</p>
+<ol>
+<li>锁没人占，通过<code>CAS</code>把state从0改为1<br>  被占用，看是否重入或者是被别人占用<br>  若<strong>锁被别人占用，则获取失败，进入AQS的等待队列，必要时阻塞</strong></li>
+<li>释放锁时，线程调用<code>unlock()</code><br>  若当前线程不是锁持有者，<strong>抛异常</strong><br>  否则state - 1<br>  直到减到0 ， 说明彻底释放锁，<strong>唤醒AQS等待队列的下一个线程</strong></li>
+</ol>
+</li>
+</ul>
 <blockquote>
-<p>Condition</p>
+<p>AQS等待队列是什么</p>
 </blockquote>
+<ul>
+<li>当一个线程抢锁失败，不会空转，而是进入AQS维护的等待队列<br>他时一个双向链表队列<br>线程抢不到锁时<br>  伪装成Node节点，加入队尾，等待挂起</li>
+</ul>
+<blockquote>
+<p>Condition是什么</p>
+</blockquote>
+<ul>
+<li>Condition可以理解为<br><strong>与锁绑定的等待&#x2F;通知机制</strong><br>作用类似于<code>Object.wait</code>&#x2F;<code>notify()</code></li>
+</ul>
+<ol>
+<li><p><strong>传统Synchronized的线程通信</strong><br>  需要在临界区去调用<strong>对象</strong>的等待(wait)和唤醒(notify)<br>  <strong>只能与一个对象的Monitor绑定</strong></p>
+</li>
+<li><p><code>ReentrantLock</code> + <code>Condition</code><br><strong>使用方法</strong>：</p>
+</li>
+</ol>
+  <div class="code-container" data-rel="Java"><figure class="iseeu highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">ReentrantLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"><span class="type">Condition</span> <span class="variable">condition</span> <span class="operator">=</span> lock.newCondition();</span><br><span class="line">lock.lock();</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    condition.await(); <span class="comment">//使该线程进入AQS等待队列</span></span><br><span class="line">    condition.signal(); <span class="comment">//唤醒该线程 重新竞争锁</span></span><br><span class="line">    condition.signalAll(); <span class="comment">//唤醒所有线程</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    lock.unlock();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div>
+<ul>
+<li><strong>三个方法</strong><ol>
+<li><code>await()</code><br>  使持有锁的当前线程 <strong>释放锁</strong>，并<strong>进入等待队列</strong></li>
+<li><code>signal()</code><br>  唤醒该等待线程，<strong>重新竞争锁</strong></li>
+<li><code>signalAll()</code><br>  唤醒<strong>所有</strong>等待线程</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p>Condition 比 wait&#x2F;notify 强在哪</p>
+</blockquote>
+<ul>
+<li>最大的优势：<br><strong>一个锁可以创建多个Condition 对应多个等待队列</strong><ul>
+<li>比如：<br>生产者消费者的模型<br>有两个队列<br><code>notFull</code> 队列没满才能产生<br><code>notEmpty</code> 队列不空才能消费</li>
+</ul>
+</li>
+</ul>
+<h1 id="9-JMM-Java-Memory-Model"><a href="#9-JMM-Java-Memory-Model" class="headerlink" title="9. JMM(Java Memory Model)"></a>9. JMM(Java Memory Model)</h1><ul>
+<li>JMM是Java的<strong>内存模型规范</strong><br>用于定义多线程之间<strong>变量如何共享&#x2F;可见&#x2F;有序</strong></li>
+</ul>
+<h2 id="CPU缓存模型"><a href="#CPU缓存模型" class="headerlink" title="CPU缓存模型"></a>CPU缓存模型</h2><ul>
+<li><p>要搞清楚多线程变量之间的关系，我们先从CPU缓存讲起</p>
+</li>
+<li><p>磁盘运行速度太慢，所以引入了内存，运行程序时，<strong>先将磁盘数据读到内存，然后再运行</strong><br><strong>相比于磁盘，内存相当于缓存</strong><br>相比于CPU，内存还是太慢了，所以用了<strong>CPU缓存</strong></p>
+</li>
+<li><p>所以为什么要有CPU缓存：<br><strong>解决CPU处理速度与内存不匹配的问题</strong></p>
+</li>
+<li><p>CPU缓存分为三级L1 L2 L3<br><strong>L1和L2是CPU核心私有的，而L3是共享的</strong></p>
+</li>
+</ul>
+<blockquote>
+<p>CPU缓存怎么工作的?</p>
+</blockquote>
+<ul>
+<li>CPU运行程序时，先将内存中的数据复制到CPU缓存，CPU就可以直接从缓存中读取数据<br>运算完成后，再<strong>将运算得到的数据写回内存中，这样内存缓存不一致问题就解决了</strong></li>
+</ul>
+<h2 id="指令重排序"><a href="#指令重排序" class="headerlink" title="指令重排序"></a>指令重排序</h2><ul>
+<li>为了<strong>提升执行速度</strong>，计算机会在执行代码时，对<strong>指令进行重排序</strong></li>
+</ul>
+<blockquote>
+<p>什么是指令重排序</p>
+</blockquote>
+<ul>
+<li>简单来说就是系统执行代码时<strong>不一定按照写的代码顺序依次执行</strong></li>
+<li>Java 源代码会经历 <code>编译器优化重排 —&gt; 指令并行重排 —&gt; 内存系统重排</code> 的过程<br>  最终才变成操作系统可执行的指令序列。指令重排序可以保证串行语义一致，<br>  但是没有保证多线程间的语义也一致 ，<strong>所以在多线程下，指令重排序可能会导致一些问题。</strong></li>
+</ul>
+<h2 id="为什么需要JMM"><a href="#为什么需要JMM" class="headerlink" title="为什么需要JMM"></a>为什么需要JMM</h2><ul>
+<li><strong>为了解决以下问题</strong>：</li>
+</ul>
+<ol>
+<li><p><strong>可见性问题</strong><br>  当一个CPU核心执行线程任务，修改了<strong>CPU缓存中的数据</strong><br>  但是缓存中的数据还没有写回到内存中<br>  这时其他CPU核心去执行另外一个线程任务,<strong>从内存中读取的数据就和缓存中不一致</strong></p>
+</li>
+<li><p><strong>有序性问题</strong><br>  多线程执行时，为了提升性能会对指令重排序，会造成语义不一致</p>
+</li>
+<li><p><strong>原子性问题</strong><br>  每个线程执行的时候都会分给一个<strong>时间片，规定线程占用CPU的时间</strong><br>  如果一个线程读取到数据，还没修改，时间片耗尽了<br>  这时第二个线程修改了<br>  而第一个线程恢复之后<strong>又进行了修改，导致失去了原子性</strong></p>
+</li>
+</ol>
+<ul>
+<li><p>OS通过内存模型定义了规范去解决了这些问题，但是不同OS的规范不同<br>会导致Java代码在不同OS下无法执行</p>
+</li>
+<li><p><strong>所以为了达到不同OS下都能执行，Java自己去提供了内存模型规范，也就是JMM</strong></p>
+</li>
+</ul>
 
 		</div>
 
@@ -1135,7 +1240,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2026-04-02 23:06:17
+                    :</strong> 2026-04-06 20:01:01
             </li>
         
         <li>
@@ -1214,7 +1319,7 @@
 	<div class="post-toc">
 		<div class="toc-title">目录</div>
 		<div class="page-title">JUC查漏补缺</div>
-		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="nav-text">1. 线程与进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="nav-text">2. 如何创建线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">3. 线程的生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Thread-sleep-%E6%96%B9%E6%B3%95%E5%92%8CObject-wait-%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-text">4. Thread.sleep()方法和Object.wait()方法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-text">5. 多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Synchronized%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">6. Synchronized关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E6%82%B2%E8%A7%82%E9%94%81%EF%BC%8C%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-text">7. 悲观锁，乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7%E6%9C%BA%E5%88%B6"><span class="nav-text">版本号机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS%E7%AE%97%E6%B3%95"><span class="nav-text">CAS算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-ReentrantLock"><span class="nav-text">8. ReentrantLock</span></a></li></ol>
+		<ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BA%BF%E7%A8%8B%E4%B8%8E%E8%BF%9B%E7%A8%8B"><span class="nav-text">1. 线程与进程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E7%BA%BF%E7%A8%8B"><span class="nav-text">2. 如何创建线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-text">3. 线程的生命周期</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Thread-sleep-%E6%96%B9%E6%B3%95%E5%92%8CObject-wait-%E6%96%B9%E6%B3%95%E5%AF%B9%E6%AF%94"><span class="nav-text">4. Thread.sleep()方法和Object.wait()方法对比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-text">5. 多线程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Synchronized%E5%85%B3%E9%94%AE%E5%AD%97"><span class="nav-text">6. Synchronized关键字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E6%82%B2%E8%A7%82%E9%94%81%EF%BC%8C%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-text">7. 悲观锁，乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%82%B2%E8%A7%82%E9%94%81"><span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81"><span class="nav-text">乐观锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC%E5%8F%B7%E6%9C%BA%E5%88%B6"><span class="nav-text">版本号机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS%E7%AE%97%E6%B3%95"><span class="nav-text">CAS算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-ReentrantLock"><span class="nav-text">8. ReentrantLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-JMM-Java-Memory-Model"><span class="nav-text">9. JMM(Java Memory Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CPU%E7%BC%93%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-text">CPU缓存模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E4%BB%A4%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="nav-text">指令重排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81JMM"><span class="nav-text">为什么需要JMM</span></a></li></ol></li></ol>
 
 	</div>
 </div>
@@ -1247,7 +1352,7 @@
                     </span>
                     
                         <span>
-                            共 136.7k 字
+                            共 138k 字
                         </span>
                     
                 </p>
